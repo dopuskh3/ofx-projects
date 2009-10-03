@@ -1,0 +1,334 @@
+# vim:set ft=cmake:syn on
+cmake_minimum_required(VERSION 2.6)
+
+########################################################################################################
+########### Configuration Vars #########################################################################
+########################################################################################################
+
+# The path where stants openFrameworks's sources
+set ( ofx_sources_directory "/home/fv/Dev/openFrameworks/ofx-dev/libs/openFrameworks" )
+
+# Additional include directories 
+set ( custom_include_dirs "/usr/include/libavformat;/usr/include/libavcodec;/usr/include/libswscale")
+
+# Poco include path where to find Poco/Poco.h and libPocoFoundation
+set (poco_includes "/usr/include" )
+set (poco_libdir " ")
+
+# GLee include path 
+set (glee_includes "/home/fv/Dev/openFrameworks/ofx-dev/libs/GLee/include" )
+set (glee_libdir   "/home/fv/Dev/openFrameworks/ofx-dev/libs/GLee/lib" ) 
+
+# FModex 
+set (fmodex_includes "/home/fv/Dev/openFrameworks/ofx-dev/libs/fmodex/inc" ) 
+set (fmodex_libdir   "/home/fv/Dev/openFrameworks/ofx-dev/libs/fmodex/lib/linux/" )
+
+# RtAudio
+set (rtaudio_includes "/home/fv/Dev/openFrameworks/ofx-dev/libs/rtAudio/include")
+set (rtaudio_libdir   "/home/fv/Dev/openFrameworks/ofx-dev/libs/rtAudio/lib")
+
+# FreeImage 
+set ( freeimage_includes "/home/fv/Dev/openFrameworks/ofx-dev/libs/freeimage/include" )
+set ( freeimage_libdir   "/home/fv/Dev/openFrameworks/ofx-dev/libs/freeimage/lib" ) 
+
+# For linux only 
+set (unicap_includes "/home/fv/Dev/openFrameworks/ofx-dev/libs/unicap/include")
+set (unicap_libdir   "/home/fv/Dev/openFrameworks/ofx-dev/libs/unicap/lib")
+
+set (asound_includes "")
+set (asound_libdir "")
+
+set (raw1394_includes "")
+set (raw1394_libdir "")
+
+########################################################################################################
+########################################################################################################
+########################################################################################################
+
+
+
+if ( CMAKE_SYSTEM_NAME MATCHES "Darwin" )
+	set (CMAKE_FIND_LIBRARY_PREFIXES "" "lib")
+	set (CMAKE_FIND_LIBRARY_SUFFIXES ".dylib" ".a" ".lib")
+endif ()
+
+
+### Macros ... 
+
+macro ( find_include_append header_file sp)
+    set (search_paths ${sp})
+
+    if (CMAKE_SYSTEM_NAME MATCHES "Linux" ) 
+        set ( search_paths "${search_paths};/usr/include;/usr/local/include" )
+    endif ()
+
+    foreach (directory ${search_paths} ) 
+        find_path ( ${header_file}incpath NAMES ${header_file} PATHS ${directory} ) 
+        if ( ${header_file}incpath )
+            set ( ofx_includes ${ofx_includes} ${${header_file}incpath} )
+            message ( "+ Found ${header_file} in ${${header_file}incpath}" )
+            break()
+        endif()
+   endforeach()
+
+   if ( NOT ${header_file}incpath ) 
+       message ( FATAL_ERROR "Cannot find ${header_file} in the following directories ${search_paths}")
+   endif ()
+
+ 
+endmacro ( find_include_append)
+
+
+macro ( find_lib libname sp )
+    set (search_paths ${sp})
+    if ( CMAKE_SYSTEM_NAME MATCHES "Linux" )
+        set ( search_paths "${search_paths};/usr/lib;/usr/local/lib" )
+    endif()
+
+    foreach(directory ${search_paths})
+        find_library(${libname}_LIBRARY NAMES ${libname} PATHS ${search_paths}  NO_DEFAULT_PATH)
+        if ( ${libname}_LIBRARY )
+            message ( "+ Found ${libname} in ${${libname}_LIBRARY}" )
+            break()
+        endif()
+    endforeach()
+    if ( NOT ${libname}_LIBRARY )
+        message(FATAL_ERROR " ** Cannot find ${libname} librarie in path ${search_paths} ")
+    endif()
+    #execute_process(COMMAND "dirname" "${${libname}_LIBRARY}" OUTPUT_VARIABLE ldir)
+    #string(REPLACE "\n" "" ldir ${ldir})
+    #message ( " ${${libname}_LIBRARY} is static in ${ldir}")
+    #set ( CMAKE_LIBRARY_PATH_FLAG ${CMAKE_LIBRARY_PATH_FLAG} ${ldir})
+    #endif ()
+endmacro ( find_lib) 
+
+
+
+####################################### COMPILATION ####################################################
+
+### POCO ------------------------------------------------
+find_include_append ( Poco/Poco.h ${poco_includes})
+find_lib("PocoFoundation" ${poco_libdir} )
+
+### GLEE ------------------------------------------------
+find_include_append ( GLee.h ${glee_includes})
+find_lib("GLee"  ${glee_libdir} )
+
+### FMODEX ----------------------------------------------
+find_include_append ( fmod.h ${fmodex_includes})
+find_lib("fmodex" ${fmodex_libdir})
+
+### RTAUDIO ---------------------------------------------
+find_include_append ( RtAudio.h ${rtaudio_includes})
+find_lib("RtAudio" ${rtaudio_libdir})
+
+### FREEIMAGE -------------------------------------------
+find_include_append ( FreeImage.h ${freeimage_includes})
+find_lib("freeimage" ${freeimage_libdir})
+
+### FREETYPE --------------------------------------------
+include(FindFreetype)
+
+### GLUT ------------------------------------------------
+include(FindGLUT)
+if ( GLUT_LIBRARIES )
+    message ( "+ Found GLUT libraries in ${GLUT_LIBRARIES}")
+else ( GLUT_LIBRARIES )
+    message ( fatal_error "- Cannot find GLUT")
+endif (GLUT_LIBRARIES)
+
+### GLU -------------------------------------------------
+include(FindGLU)
+if ( GLU_LIBRARY )
+    message ( "+ Found GLU libraries in ${GLU_LIBRARY}")
+else ( GLU_LIBRARY )
+    message ( fatal_error "- Cannot find GLU")
+endif (GLU_LIBRARY)
+
+###### LINUX SPECIFIC DEPENDENCIES ######################################
+if ( CMAKE_SYSTEM_NAME MATCHES "Linux" ) 
+
+### UNICAP ----------------------------------------------
+    find_include_append ( unicap.h    ${unicap_includes})
+    find_lib("unicap" "${unicap_libdir}" )
+
+### LIBASOUND 
+	find_lib("asound" "${asound_libdir}" )
+
+### LIBRAW1394
+	find_lib("raw1394" "${raw1394_libdir}" )
+
+### PKCONFIG 
+    include (FindPkgConfig)
+### GSTREAMER
+    pkg_search_module(GST gstreamer-0.10)
+    pkg_search_module(GST_VIDEO gstreamer-video-0.10)
+    pkg_search_module(GST_BASE gstreamer-base-0.10)
+    pkg_search_module(GST_APP gstreamer-app-0.10)
+
+### LIBAVCODEC
+    pkg_search_module(LAVC libavcodec )
+### LIBAVFORMAT
+    pkg_search_module(LAVF libavformat )
+### LIBAVUTILS
+    pkg_search_module(LAVU libavutil )
+### LIBSWSCALE
+    pkg_search_module(LSWSCALE libswscale )
+endif()
+
+###### OS X SPECIFIC DEPENDENCIES #########################################
+if ( CMAKE_SYSTEM_NAME MATCHES "Darwin" )
+### QUICKTIME 
+    include(FindQuickTime)
+    if ( NOT ${QUICKTIME_FOUND} )
+        message( fatal_error "QuickTime framework not found " ) 
+    endif ( )
+
+### FREETYPE (hacked becaude FindFreetype cmake module does not set includes directory
+    find_include_append("freetype.h" "/usr/X11R6/include/freetype2/freetype")
+
+### COREAUDIO
+    FIND_LIBRARY(COREAUDIO_LIBRARY CoreAudio)
+### CARBON
+    FIND_LIBRARY(CARBON_LIBRARY Carbon)
+### COREFOUNDATION
+    FIND_LIBRARY(COREFOUNDATION_LIBRARY CoreFoundation )
+endif ()
+
+
+## Linux Specific
+# if ( CMAKE_SYSTEM_NAME MATCHES "Linux" ) 
+#	find_include_append ( avformat.h /usr/include/libavformat/ )
+#	find_include_append ( avcodec.h /usr/include/libavcodec/ )
+#	find_include_append ( gst/gst.h /usr/include/gstreamer-0.10/ )
+#	find_include_append ( swscale.h /usr/include/libswscale )
+# endif ( CMAKE_SYSTEM_NAME MATCHES "Linux" )
+
+# for mac os X find_lib("quicktime" ${libs_path}/quicktime/)
+#FCollada  fmodex  freeimage  freetype  GLee  glfw  glut  gstappsink  libofw  openFrameworks  poco  quicktime  rtAudio  unicap  videoInput
+
+set (ofx_includes ${ofx_includes} 
+    ${FREETYPE_INCLUDE_DIRS} 
+    ${GLUT_INCLUDE_DIRS}
+   )
+
+if ( CMAKE_SYSTEM_NAME MATCHES "Linux" )
+    set (ofx_includes ${ofx_includes} 
+    ${LAVC_INCLUDE_DIRS}
+    ${LAVF_INCLUDE_DIRS}
+    ${LAVU_INCLUDE_DIRS}
+    ${LSWSCALE_INCLUDE_DIRS} 
+    ${GST_INCLUDE_DIRS}
+    ${GST_VIDEO_INCLUDE_DIRS} 
+    ${GST_BASE_INCLUDE_DIRS}
+    ${GST_APP_INCLUDE_DIRS})
+endif ()
+
+if ( CMAKE_SYSTEM_NAME MATCHES "Darwin" ) 
+   set (ofx_includes ${ofx_includes}
+	${QUICKTIME_INCLUDE_DIR})
+endif()
+
+set (ofx_libs 
+    ${GLUT_LIBRARIES}
+    ${GLU_LIBRARY}
+    ${GLee_LIBRARY}
+    ${fmodex_LIBRARY}
+    ${PocoFoundation_LIBRARY}
+    ${rtaudio_LIBRARY} 
+    ${freeimage_LIBRARY} 
+    ${unicap_LIBRARY}
+    ${RtAudio_LIBRARY}
+    ${FREETYPE_LIBRARIES}
+   )
+
+if ( CMAKE_SYSTEM_NAME MATCHES "Linux" )
+  set (ofx_libs ${ofx_libs}
+    ${GST_LIBRARIES}
+    ${LAVC_LIBRARIES}
+    ${LAVF_LIBRARIES}
+    ${LAVU_LIBRARIES}
+    ${LSWSCALE_LIBRARIES}
+    ${GST_VIDEO_LIBRARIES} 
+    ${GST_BASE_LIBRARIES}
+    ${GST_APP_LIBRARIES}
+    ${asound_LIBRARY}
+    ${raw1394_LIBRARY}
+    )
+endif()
+    
+if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+  set (ofx_libs ${ofx_libs}
+	${QUICKTIME_LIBRARY}
+    ${COREAUDIO_LIBRARY}
+    ${COREFOUNDATION_LIBRARY}
+    ${CARBON_LIBRARY}
+    )
+endif()
+
+######################################################################################
+##### OpenFrameworks files ###########################################################
+######################################################################################
+
+
+set (OFX_SOURCE_FILES 
+    ${ofx_sources_directory}/app/ofAppGlutWindow.cpp
+    ${ofx_sources_directory}/events/ofEvents.h
+    ${ofx_sources_directory}/events/ofEventUtils.h
+    ${ofx_sources_directory}/utils/ofConstants.h
+    ${ofx_sources_directory}/utils/ofUtils.h
+    ${ofx_sources_directory}/utils/ofMath.cpp
+    ${ofx_sources_directory}/utils/ofTypes.h
+    ${ofx_sources_directory}/utils/ofUtils.cpp
+    ${ofx_sources_directory}/utils/ofMath.h
+    ${ofx_sources_directory}/ofMain.h
+    ${ofx_sources_directory}/graphics/ofImage.h
+    ${ofx_sources_directory}/graphics/ofGraphics.cpp
+    ${ofx_sources_directory}/graphics/ofGraphics.h
+    ${ofx_sources_directory}/graphics/ofBitmapFont.cpp
+    ${ofx_sources_directory}/graphics/ofBitmapFont.h
+    ${ofx_sources_directory}/graphics/ofTrueTypeFont.h
+    ${ofx_sources_directory}/graphics/ofTrueTypeFont.cpp
+    ${ofx_sources_directory}/graphics/ofTexture.cpp
+    ${ofx_sources_directory}/graphics/ofImage.cpp
+    ${ofx_sources_directory}/graphics/ofTexture.h
+    ${ofx_sources_directory}/communication/ofArduino.h
+    ${ofx_sources_directory}/communication/ofStandardFirmata.cpp
+    ${ofx_sources_directory}/communication/ofSerial.cpp
+    ${ofx_sources_directory}/communication/ofSerial.h
+    ${ofx_sources_directory}/communication/ofStandardFirmata.h
+    ${ofx_sources_directory}/communication/ofArduino.cpp
+    ${ofx_sources_directory}/video/ofUCUtils.h
+    ${ofx_sources_directory}/video/ofVideoGrabber.h
+    ${ofx_sources_directory}/video/ofVideoPlayer.h
+    ${ofx_sources_directory}/video/ofUCUtils.cpp
+    ${ofx_sources_directory}/video/ofQtUtils.cpp
+    ${ofx_sources_directory}/video/ofVideoPlayer.cpp
+    ${ofx_sources_directory}/video/ofQtUtils.h
+    ${ofx_sources_directory}/video/ofV4LUtils.h
+    ${ofx_sources_directory}/video/ofVideoGrabber.cpp
+    ${ofx_sources_directory}/sound/ofSoundStream.h
+    ${ofx_sources_directory}/sound/ofSoundStream.cpp
+    ${ofx_sources_directory}/sound/ofSoundPlayer.cpp
+    ${ofx_sources_directory}/sound/ofSoundPlayer.h
+    ${ofx_sources_directory}/app/ofBaseApp.h
+    ${ofx_sources_directory}/app/ofAppRunner.h
+    ${ofx_sources_directory}/app/ofAppRunner.cpp
+    ${ofx_sources_directory}/app/ofAppBaseWindow.h
+    ${ofx_sources_directory}/app/ofAppGlutWindow.h )
+
+# set include paths
+set ( ofx_include_dirs . events utils graphics communication video sound app )
+foreach (idir ${ofx_include_dirs})
+    set (ofx_includes ${ofx_includes} ${ofx_sources_directory}/${idir})
+    # message ( " ${ofx_sources_directory}/${idir} ")
+endforeach(idir)
+
+set ( ofx_includes ${ofx_includes} ${custom_include_dirs} )
+
+message ( "Following include path are configured: " )
+
+#foreach ( dir ${ofx_includes} )
+# message ("  ${dir}")
+#endforeach()
+# message (" Libs ${ofx_libs}")
