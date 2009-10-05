@@ -7,11 +7,11 @@ void testApp::setup(){
 	ofSetFrameRate(32);
 
     tracker = new bTracker(320, 240); 
-    world = new bWorld();
-    world->createWorld();
+    // world = new bWorld();
+    // world->createWorld();
     //480, 640); 
     //, 240); 
-	//video.loadMovie("multiPerson-FromBehind-IR.mov");
+	// video.loadMovie("multiPerson-FromBehind-IR.mov");
 
 }
 
@@ -29,7 +29,8 @@ void testApp::draw(){
   ofSetColor(255, 255, 255);
   tracker->background.draw(tracker->width, 0); 
   tracker->threshold.draw(0, tracker->height);
-  world->shapeFromBlobs(tracker->getBlobs()); 
+  tracker->draw();
+  //world->shapeFromBlobs(tracker->getBlobs()); 
 }
 
 //--------------------------------------------------------------
