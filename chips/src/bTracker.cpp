@@ -8,6 +8,7 @@
 ///====================================================================================
 
 #include "bTracker.h"
+#include "bBlob.h"
 
 //-------------------------------------------------------------------------
 bTracker::bTracker(int w, int h){ 
@@ -34,12 +35,13 @@ bTracker::bTracker(int w, int h){
     this->erode=2;
     this->blur=2;
 
-    this->minBlobSize = w*h/10; 
+    this->minBlobSize = w*h*0.1; 
     this->maxBlobSize = w*h*0.75;
     this->maxBlobs = 10; 
 
     this->setBackground(); 	
-
+  
+    this->particleSystem = new ParticleSystem(100); 
 }
 
 //------------------------------------------------------------------------- 
@@ -80,10 +82,15 @@ void bTracker::update(){
   // blur  
   for(int i=0; i < this->blur; i++)
     this->threshold.blur();
-
   
   int numFound = contourFinder.findContours(this->threshold, this->minBlobSize, this->maxBlobSize, this->maxBlobs, false, false);
-
+  
+  // process blobs
+  this->particleSystem->update();
+  for (int i = 0 ; i < numFound; i++){
+    bBlob b = bBlob(contourFinder.blobs[i]);
+    this->particleSystem->checkBlob(&b); 
+  }
    
 }
 
@@ -108,4 +115,9 @@ ofxCvColorImage *bTracker::getFrameImage(){  return &this->source; }
 //------------------------------------------------------------------------- 
 vector<ofxCvBlob>  *bTracker::getBlobs(){
   return &this->contourFinder.blobs; 
+}
+
+void bTracker::draw(){
+  this->particleSystem->draw();
+  this->contourFinder.draw();
 }

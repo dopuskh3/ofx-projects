@@ -12,6 +12,7 @@
 
 #include "ofMain.h"
 #include "ofxOpenCv.h"
+#include "ParticleSystem.h"
 
 
 #define ABDIFF_MODE 0
@@ -22,6 +23,7 @@ class bTracker {
 
   
   public: 
+      ParticleSystem * particleSystem;
       // video grabber 
 	  ofVideoGrabber vidGrabber;
       // contour finder 
@@ -49,6 +51,7 @@ class bTracker {
       // set diff mode 
       void setDiffMode(int diffMode); 
       void setThreshold(int t); 
+      void draw();
       // Retrieve background image
       ofxCvGrayscaleImage *getBackgroundImage(); 
       // retrieve current image
