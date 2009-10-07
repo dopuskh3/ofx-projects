@@ -10,6 +10,8 @@
 #include "ofxOpenCv.h"
 
 
+typedef vector<ofPoint> bHullShape;
+
 class bContourFinder : public ofxCvContourFinder {
   
   public: 
@@ -25,7 +27,6 @@ class bContourFinder : public ofxCvContourFinder {
                                int nconsidered, bool bfindholes,
                                bool buseapproximation = true){
         int i = ofxCvContourFinder::findContours(input, minarea, maxarea, nconsidered, bfindholes, buseapproximation);
-        findConvexHulls(); 
         return i;
 
     }
@@ -43,8 +44,17 @@ class bContourFinder : public ofxCvContourFinder {
     
     void reset();
     
-    int findConvexHulls();    
+
+    int findConvexHulls(ofxCvGrayscaleImage&  input,
+									  int minArea,
+									  int maxArea,
+									  int nConsidered,
+									  bool bFindHoles,
+                                      bool bUseApproximation);
+
+
     vector <CvSeq *> convexHulls;
+    vector <bHullShape> hulls;
 
 };
 
