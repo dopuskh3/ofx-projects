@@ -6,7 +6,7 @@ void testApp::setup(){
 	ofBackground(20,20,20);
 	ofSetFrameRate(32);
 
-    tracker = new bTracker(320, 240); 
+    tracker.setup(320, 240); 
     // world = new bWorld();
     // world->createWorld();
     //480, 640); 
@@ -17,20 +17,22 @@ void testApp::setup(){
 
 //--------------------------------------------------------------
 void testApp::update(){
-  tracker->update();
+
+  tracker.update();
+  std::cout<<tracker.getHullShapes().size()<<std::endl; 
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
   ofSetColor(255, 255, 255);
-  tracker->source.draw(tracker->width*2, 0);
+  tracker.source.draw(tracker.width*2, 0);
   ofSetColor(255, 255, 255);
-  //tracker->contourFinder.draw(0, 0); 
+  //tracker.contourFinder.draw(0, 0); 
   ofSetColor(255, 255, 255);
-  tracker->background.draw(tracker->width, 0); 
-  tracker->threshold.draw(0, tracker->height);
-  tracker->draw();
-  //world->shapeFromBlobs(tracker->getBlobs()); 
+  tracker.background.draw(tracker.width, 0); 
+  tracker.threshold.draw(0, tracker.height);
+  tracker.draw();
+  //world->shapeFromBlobs(tracker.getBlobs()); 
 }
 
 //--------------------------------------------------------------
@@ -38,13 +40,13 @@ void testApp::keyPressed  (int key){
 
   switch(key){
     case 'g':
-      tracker->setBackground();
+      tracker.setBackground();
       break;
     case OF_KEY_UP:
-      tracker->threshValue+=1;
+      tracker.threshValue+=1;
       break;
     case OF_KEY_DOWN:
-      tracker->threshValue-=1; 
+      tracker.threshValue-=1; 
       break;
   }
 }

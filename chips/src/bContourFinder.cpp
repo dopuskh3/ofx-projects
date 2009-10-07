@@ -75,8 +75,7 @@ int bContourFinder::findConvexHulls(ofxCvGrayscaleImage&  input,
         hs.push_back(ofPoint(p->x, p->y));
       }
       hulls.push_back(hs);
-      std::cout<<"Hull size = "<<hull->total<<std::endl;
-
+      //std::cout<<"Hull size = "<<hull->total<<std::endl;
     }
 
 	// Free the storage memory.
@@ -86,7 +85,6 @@ int bContourFinder::findConvexHulls(ofxCvGrayscaleImage&  input,
     return 0;
 
 }
-
 
 void bContourFinder::reset(){
   ofxCvContourFinder::reset();

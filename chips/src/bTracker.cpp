@@ -11,7 +11,7 @@
 #include "bBlob.h"
 
 //-------------------------------------------------------------------------
-bTracker::bTracker(int w, int h){ 
+void bTracker::setup(int w, int h){ 
      
 	this->vidGrabber.setVerbose(true);
     // size 
@@ -30,7 +30,7 @@ bTracker::bTracker(int w, int h){
 
     // set default params
     this->threshValue = 30; 
-    this->diffMode  = ABDIFF_MODE; 
+    this->diffMode  = DARK_MODE; 
     this->dilate=2; 
     this->erode=2;
     this->blur=2;
@@ -122,21 +122,25 @@ ofxCvGrayscaleImage *bTracker::getThresholdImage(){ return &this->threshold; }
 ofxCvColorImage *bTracker::getFrameImage(){  return &this->source; }
 
 //------------------------------------------------------------------------- 
-vector<ofxCvBlob>  *bTracker::getBlobs(){
-  return &this->contourFinder.blobs; 
+vector<ofxCvBlob>  &bTracker::getBlobs(){
+  return this->contourFinder.blobs; 
+}
+//------------------------------------------------------------------------- 
+vector<bHullShape> &bTracker::getHullShapes(){
+  return this->contourFinder.hulls; 
 }
 
+//------------------------------------------------------------------------- 
 void bTracker::draw(){
-  this->particleSystem->draw();
-  this->contourFinder.draw();
   ofSetColor(0,0,255);
   for (int i = 0 ; i < contourFinder.hulls.size(); i++){
     ofBeginShape();
     for (int j = 0; j < contourFinder.hulls[i].size(); j++){
-      std::cout<<contourFinder.hulls[i][j].x<<"  "<<contourFinder.hulls[i][j].y<<std::endl; 
-
+      //std::cout<<contourFinder.hulls[i][j].x<<"  "<<contourFinder.hulls[i][j].y<<std::endl; 
       ofVertex(contourFinder.hulls[i][j].x, contourFinder.hulls[i][j].y); 
     }
     ofEndShape();
   }
 }
+
+

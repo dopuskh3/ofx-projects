@@ -45,7 +45,8 @@ class bTracker {
       int threshValue; 
 
       
-      bTracker(int height, int width);
+      bTracker(){};
+      void setup(int w, int h ); 
       // set background 
       void setBackground(); 
       // process 
@@ -59,7 +60,8 @@ class bTracker {
       // retrieve current image
       ofxCvGrayscaleImage *getThresholdImage(); 
       ofxCvColorImage *getFrameImage(); 
-      vector<ofxCvBlob>  *getBlobs();
+      vector<ofxCvBlob>  &getBlobs();
+      vector<bHullShape> &getHullShapes();
 //      vector<CvSeq *>    convexHulls;
 
 };
