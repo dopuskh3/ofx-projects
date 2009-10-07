@@ -111,12 +111,12 @@ ofxCvColorImage *bTracker::getFrameImage(){  return &this->source; }
 //------------------------------------------------------------------------- 
 // return blobs 
 vector<ofxCvBlob>  &bTracker::getBlobs(){
-  return this->contourFinder.blobs; 
+  return contourFinder.blobs; 
 }
 //-------------------------------------------------------------------------
 //Return convex blobs  
-vector<bHullShape> &bTracker::getHullShapes(){
-  return this->contourFinder.convexBlobs; 
+vector<ofxCvBlob> &bTracker::getConvexBlobs(){
+  return contourFinder.convexBlobs; 
 }
 
 //------------------------------------------------------------------------- 

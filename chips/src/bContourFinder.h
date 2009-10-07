@@ -23,8 +23,6 @@ class bContourFinder : public ofxCvContourFinder {
     void reset();
     virtual void  draw( float x, float y, float w, float h ); //{ ofxCvContourFinder::draw(x, y, w, h);  }; 
   
-    vector <CvSeq *> convexHulls;
-    vector <bHullShape> hulls;
     vector <ofxCvBlob> convexBlobs; 
 
 };

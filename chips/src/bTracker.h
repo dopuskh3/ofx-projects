@@ -61,7 +61,7 @@ class bTracker {
       ofxCvGrayscaleImage *getThresholdImage(); 
       ofxCvColorImage *getFrameImage(); 
       vector<ofxCvBlob>  &getBlobs();
-      vector<bHullShape> &getHullShapes();
+      vector<ofxCvBlob> &getConvexBlobs();
 //      vector<CvSeq *>    convexHulls;
 
 };

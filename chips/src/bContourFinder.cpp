@@ -74,5 +74,5 @@ void bContourFinder::draw( float x, float y, float w, float h ){
 
 void bContourFinder::reset(){
   ofxCvContourFinder::reset();
-  convexHulls.clear(); 
+  convexBlobs.clear();
 }

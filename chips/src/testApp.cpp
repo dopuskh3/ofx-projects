@@ -19,7 +19,6 @@ void testApp::setup(){
 void testApp::update(){
 
   tracker.update();
-  std::cout<<tracker.getHullShapes().size()<<std::endl; 
 }
 
 //--------------------------------------------------------------
