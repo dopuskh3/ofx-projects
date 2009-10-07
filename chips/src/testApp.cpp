@@ -41,10 +41,10 @@ void testApp::keyPressed  (int key){
       tracker->setBackground();
       break;
     case OF_KEY_UP:
-      tracker->threshValue+=10;
+      tracker->threshValue+=1;
       break;
     case OF_KEY_DOWN:
-      tracker->threshValue-=10; 
+      tracker->threshValue-=1; 
       break;
   }
 }

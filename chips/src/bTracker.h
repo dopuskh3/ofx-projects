@@ -13,6 +13,7 @@
 #include "ofMain.h"
 #include "ofxOpenCv.h"
 #include "ParticleSystem.h"
+#include "bContourFinder.h"
 
 
 #define ABDIFF_MODE 0
@@ -27,7 +28,8 @@ class bTracker {
       // video grabber 
 	  ofVideoGrabber vidGrabber;
       // contour finder 
-	  ofxCvContourFinder contourFinder;
+	  //ofxCvContourFinder contourFinder;
+      bContourFinder contourFinder;
 
       // threshold image
       ofxCvGrayscaleImage threshold;
@@ -58,6 +60,7 @@ class bTracker {
       ofxCvGrayscaleImage *getThresholdImage(); 
       ofxCvColorImage *getFrameImage(); 
       vector<ofxCvBlob>  *getBlobs();
+//      vector<CvSeq *>    convexHulls;
 
 };
 

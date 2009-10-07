@@ -31,7 +31,7 @@ bTracker::bTracker(int w, int h){
     // set default params
     this->threshValue = 30; 
     this->diffMode  = ABDIFF_MODE; 
-    this->dilate=1; 
+    this->dilate=2; 
     this->erode=2;
     this->blur=2;
 
@@ -72,19 +72,25 @@ void bTracker::update(){
   }
   
   this->threshold.threshold(this->threshValue); 
+  //this->threshold.adaptiveThreshold(20, this->threshValue, 0, 1);   
+ 
+  //  erode 
+  for(int i=0; i < this->erode; i++ )
+    this->threshold.erode_3x3(); 
   
   // dilate 
   for(int i=0; i < this->dilate; i++)
 	this->threshold.dilate_3x3(); 
-  //  erode 
-  for(int i=0; i < this->erode; i++ )
-    this->threshold.erode_3x3(); 
-  // blur  
+ // blur  
   for(int i=0; i < this->blur; i++)
     this->threshold.blur();
   
   int numFound = contourFinder.findContours(this->threshold, this->minBlobSize, this->maxBlobSize, this->maxBlobs, false, false);
-  
+  //-------------------------------------------------------------------------
+  //contourFinder.findConvexHulls();
+  //CvSeq *convexPoints =    cvConvexHull2(contourFinder.C
+  //-------------------------------------------------------------------------
+
   // process blobs
   this->particleSystem->update();
   for (int i = 0 ; i < numFound; i++){
