@@ -85,21 +85,8 @@ void bTracker::update(){
   for(int i=0; i < this->blur; i++)
     this->threshold.blur();
   
-  //int numFound = contourFinder.findContours(this->threshold, this->minBlobSize, this->maxBlobSize, this->maxBlobs, false, false);
-  int numFound = contourFinder.findConvexHulls(this->threshold, this->minBlobSize, this->maxBlobSize, this->maxBlobs, false, false);
-
-  //contourFinder.findConvexHulls();
-  //------------------------------------------------------------------------
-  //contourFinder.findConvexHulls();
-  //CvSeq *convexPoints =    cvConvexHull2(contourFinder.C
-  //-------------------------------------------------------------------------
-
-  // process blobs
-  this->particleSystem->update();
-  for (int i = 0 ; i < numFound; i++){
-    bBlob b = bBlob(contourFinder.blobs[i]);
-    this->particleSystem->checkBlob(&b); 
-  }
+  int numFound = contourFinder.findContours(this->threshold, this->minBlobSize, this->maxBlobSize, this->maxBlobs, false, true);
+  contourFinder.findConvexHulls();
    
 }
 
@@ -122,25 +109,20 @@ ofxCvGrayscaleImage *bTracker::getThresholdImage(){ return &this->threshold; }
 ofxCvColorImage *bTracker::getFrameImage(){  return &this->source; }
 
 //------------------------------------------------------------------------- 
+// return blobs 
 vector<ofxCvBlob>  &bTracker::getBlobs(){
   return this->contourFinder.blobs; 
 }
-//------------------------------------------------------------------------- 
+//-------------------------------------------------------------------------
+//Return convex blobs  
 vector<bHullShape> &bTracker::getHullShapes(){
-  return this->contourFinder.hulls; 
+  return this->contourFinder.convexBlobs; 
 }
 
 //------------------------------------------------------------------------- 
 void bTracker::draw(){
   ofSetColor(0,0,255);
-  for (int i = 0 ; i < contourFinder.hulls.size(); i++){
-    ofBeginShape();
-    for (int j = 0; j < contourFinder.hulls[i].size(); j++){
-      //std::cout<<contourFinder.hulls[i][j].x<<"  "<<contourFinder.hulls[i][j].y<<std::endl; 
-      ofVertex(contourFinder.hulls[i][j].x, contourFinder.hulls[i][j].y); 
-    }
-    ofEndShape();
-  }
+  contourFinder.draw(0, 0);
 }
 
 
