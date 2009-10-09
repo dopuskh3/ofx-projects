@@ -17,7 +17,7 @@
 #include "ofxCvGrayscaleImage.h"
 #include <algorithm>
 
-class ofxCvContourFinder : public ofBaseDraws {
+class ofxCvContourFinder : private ofBaseDraws {
 
   public:
   

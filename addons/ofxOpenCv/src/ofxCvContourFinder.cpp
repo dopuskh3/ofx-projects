@@ -79,7 +79,12 @@ int ofxCvContourFinder::findContours( ofxCvGrayscaleImage&  input,
 	CvContourRetrievalMode  retrieve_mode
         = (bFindHoles) ? CV_RETR_LIST : CV_RETR_EXTERNAL;
 	cvFindContours( inputCopy.getCvImage(), contour_storage, &contour_list,
-                    sizeof(CvContour), retrieve_mode, bUseApproximation ? CV_CHAIN_APPROX_SIMPLE : CV_CHAIN_APPROX_NONE );
+                    sizeof(CvContour), retrieve_mode, bUseApproximation ? CV_CHAIN_APPROX_TC89_L1 /*CV_CHAIN_APPROX_SIMPLE*/ : CV_CHAIN_APPROX_NONE );
+
+    //if (contour_list)
+    //  contour_list = cvApproxPoly( contour_list, sizeof(CvContour), contour_storage, CV_POLY_APPROX_DP, 1, 1 );
+
+
 	CvSeq* contour_ptr = contour_list;
 
 	// put the contours from the linked list, into an array for sorting

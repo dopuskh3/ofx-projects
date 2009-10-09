@@ -12,6 +12,8 @@ void testApp::setup(){
     //480, 640); 
     //, 240); 
 	// video.loadMovie("multiPerson-FromBehind-IR.mov");
+    spectrum.setup(std::string("test.mp3"), 64); 
+    spectrum.play(); 
 
 }
 
@@ -19,11 +21,18 @@ void testApp::setup(){
 void testApp::update(){
 
   tracker.update();
+  if (tracker.getConvexBlobs().size() >= 1 )
+    spectrum.setShape(&tracker.getBlobs()[0].pts); 
+  else
+    std::cout<<"Nothing to draw"<<tracker.getConvexBlobs().size()<<std::endl;
+  spectrum.update();
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
   ofSetColor(255, 255, 255);
+
+
   tracker.source.draw(tracker.width*2, 0);
   ofSetColor(255, 255, 255);
   //tracker.contourFinder.draw(0, 0); 
@@ -31,6 +40,8 @@ void testApp::draw(){
   tracker.background.draw(tracker.width, 0); 
   tracker.threshold.draw(0, tracker.height);
   tracker.draw();
+  spectrum.draw();
+  
   //world->shapeFromBlobs(tracker.getBlobs()); 
 }
 

@@ -46,7 +46,7 @@ set (raw1394_libdir "")
 endif ()
 
 if ( CMAKE_SYSTEM_NAME MATCHES "Linux" )
-	
+set ( addons_path "/home/fv/Dev/openFrameworks/ofx-projects/addons" ) 
 # The path where stants openFrameworks's sources
 set ( ofx_sources_directory "/home/fv/Dev/openFrameworks/ofx-dev/libs/openFrameworks" )
 
@@ -97,6 +97,14 @@ endif ()
 
 
 ### Macros ... 
+macro ( ofx_addon addonname ) 
+    message ( "Configuring ${addonname} addon ${addons_path}/${addonname}/${addonname}.cmake " ) 
+    include ( "${addons_path}/${addonname}/${addonname}.cmake"_)
+    set ( OFX_SOURCE_FILES "${OFX_SOURCE_FILES} ${${addonname}_SOURCES}" )
+    set ( ofx_libs "${ofx_libs} ${${addonname}_LIBRARIES}" ) 
+    include_directories( ${${addonname}_INCLUDES} ) 
+endmacro ( ofx_addon)
+
 
 macro ( find_include_append header_file sp)
     set (search_paths ${sp})

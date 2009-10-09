@@ -6,6 +6,7 @@
 
 //--------------------
 #include "bTracker.h"
+#include "ShapeSpectrum.h"
 
 class testApp : public ofSimpleApp{
 	
@@ -24,6 +25,7 @@ class testApp : public ofSimpleApp{
 		void mouseReleased();
 		
 	    bTracker tracker; 
+        ShapeSpectrum spectrum;
 		
 };
 
