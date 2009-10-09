@@ -1,11 +1,14 @@
-///=====================================================================================
-/// \file ShapeSpectrum.h
-/// \brief 
-///
-/// \author f.visconte, francois.visconte@milpix.com
-/// \version $Id$
-///
-///====================================================================================
+//-------------------------------------------------------------------------------------
+//
+// \file ShapeSpectrum.h
+// \brief 
+//
+// \author Francois Visconte <f.visconte@gmail.com> 
+// http://digitalork.blogspot.com, http://github.com/dopuskh3
+//
+//------------------------------------------------------------------------------------ 
+
+
 
 #ifndef _SHAPE_SPECTRUM_H_
 #define _SHAPE_SPECTRUM_H_

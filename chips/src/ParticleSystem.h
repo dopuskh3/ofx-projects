@@ -2,7 +2,7 @@
 /// \file ParticleSystem.h
 /// \brief 
 ///
-/// \author f.visconte, francois.visconte@milpix.com
+///author Francois Visconte, f.visconte@gmail.com
 /// \version $Id$
 ///
 ///====================================================================================

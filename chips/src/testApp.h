@@ -1,3 +1,13 @@
+//-------------------------------------------------------------------------------------
+//
+// \file testApp.h
+// \brief 
+//
+// \author Francois Visconte <f.visconte@gmail.com> 
+// http://digitalork.blogspot.com, http://github.com/dopuskh3
+//
+//------------------------------------------------------------------------------------ 
+
 #ifndef _TEST_APP
 #define _TEST_APP
 

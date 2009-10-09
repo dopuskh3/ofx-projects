@@ -1,11 +1,15 @@
-///=====================================================================================
-/// \file ShapeSpectrum.cpp
-/// \brief i
-///
-/// \author f.visconte, francois.visconte@milpix.com
-/// \version $Id$
-///
-///====================================================================================
+//-------------------------------------------------------------------------------------
+//
+// \file ShapeSpectrum.cpp
+// \brief 
+//
+// \author Francois Visconte <f.visconte@gmail.com>
+// http://digitalork.blogspot.com, http://github.com/dopuskh3
+//
+//------------------------------------------------------------------------------------ 
+
+
+
 
 #include "ShapeSpectrum.h"
 #include "ofxVec2f.h"

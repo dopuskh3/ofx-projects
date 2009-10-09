@@ -1,11 +1,14 @@
-///=====================================================================================
-/// \file bTracket.h
-/// \brief 
-///
-/// \author f.visconte, francois.visconte@milpix.com
-/// \version $Id$
-///
-///====================================================================================
+//-------------------------------------------------------------------------------------
+//
+// \file bTracker.h
+// \brief 
+//
+// \author Francois Visconte <f.visconte@gmail.com> 
+// http://digitalork.blogspot.com, http://github.com/dopuskh3
+//
+//------------------------------------------------------------------------------------ 
+
+
 
 #ifndef _BTRACKER_H_
 #define _BTRACKER_H_

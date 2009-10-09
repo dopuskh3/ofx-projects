@@ -1,11 +1,14 @@
-///=====================================================================================
-/// \file bTracket.cpp
-/// \brief 
-///
-/// \author f.visconte, francois.visconte@milpix.com
-/// \version $Id$
-///
-///====================================================================================
+//-------------------------------------------------------------------------------------
+//
+// \file bTracker.cpp
+// \brief 
+//
+// \author Francois Visconte <f.visconte@gmail.com>
+// http://digitalork.blogspot.com, http://github.com/dopuskh3
+//
+//------------------------------------------------------------------------------------ 
+
+
 
 #include "bTracker.h"
 #include "bBlob.h"
