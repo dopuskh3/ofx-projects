@@ -1,28 +1,43 @@
-/*uniform sampler2D tex;
+#extension GL_ARB_texture_rectangle : enable
 
-void main()
-{
-     gl_FragColor = texture2D(tex, gl_TexCoord[0].st);
-}
-*/
-varying vec3 lightDir,normal;
-uniform sampler2D tex;
+uniform sampler2DRect tex;
+varying vec3 normal;
 
-void main()
-{
-    vec3 ct,cf;
-    vec4 texel;
-    float intensity,at,af;
 
-    intensity = max(dot(lightDir,normalize(normal)),0.0);
+void main( void )
+{   
+vec4 baseColor = vec4(0.0, 0.0, 0.0, 1.0);
+	
+	float ddy = 15.0;
+	float ddx = 15.0;
+ 
+  // Horizontal blur
+  baseColor += 0.015625 * texture2DRect(tex, gl_TexCoord[0].st + vec2(0.0, ddy*-3.0) );
+  baseColor += 0.09375 * texture2DRect(tex, gl_TexCoord[0].st + vec2(0.0, ddy*-2.0) );
+  baseColor += 0.234375 * texture2DRect(tex, gl_TexCoord[0].st + vec2(0.0, ddy*-1.0) );
+  baseColor += 0.3125 * texture2DRect(tex, gl_TexCoord[0].st + vec2(0.0, 0.0) );
+  baseColor += 0.234375 * texture2DRect(tex, gl_TexCoord[0].st + vec2(0.0, ddy*1.0) );
+  baseColor += 0.09375 * texture2DRect(tex, gl_TexCoord[0].st + vec2(0.0, ddy*2.0) );
+  baseColor += 0.015625 * texture2DRect(tex, gl_TexCoord[0].st + vec2(0.0, ddy*3.0) );
+  
+  // Vertical blur
+  baseColor += 0.015625 * texture2DRect(tex, gl_TexCoord[0].st + vec2(ddx*-3.0, 0.0) );
+  baseColor += 0.09375 * texture2DRect(tex, gl_TexCoord[0].st + vec2(ddx*-2.0, 0.0) );
+  baseColor += 0.234375 * texture2DRect(tex, gl_TexCoord[0].st + vec2(ddx*-1.0, 0.0) );
+  baseColor += 0.3125 * texture2DRect(tex, gl_TexCoord[0].st + vec2(0.0, 0.0) );
+  baseColor += 0.234375 * texture2DRect(tex, gl_TexCoord[0].st + vec2(ddx*1.0, 0.0) );
+  baseColor += 0.09375 * texture2DRect(tex, gl_TexCoord[0].st + vec2(ddx*2.0, 0.0) );
+  baseColor += 0.015625 * texture2DRect(tex, gl_TexCoord[0].st + vec2(ddx*3.0, 0.0) );
+  
+  // Mix both
+  baseColor *= 0.5;
+  vec4 color = texture2DRect(tex,gl_TexCoord[0].st + vec2( 100, 109) );
+ 
+  //baseColor.a = 1.0;
+  //baseColor.r= 1; 
+      
+  gl_FragColor = baseColor; //color; // baseColor * 0.2; // * color; // texture2DRect( tex, gl_TexCoord[0].xy );
 
-    cf = intensity * (gl_FrontMaterial.diffuse).rgb + 
-        gl_FrontMaterial.ambient.rgb;
-    af = gl_FrontMaterial.diffuse.a;
-
-    texel = texture2D(tex,gl_TexCoord[0].st);
-    ct = texel.rgb;
-    at = texel.a;
-    gl_FragColor = vec4(ct * cf, at * af);  
+//    gl_FragColor= vec4(normal, 1.0); // * baseColor;
 }
 

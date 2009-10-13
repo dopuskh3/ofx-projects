@@ -13,16 +13,20 @@
 
 #include "ofxFBOTexture.h"
 
+#define TEXBUG 1
 void ofxFBOTexture::allocate(int w, int h, bool autoClear) {
         _isActive = false;
 
         texData.width = w;
         texData.height = h;
 
+#ifdef TEXBUG
+    std::cout<<"ARB program"<<std::endl;
     if (GLEE_ARB_texture_rectangle){
         texData.tex_w = w;
         texData.tex_h = h;
         texData.textureTarget = GL_TEXTURE_RECTANGLE_ARB;
+        
     } else {
         texData.tex_w = ofNextPow2(w);
         texData.tex_h = ofNextPow2(h);
@@ -35,6 +39,13 @@ void ofxFBOTexture::allocate(int w, int h, bool autoClear) {
                 texData.tex_t = 1.0f;
                 texData.tex_u = 1.0f;
         }
+#else
+        texData.tex_w = ofNextPow2(w);                                                                                                                                                                           
+        texData.tex_h = ofNextPow2(h);
+        texData.tex_t = 1.0f;
+        texData.tex_u = 1.0f;
+        texData.textureTarget = GL_TEXTURE_2D;
+#endif
 
         // attempt to free the previous bound texture, if we can:
         clean();
