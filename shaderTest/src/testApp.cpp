@@ -14,7 +14,7 @@ void testApp::setup(){
        
     shader.loadShader((char *)"diffuse");
     shader.printActiveUniforms(); 
-    psys.setup(5000); 
+    psys.setup(50); 
   
     glActiveTexture(GL_TEXTURE0);
     tex.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
@@ -55,7 +55,7 @@ void testApp::draw(){
   psys.draw(); 
   tex.end();
 
-  tex.draw( ofGetWidth()/2,0 , ofGetWidth()/2, ofGetHeight()/2);
+  //tex.draw( ofGetWidth()/2,0 , ofGetWidth()/2, ofGetHeight()/2);
   
   ofSetColor(255,255,255);
   //glBindTexture(GL_TEXTURE_2D, (GLuint)tex.getTextureData().textureName[0]);
@@ -65,7 +65,8 @@ void testApp::draw(){
   shader.setUniform("tex", (int) 0);
  //glBindTexture(GL_TEXTURE_2D, (GLuint)tex.getTextureData().textureName[0]);
   shader.setShaderActive(true); 
-     tex.draw(0,0, ofGetWidth()/2.0, ofGetHeight()/2.0);
+     tex.draw(0,0);
+     //, ofGetWidth()/2.0, ofGetHeight()/2.0);
   shader.setShaderActive(false);
 
 

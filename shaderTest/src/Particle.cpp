@@ -73,7 +73,16 @@ void Particle::addRepulsionForce(ofxVec3f &pos, float radius, float scale){
 //---------------------------------------------------- 
 void Particle::draw(){
   //if(!raise)
-  ofCircle(this->position.x, this->position.y, 5);
+	glPushAttrib(GL_COLOR_BUFFER_BIT);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_LINE_STRIP);
+	glVertex3f(position.x-(velocity.x)+2, position.y-velocity.y+2,0.0f);
+	glVertex3f(position.x-(velocity.x)-2, position.y-velocity.y-2,0.0f);
+	glVertex3f(position.x+2, position.y+2,0.0f);
+	glVertex3f(position.x-2, position.y-2, 0.0f);
+	glEnd();
+	
+//  ofCircle(this->position.x, this->position.y, 5);
   //glBegin(GL_POINTS);
   //glVertex3f(position.x, position.y, position.z);
   //glEnd( );
