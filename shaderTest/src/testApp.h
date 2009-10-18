@@ -37,6 +37,13 @@ class testApp : public ofSimpleApp{
         ofShader shader; 
         ofxFBOTexture tex;
         ofTexture texi;
+
+        ofSoundPlayer music;
+
+        float *fftList;  
+        float *fftSmoothed;     
+        int bands;
+
 };
 
 #endif

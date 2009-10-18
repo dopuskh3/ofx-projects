@@ -13,6 +13,9 @@
 #include "ofMain.h"
 #include "ofxVectorMath.h"
 
+//---------------------------------------------------- -
+#include <deque>
+
 #define PARTICLE_TTL 1000
 
 class Particle{
@@ -21,6 +24,12 @@ class Particle{
     ofxVec3f position; 
     ofxVec3f velocity;
     ofxVec3f accel; 
+
+    deque<ofxVec3f> hPos; 
+    deque<ofxVec3f> hVel; 
+    deque<ofxVec3f> hAc; 
+
+    int numH; 
 
     Particle(float x, float y);
     void addForce(ofxVec3f f); 
@@ -37,6 +46,8 @@ class Particle{
     float fuzz; 
     float fuzzDec; 
     float damping; 
+    int id;
+    int r, g, b, alpha;
      
 };
 
