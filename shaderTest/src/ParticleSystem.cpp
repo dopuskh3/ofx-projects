@@ -11,6 +11,7 @@
 
 
 #include "ParticleSystem.h"
+#include "msaColor.cpp"
 
 ParticleSystem::ParticleSystem(){
 
@@ -29,7 +30,7 @@ ParticleSystem::ParticleSystem(){
 //
 void ParticleSystem::setup(int nParticles){
   for(int i=0; i < nParticles; i++){
-    addParticle();
+  //addParticle();
   }  
 
   mouseX = 0; 
@@ -55,7 +56,6 @@ void ParticleSystem::addRepiel(ofxVec3f center, float fValue, float fRadius){
   forcesPos.push_back(center); 
   forcesVal.push_back(fValue);  
   forcesRad.push_back(fRadius);
-  std::cout<<fRadius<<std::endl;
 }
 
 void ParticleSystem::addParticle(){
@@ -73,36 +73,46 @@ bool ParticleSystem::particleDeserveToLive(int j){
   return true;
 }
 
-#define FFT_THRESH 0.1f
-#define FFT_MULT 50.0f
+#define FFT_THRESH 0.001f
+#define FFT_MULT 5.8f
 void ParticleSystem::update(){
   int repielValue = 2; 
   float averfft=1.0f; 
+  float fftMax = 0.0f;
   
   
   if(fftSize && fft >0){
-    for (int i=0; i<fftSize; i++){
-      if(fft[i]>FFT_THRESH && particles.size() < 250){
+    for(int i=0; i< fftSize; i++){
+      averfft+=fft[i];
+      if(fft[i]>fftMax)
+        fftMax = fft[i];
+    }
+    averfft/=fftSize;
+    for (int i=fftSize-1; i>=0; i--){
+      if(fft[i]>averfft+FFT_THRESH && particles.size() < 6*fftSize){
         // addParticle(); 
         Particle p=Particle(width/2 + ofRandom(-20, 20), height/2 + ofRandom(-20.0, 20.0));
+        
+        p.alpha = 0.0f;
         p.id = i; 
+        p.angle = i/fftSize*TWO_PI;
+        //p.accel = 100*fft[i]*ofxVec3f(cos(p.angle), -sin(p.angle), 0.0f); 
+        
+        p.update();
         particles.push_back(p);
         //    particles.at(particles.size()-1).id = i; 
       }
-      averfft += fft[i];
     }
 
-    averfft/=fftSize; 
   }
          
   // for each particles 
-  cout<<particles.size()<<endl;
   for(int j=0; j < particles.size(); j++){
     particles[j].accel *=0.2; //.set(0,0,0);
-    particles[j].addDamping();
-    ofxVec3f mousePos = ofxVec3f(mouseX, mouseY); 
+    //particles[j].addDamping();
     
     if(! particleDeserveToLive(j)){
+      //cout<<"ERASING"<<endl;
       particles.erase(particles.begin()+j);
       continue;
       //addParticle(); 
@@ -133,12 +143,21 @@ void ParticleSystem::update(){
       // get multiplicator from sign
       //float angleSign=(particles[j].id<0)?-1.0f:1.0f;
 
-      float fftAngle = (fft[fftid]*TWO_PI); 
+      float fftAngle = fft[fftid]/fftMax*TWO_PI + particles[j].angle; //+ (1.0f/fftSize)*PI; //4.0f*(PI/2.0f))
       // apply force 
-      ofxVec3f fftForce = averfft * FFT_MULT * ofxVec3f(cos(fftAngle), -sin(fftAngle), 0); 
+      ofxVec2f fftForce = (averfft + (1+fft[fftid]))*  FFT_MULT * ofxVec3f(cos(fftAngle), -sin(fftAngle), 0); 
       particles[j].accel += fftForce; // + ofRandom(-1, 1); 
       //particles[j].velocity += averfft * 0.01; 
-      particles[j].alpha = (fft[fftid] /4)*64 + 192; 
+      
+
+      msaColor color; 
+      int h = (lroundf(particles[j].id * 360.0f / (float)fftSize)); //+ ofGetFrameNum() )%360; 
+      color.setHSV(h, 0.5 + fft[fftid]/2.0f,  0.5f + fft[fftid]/2.0f); 
+      particles[j].r = color.r; 
+      particles[j].g = color.g;
+      particles[j].b = color.b;
+      particles[j].alpha =(fft[fftid] /2.0f)+0.5; 
+      //cout<<particles[j].velocity.length()<<endl;
      // if (particles.size() < 500 && averfft>0.02){
      //   addParticle();
      // }
@@ -165,20 +184,22 @@ void ParticleSystem::toggleErase(){
 void ParticleSystem::draw(){
 
 #ifdef DRAW_REPIELS
-  ofSetColor(255, 0, 0);
-  ofNoFill();
   for(int i=0; i< forcesPos.size(); i++){
     ofCircle(forcesPos[i].x, forcesPos[i].y, forcesRad[i]); 
   }
 #endif 
   for(int i=0; i < this->particles.size(); i++)
     this->particles[i].draw();
+  ofNoFill(); 
 
-  // debug
-  for(int i =0 ; i < fftSize; i++){
-    glColor4f(0.0, 0.0, 0.0, 1.0); 
-    ofRect(100+i*5, ofGetHeight()-100, 5,  -(fft[i] * 500));
-  }
+  //; debug
+  //for(int i =0 ; i < fftSize; i++){
+  //  glColor4f(0.0, 0.0, 0.0, 1.0); 
+  //  ofRect(100+i*5, ofGetHeight()-100, 5,  -(fft[i] * 500));
+ // }
+  //ofRect(100, ofGetHeight() - (100.0*FFT_THRESH*500.0f), ofGetWidth()-100, 2); 
+
+  //ofLine(100, ofGetHeight() - (100.0*FFT_THRESH*500.0f), ofGetWidth()-100.0f,  ofGetHeight() - (100.0f*FFT_THRESH*500.0f));
 
 }
 

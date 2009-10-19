@@ -20,36 +20,38 @@ Particle::Particle(float x, float y){
   ttl = PARTICLE_TTL; 
   damping = 0.01f;
   fuzz = 0.0;
-  numH = 50; 
+  numH = 3; 
 
-  r = (int)ofRandom(40, 60);
-  g = (int)ofRandom(10, 30);
-  b = (int)ofRandom(0, 10);
+  r = 0.0f; 
+  g = 0.0f;
+  b = 0.0f; 
 
   alpha = 0;
 
 
 }
 
+
 // ---------------------------------------------------- 
 void Particle::update(){
 
   //ttl--; 
 
-    if(numH > 0){
+  if(numH > 0){
     hPos.push_back(position); 
     hVel.push_back(velocity); 
     hAc.push_back(accel); 
+    hColor.push_back(ofxVec4f(r, g, b, alpha)); 
+
     if(hPos.size() >= numH){
       hPos.pop_front(); 
       hVel.pop_front();
       hAc.pop_front(); 
+      hColor.pop_front();
     }
   }
   velocity += accel; 
   position += velocity;
-
-
 
 
   //if(fuzz != 0){
@@ -96,34 +98,33 @@ void Particle::addRepulsionForce(ofxVec3f &pos, float radius, float scale){
 //---------------------------------------------------- 
 void Particle::draw(){
   //if(!raise)
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  //glEnable(GL_DEPTH_TEST);
+   vector<ofxVec3f> tmp; 
+  glBegin(GL_QUAD_STRIP);
+
+  for(int i=0 ; i < hPos.size(); i++){
+    float l = hVel[i].length();
+    float angle = atan2(hVel[i].y, hVel[i].x); 
+    float ofx = sin(angle)*l*0.2; 
+    float ofy = cos(angle)*l*0.2; 
     
-    vector<ofxVec3f> tmp; 
+    glColor4f(hColor[i].x, hColor[i].y, hColor[i].z, hColor[i].w);
+    glVertex3f(hPos[i].x+ofx, hPos[i].y+ofy , 0.0f); 
+    glVertex3f(hPos[i].x-ofx, hPos[i].y-ofy , 0.0f); 
+    tmp.push_back(ofxVec3f(ofx, ofy , 0.0f)); 
+  }
+  glEnd();
 
-
-	glBegin(GL_QUAD_STRIP);
-    for(int i=0 ; i < hPos.size(); i++){
-      float l = hVel[i].length();
-      float angle = atan2(hVel[i].y, hVel[i].x); 
-      float ofx = sin(angle)*l*0.2; 
-      float ofy = cos(angle)*l*0.2; 
-
-      ofSetColor(r, g, b, alpha);
-      glVertex3f(hPos[i].x+ofx, hPos[i].y+ofy , 0.0f); 
-      glVertex3f(hPos[i].x-ofx, hPos[i].y-ofy , 0.0f); 
-      tmp.push_back(ofxVec3f(ofx, ofy , 0.0f)); 
-    }
-	glEnd();
-    
-
-    glBegin(GL_LINE_STRIP); 
-    for (int i =0 ; i < tmp.size(); i++){
-      glVertex3f(hPos[i].x+tmp[i].x, hPos[i].y+tmp[i].y, 0); // hPos[i].z + tmp[i].z); 
-    }
-    for (int i=tmp.size()-1; i >= 0; i--){
-      glVertex3f(hPos[i].x-tmp[i].x, hPos[i].y-tmp[i].y, 0); // hPos[i].z - tmp[i].z); 
-    }
-    glEnd(); 
+  glColor4f(0, 0, 0, 0.0); 
+  glBegin(GL_LINE_STRIP); 
+  for (int i =0 ; i < tmp.size(); i++){
+    glVertex3f(hPos[i].x+tmp[i].x, hPos[i].y+tmp[i].y, 0); // hPos[i].z + tmp[i].z); 
+  }
+  for (int i=tmp.size()-1; i >= 0; i--){
+    glVertex3f(hPos[i].x-tmp[i].x, hPos[i].y-tmp[i].y, 0); // hPos[i].z - tmp[i].z); 
+  }
+  glEnd(); 
 
 	//glVertex3f(position.x-(velocity.x)+2, position.y-velocity.y+2,0.0f);
 	//glVertex3f(position.x-(velocity.x)-2, position.y-velocity.y-2,0.0f);

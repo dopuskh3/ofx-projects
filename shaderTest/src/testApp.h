@@ -10,12 +10,13 @@
 
 #ifndef _TEST_APP
 #define _TEST_APP
-
+#define GRAB 
 #include "ofMain.h"
 #include "ofShader.h"
 
 #include "ParticleSystem.h"
 #include "ofxFBOTexture.h"
+#include "SnapShooter.h"
 
 class testApp : public ofSimpleApp{
 	
@@ -43,7 +44,7 @@ class testApp : public ofSimpleApp{
         float *fftList;  
         float *fftSmoothed;     
         int bands;
-
+  
 };
 
 #endif

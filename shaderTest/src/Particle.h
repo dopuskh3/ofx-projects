@@ -28,6 +28,7 @@ class Particle{
     deque<ofxVec3f> hPos; 
     deque<ofxVec3f> hVel; 
     deque<ofxVec3f> hAc; 
+    deque<ofxVec4f> hColor;
 
     int numH; 
 
@@ -47,7 +48,8 @@ class Particle{
     float fuzzDec; 
     float damping; 
     int id;
-    int r, g, b, alpha;
+    float r, g, b, alpha;
+    float angle;
      
 };
 

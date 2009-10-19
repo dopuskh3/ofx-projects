@@ -3,7 +3,7 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){	
-	ofBackground(240,240,240);
+	ofBackground(0,0,0);
 	ofSetFrameRate(32);
     
     glDepthMask(false);
@@ -15,7 +15,6 @@ void testApp::setup(){
     shader.loadShader((char *)"diffuse");
     shader.printActiveUniforms(); 
     
-    
 
     psys.setup(56); 
   
@@ -25,7 +24,7 @@ void testApp::setup(){
     
 
     fftList=NULL;                                                                                                   
-    bands = 256;
+    bands = 128;//256;
 
     fftSmoothed = (float *)malloc(bands* sizeof(float));
     for (int i =0 ; i < bands; i++)
@@ -34,6 +33,7 @@ void testApp::setup(){
     music.loadSound("test.mp3"); 
     music.play(); 
     music.setVolume(1); 
+
 
 
     /*for (int i = 0 ; i < 10; i++){
@@ -53,12 +53,15 @@ void testApp::setup(){
 void testApp::update(){
 
 
+
   fftList = ofSoundGetSpectrum(bands); 
 
   for (int i = 0; i < bands; i++){
-      if (i>2 && i < bands-2)
-        fftList[i] = (fftList[i-1] +fftList[i-2] + fftList[i+2] + fftList[i+1]) / 4.0f;
-      fftSmoothed[i] *= 0.50f; 
+     // if (i>2 && i < bands-2)
+  //    fftList[i] = sqrtf(fftList[i]);
+     //fftList[i] = (fftList[i-1] +fftList[i-2] + fftList[i+2] + fftList[i+1]) / 4.0f;
+
+      fftSmoothed[i] *= 0.10f; 
       if ( fftSmoothed[i] < fftList[i] ){
         fftSmoothed[i] = fftList[i]; 
         if(fftSmoothed[i] > 1.0f){
@@ -79,13 +82,16 @@ void testApp::draw(){
   //ofEnableAlphaBlending();
  
   ofEnableAlphaBlending();
+  glEnable(GL_BLEND);
+  glEnable(GL_LINE_SMOOTH); 
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
  
- 
-  tex.begin();
+  glClear(GL_COLOR_BUFFER_BIT); 
+  //tex.begin();
 //  glColor4f(0.4, 0.4, 0.4, 0.5); 
   //ofSetColor(200, 200, 200, 100); //55, 255);
   psys.draw(); 
-  tex.end();
+  //tex.end();
 
   //tex.draw( ofGetWidth()/2,0 , ofGetWidth()/2, ofGetHeight()/2);
   
@@ -96,8 +102,8 @@ void testApp::draw(){
   //tex.bindAsTexture();
   shader.setUniform((char *)"tex", (int) 0);
  //glBindTexture(GL_TEXTURE_2D, (GLuint)tex.getTextureData().textureName[0]);
-  shader.setShaderActive(true); 
-     tex.draw(0,0);
+  //shader.setShaderActive(true); 
+    // tex.draw(0,0);
      //, ofGetWidth()/2.0, ofGetHeight()/2.0);
   shader.setShaderActive(false);
 
