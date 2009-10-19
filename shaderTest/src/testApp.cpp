@@ -24,7 +24,7 @@ void testApp::setup(){
     
 
     fftList=NULL;                                                                                                   
-    bands = 128;//256;
+    bands = 256;
 
     fftSmoothed = (float *)malloc(bands* sizeof(float));
     for (int i =0 ; i < bands; i++)
@@ -57,11 +57,11 @@ void testApp::update(){
   fftList = ofSoundGetSpectrum(bands); 
 
   for (int i = 0; i < bands; i++){
-     // if (i>2 && i < bands-2)
-  //    fftList[i] = sqrtf(fftList[i]);
-     //fftList[i] = (fftList[i-1] +fftList[i-2] + fftList[i+2] + fftList[i+1]) / 4.0f;
-
-      fftSmoothed[i] *= 0.10f; 
+      fftList[0] = 0.0f;
+      fftList[bands-1] = 0.0f;
+      fftList[i] = sqrtf(fftList[i]);
+      fftList[i] = (fftList[i-1] + fftList[i] +  fftList[i+1]) / 3.0f;
+      fftSmoothed[i] *= 0.40f; 
       if ( fftSmoothed[i] < fftList[i] ){
         fftSmoothed[i] = fftList[i]; 
         if(fftSmoothed[i] > 1.0f){

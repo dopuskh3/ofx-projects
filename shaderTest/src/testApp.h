@@ -16,7 +16,6 @@
 
 #include "ParticleSystem.h"
 #include "ofxFBOTexture.h"
-#include "SnapShooter.h"
 
 class testApp : public ofSimpleApp{
 	

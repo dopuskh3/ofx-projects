@@ -73,8 +73,8 @@ bool ParticleSystem::particleDeserveToLive(int j){
   return true;
 }
 
-#define FFT_THRESH 0.001f
-#define FFT_MULT 5.8f
+#define FFT_THRESH 0.02f
+#define FFT_MULT 7.4f
 void ParticleSystem::update(){
   int repielValue = 2; 
   float averfft=1.0f; 
@@ -89,13 +89,13 @@ void ParticleSystem::update(){
     }
     averfft/=fftSize;
     for (int i=fftSize-1; i>=0; i--){
-      if(fft[i]>averfft+FFT_THRESH && particles.size() < 6*fftSize){
+      if(fft[i]>FFT_THRESH && particles.size() < 2*fftSize){
         // addParticle(); 
         Particle p=Particle(width/2 + ofRandom(-20, 20), height/2 + ofRandom(-20.0, 20.0));
         
         p.alpha = 0.0f;
         p.id = i; 
-        p.angle = i/fftSize*TWO_PI;
+        p.angle = (ofGetFrameNum()%100/100.0f) * TWO_PI + i/fftSize*TWO_PI;
         //p.accel = 100*fft[i]*ofxVec3f(cos(p.angle), -sin(p.angle), 0.0f); 
         
         p.update();
@@ -145,18 +145,18 @@ void ParticleSystem::update(){
 
       float fftAngle = fft[fftid]/fftMax*TWO_PI + particles[j].angle; //+ (1.0f/fftSize)*PI; //4.0f*(PI/2.0f))
       // apply force 
-      ofxVec2f fftForce = (averfft + (1+fft[fftid]))*  FFT_MULT * ofxVec3f(cos(fftAngle), -sin(fftAngle), 0); 
+      ofxVec2f fftForce = (/*averfft +*/ (1+fft[fftid]))*  FFT_MULT * ofxVec3f(cos(fftAngle), -sin(fftAngle), 0); 
       particles[j].accel += fftForce; // + ofRandom(-1, 1); 
       //particles[j].velocity += averfft * 0.01; 
       
 
       msaColor color; 
       int h = (lroundf(particles[j].id * 360.0f / (float)fftSize)); //+ ofGetFrameNum() )%360; 
-      color.setHSV(h, 0.5 + fft[fftid]/2.0f,  0.5f + fft[fftid]/2.0f); 
+      color.setHSV(h, MIN(8*averfft, 1.0),  MIN(8*fft[fftid], 1.0)); 
       particles[j].r = color.r; 
       particles[j].g = color.g;
       particles[j].b = color.b;
-      particles[j].alpha =(fft[fftid] /2.0f)+0.5; 
+      particles[j].alpha = fft[fftid]; 
       //cout<<particles[j].velocity.length()<<endl;
      // if (particles.size() < 500 && averfft>0.02){
      //   addParticle();
@@ -193,13 +193,13 @@ void ParticleSystem::draw(){
   ofNoFill(); 
 
   //; debug
-  //for(int i =0 ; i < fftSize; i++){
-  //  glColor4f(0.0, 0.0, 0.0, 1.0); 
-  //  ofRect(100+i*5, ofGetHeight()-100, 5,  -(fft[i] * 500));
- // }
-  //ofRect(100, ofGetHeight() - (100.0*FFT_THRESH*500.0f), ofGetWidth()-100, 2); 
+  for(int i =0 ; i < fftSize; i++){
+    glColor4f(0.6, 0.6, 0.6, 1.0); 
+    ofRect(100+i*5, ofGetHeight()-100, 5,  -(fft[i] * 500));
+  }
+  ofRect(100, ofGetHeight() - (100.0*FFT_THRESH*500.0f), ofGetWidth()-100, 2); 
 
-  //ofLine(100, ofGetHeight() - (100.0*FFT_THRESH*500.0f), ofGetWidth()-100.0f,  ofGetHeight() - (100.0f*FFT_THRESH*500.0f));
+  ofLine(100, ofGetHeight() - 100.0 - (FFT_THRESH*500.0f), ofGetWidth()-100.0f,  ofGetHeight() - 100.0f - (FFT_THRESH*500.0f));
 
 }
 

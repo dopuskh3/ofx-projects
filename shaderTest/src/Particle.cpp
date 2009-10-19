@@ -20,7 +20,7 @@ Particle::Particle(float x, float y){
   ttl = PARTICLE_TTL; 
   damping = 0.01f;
   fuzz = 0.0;
-  numH = 3; 
+  numH = ofRandom(4,20); 
 
   r = 0.0f; 
   g = 0.0f;
