@@ -73,7 +73,7 @@ bool ParticleSystem::particleDeserveToLive(int j){
   return true;
 }
 
-#define FFT_THRESH 0.02f
+#define FFT_THRESH 0.05f
 #define FFT_MULT 7.4f
 void ParticleSystem::update(){
   int repielValue = 2; 
@@ -89,7 +89,7 @@ void ParticleSystem::update(){
     }
     averfft/=fftSize;
     for (int i=fftSize-1; i>=0; i--){
-      if(fft[i]>FFT_THRESH && particles.size() < 2*fftSize){
+      if(fft[i]>FFT_THRESH && particles.size() < 3*fftSize){
         // addParticle(); 
         Particle p=Particle(width/2 + ofRandom(-20, 20), height/2 + ofRandom(-20.0, 20.0));
         
