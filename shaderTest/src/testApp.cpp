@@ -24,7 +24,7 @@ void testApp::setup(){
     
 
     fftList=NULL;                                                                                                   
-    bands = 256;
+    bands = 127;
 
     fftSmoothed = (float *)malloc(bands* sizeof(float));
     for (int i =0 ; i < bands; i++)
@@ -57,16 +57,17 @@ void testApp::update(){
   fftList = ofSoundGetSpectrum(bands); 
 
   for (int i = 0; i < bands; i++){
-      fftList[0] = 0.0f;
-      fftList[bands-1] = 0.0f;
-      fftList[i] = sqrtf(fftList[i]);
-      fftList[i] = (fftList[i-1] + fftList[i] +  fftList[i+1]) / 3.0f;
-      fftSmoothed[i] *= 0.40f; 
+      //fftList[0] = 0.0f;
+      //fftList[bands-1] = 0.0f;
+      if(fftList[i]>1.0f) fftList[i] = 0.9f;
+      fftList[i] = cbrtf(fftList[i]);
+      //fftList[i] = (fftList[i-1] + fftList[i] +  fftList[i+1]) / 3.0f;
+      fftSmoothed[i] =0.2f; // 0.000010f; 
       if ( fftSmoothed[i] < fftList[i] ){
         fftSmoothed[i] = fftList[i]; 
-        if(fftSmoothed[i] > 1.0f){
-          fftSmoothed[i]=1.0f;
-        }
+        //if(fftSmoothed[i] > 1.0f){
+        //  fftSmoothed[i]=1.0f;
+        //}
       }
   }
 
@@ -116,7 +117,18 @@ void testApp::keyPressed  (int key){
   switch(key){
     case 'g':
       break;
+    case 'f':
+      ofSetFullscreen(true);
+      psys.width = ofGetWidth();
+      psys.height = ofGetHeight();
+      break;
+    case 'F':
+      ofSetFullscreen(false);
+      psys.width = ofGetWidth();
+      psys.height = ofGetHeight();
+      break;
     case OF_KEY_UP:
+      
       break;
     case OF_KEY_DOWN:
       break;

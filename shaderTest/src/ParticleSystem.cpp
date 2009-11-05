@@ -74,7 +74,7 @@ bool ParticleSystem::particleDeserveToLive(int j){
 }
 
 #define FFT_THRESH 0.05f
-#define FFT_MULT 7.4f
+#define FFT_MULT 5.4f
 void ParticleSystem::update(){
   int repielValue = 2; 
   float averfft=1.0f; 
@@ -88,15 +88,18 @@ void ParticleSystem::update(){
         fftMax = fft[i];
     }
     averfft/=fftSize;
-    for (int i=fftSize-1; i>=0; i--){
-      if(fft[i]>FFT_THRESH && particles.size() < 3*fftSize){
+    int count = averfft * fftMax * 200;
+    for (int j=count; j>=0; j--){
+      int i = ofRandom(0, fftSize-1);
+      if(fft[i] > averfft && particles.size() < 3*fftSize){
         // addParticle(); 
-        Particle p=Particle(width/2 + ofRandom(-20, 20), height/2 + ofRandom(-20.0, 20.0));
+        Particle p=Particle(width/2, height/2);///2 + ofRandom(-200, 200), height/2 + ofRandom(-200.0, 200.0));
         
         p.alpha = 0.0f;
         p.id = i; 
-        p.angle = (ofGetFrameNum()%100/100.0f) * TWO_PI + i/fftSize*TWO_PI;
-        //p.accel = 100*fft[i]*ofxVec3f(cos(p.angle), -sin(p.angle), 0.0f); 
+        p.angle = /*(ofGetFrameNum()%100/100.0f) * TWO_PI*/ + i/(fftSize-1)*TWO_PI;
+        //p.angle = ofRandomf() * TWO_PI;
+        p.accel = 100*fft[i]*ofxVec3f(cos(p.angle), -sin(p.angle), 0.0f); 
         
         p.update();
         particles.push_back(p);
@@ -108,7 +111,7 @@ void ParticleSystem::update(){
          
   // for each particles 
   for(int j=0; j < particles.size(); j++){
-    particles[j].accel *=0.2; //.set(0,0,0);
+    particles[j].accel *=0.05; //.set(0,0,0);
     //particles[j].addDamping();
     
     if(! particleDeserveToLive(j)){
@@ -128,7 +131,7 @@ void ParticleSystem::update(){
     float noiseAngle2  = noise->Get(particles[j].position.x/width, particles[j].position.y/height) * TWO_PI; 
     ofxVec3f noiseForce = ofxVec3f(cos(noiseAngle), -sin(noiseAngle2), 0); 
 
-    //particles[j].accel += noiseForce; 
+    //particles[j].accel += averfft * FFT_MULT * noiseForce; 
     //---------------------------------------------------- -
     //particles[j].addAttractionForce(mousePos, 100.0f, 2.2f);
     //---------------------------------------------------- Move Particles with fft noise
@@ -143,20 +146,22 @@ void ParticleSystem::update(){
       // get multiplicator from sign
       //float angleSign=(particles[j].id<0)?-1.0f:1.0f;
 
-      float fftAngle = fft[fftid]/fftMax*TWO_PI + particles[j].angle; //+ (1.0f/fftSize)*PI; //4.0f*(PI/2.0f))
+      float fftAngle = (float )(ofRandom(0, 1)-1)*sqrtf(1-(fft[fftid]/fftMax))*TWO_PI + particles[j].angle; //+ (1.0f/fftSize)*PI; //4.0f*(PI/2.0f))
       // apply force 
-      ofxVec2f fftForce = (/*averfft +*/ (1+fft[fftid]))*  FFT_MULT * ofxVec3f(cos(fftAngle), -sin(fftAngle), 0); 
+      ofxVec2f fftForce = (/*averfft +*/ sqrtf(fft[fftid])) * FFT_MULT * ofxVec3f(cos(fftAngle), -sin(fftAngle), 0); 
       particles[j].accel += fftForce; // + ofRandom(-1, 1); 
       //particles[j].velocity += averfft * 0.01; 
       
 
       msaColor color; 
       int h = (lroundf(particles[j].id * 360.0f / (float)fftSize)); //+ ofGetFrameNum() )%360; 
-      color.setHSV(h, MIN(8*averfft, 1.0),  MIN(8*fft[fftid], 1.0)); 
+      //color.setHSV(h,  MIN(sqrtf(fft[fftid]), 1.0), MIN(sqrtf(averfft), 1.0) ); 
+      color.setHSV(h,  MIN(2.0f*fft[fftid], 1.0), MIN(2.0f* averfft, 1.0) ); 
       particles[j].r = color.r; 
       particles[j].g = color.g;
       particles[j].b = color.b;
-      particles[j].alpha = fft[fftid]; 
+      particles[j].alpha = fft[fftid];
+      ///fftMax; 
       //cout<<particles[j].velocity.length()<<endl;
      // if (particles.size() < 500 && averfft>0.02){
      //   addParticle();
@@ -191,7 +196,7 @@ void ParticleSystem::draw(){
   for(int i=0; i < this->particles.size(); i++)
     this->particles[i].draw();
   ofNoFill(); 
-
+/*
   //; debug
   for(int i =0 ; i < fftSize; i++){
     glColor4f(0.6, 0.6, 0.6, 1.0); 
@@ -200,7 +205,7 @@ void ParticleSystem::draw(){
   ofRect(100, ofGetHeight() - (100.0*FFT_THRESH*500.0f), ofGetWidth()-100, 2); 
 
   ofLine(100, ofGetHeight() - 100.0 - (FFT_THRESH*500.0f), ofGetWidth()-100.0f,  ofGetHeight() - 100.0f - (FFT_THRESH*500.0f));
-
+*/
 }
 
 
