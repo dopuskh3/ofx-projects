@@ -36,6 +36,7 @@ class testApp : public ofSimpleApp{
 		
 	    bTracker tracker; 
         ShapeSpectrum spectrum;
+        int h, w; 
 		
 };
 

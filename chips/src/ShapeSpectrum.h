@@ -14,6 +14,9 @@
 #define _SHAPE_SPECTRUM_H_
 
 #include "ofMain.h"
+#include "ofxMSAPhysics.h"
+
+#define GRAVITY -1
 
 class ShapeSpectrum {
 
@@ -33,6 +36,7 @@ class ShapeSpectrum {
     ofSoundPlayer mMusic; 
     float *mFFTList; 
     int mBands;
+    ofxMSAPhysics       physics;
 };
 
 #endif

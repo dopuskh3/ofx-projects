@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(pshape)
+project(shaderTest)
 
 include ( ../CMakeBase.txt ) 
 
@@ -17,11 +17,11 @@ include_directories ( ../addons/ofxVectorMath/src/ )
 file ( GLOB_RECURSE ofxShader ../addons/ofxShader/* )
 include_directories ( ../addons/ofxShader )
 
-add_executable( pshape
+add_executable( shaderTest 
     ${app_sources_files}
     ${ofxShader}
     ${ofxVectorMath}
     ${OFX_SOURCE_FILES} )
 
 set ( libs ${ofx_libs} ${cv_LIBRARIES}) 
-target_link_libraries(pshape ${libs} )
+target_link_libraries(shaderTest ${libs} )
