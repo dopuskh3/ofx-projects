@@ -6,10 +6,10 @@ varying vec3 normal;
 
 void main( void )
 {   
-vec4 baseColor = vec4(0.0, 0.0, 0.0, 1.0);
+vec4 baseColor = vec4(0.0, 0.0, 0.0, 0.4);
 	
-	float ddy = 15.0;
-	float ddx = 15.0;
+	float ddy = 2.0;
+	float ddx = 2.0;
  
   // Horizontal blur
   baseColor += 0.015625 * texture2DRect(tex, gl_TexCoord[0].st + vec2(0.0, ddy*-3.0) );
@@ -31,7 +31,7 @@ vec4 baseColor = vec4(0.0, 0.0, 0.0, 1.0);
   
   // Mix both
   baseColor *= 0.5;
-  vec4 color = texture2DRect(tex,gl_TexCoord[0].st + vec2( 100, 109) );
+  //vec4 color = texture2DRect(tex,gl_TexCoord[0].st + vec2( 100, 109) );
  
   //baseColor.a = 1.0;
   //baseColor.r= 1; 

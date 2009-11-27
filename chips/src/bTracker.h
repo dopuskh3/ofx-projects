@@ -48,7 +48,9 @@ class bTracker {
       int threshValue; 
 
       
-      bTracker(){};
+      bTracker(){
+      
+      };
       void setup(int w, int h ); 
       // set background 
       void setBackground(); 
@@ -57,7 +59,8 @@ class bTracker {
       // set diff mode 
       void setDiffMode(int diffMode); 
       void setThreshold(int t); 
-      void draw();
+
+      void  draw( float x, float y, float w, float h );
       // Retrieve background image
       ofxCvGrayscaleImage *getBackgroundImage(); 
       // retrieve current image

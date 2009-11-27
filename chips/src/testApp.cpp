@@ -7,13 +7,15 @@ void testApp::setup(){
 	ofSetFrameRate(32);
 
     tracker.setup(320, 240); 
+    w = ofGetWidth(); 
+    h = ofGetHeight();
     // world = new bWorld();
     // world->createWorld();
     //480, 640); 
     //, 240); 
 	// video.loadMovie("multiPerson-FromBehind-IR.mov");
-    spectrum.setup(std::string("test.mp3"), 64); 
-    spectrum.play(); 
+    //spectrum.setup(std::string("test.mp3"), 72); 
+    //spectrum.play(); 
 
 }
 
@@ -21,11 +23,11 @@ void testApp::setup(){
 void testApp::update(){
 
   tracker.update();
-  if (tracker.getConvexBlobs().size() >= 1 )
-    spectrum.setShape(&tracker.getBlobs()[0].pts); 
-  else
-    std::cout<<"Nothing to draw"<<tracker.getConvexBlobs().size()<<std::endl;
-  spectrum.update();
+  //if (tracker.getConvexBlobs().size() >= 1 )
+  //  spectrum.setShape(&tracker.getBlobs()[0].pts); 
+  //else
+  //  std::cout<<"Nothing to draw"<<tracker.getConvexBlobs().size()<<std::endl;
+  //spectrum.update();
 }
 
 //--------------------------------------------------------------
@@ -33,14 +35,15 @@ void testApp::draw(){
   ofSetColor(255, 255, 255);
 
 
-  tracker.source.draw(tracker.width*2, 0);
-  ofSetColor(255, 255, 255);
+  //tracker.source.draw(tracker.width*2, 0);
   //tracker.contourFinder.draw(0, 0); 
-  ofSetColor(255, 255, 255);
-  tracker.background.draw(tracker.width, 0); 
-  tracker.threshold.draw(0, tracker.height);
-  tracker.draw();
-  spectrum.draw();
+  //ofSetColor(255, 255, 255);
+  //tracker.background.draw(tracker.width, 0); 
+  ofSetColor(25, 25, 25);
+  tracker.threshold.draw(0, 0, w, h) ; 
+  tracker.draw(0, 0, w, h ); 
+  ofFill();
+  //spectrum.draw();
   
   //world->shapeFromBlobs(tracker.getBlobs()); 
 }

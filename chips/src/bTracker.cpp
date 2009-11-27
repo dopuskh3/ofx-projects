@@ -89,7 +89,8 @@ void bTracker::update(){
     this->threshold.blur();
   
   int numFound = contourFinder.findContours(this->threshold, this->minBlobSize, this->maxBlobSize, this->maxBlobs, false, true);
-  contourFinder.findConvexHulls();
+  //contourFinder.findConvexHulls();
+  contourFinder.smoothApproxChains();
    
 }
 
@@ -123,9 +124,9 @@ vector<ofxCvBlob> &bTracker::getConvexBlobs(){
 }
 
 //------------------------------------------------------------------------- 
-void bTracker::draw(){
+void bTracker::draw(float x, float y, float h,float  w){
   ofSetColor(0,0,255);
-  contourFinder.draw(0, 0);
+  contourFinder.draw(x, y, h, w); 
 }
 
 

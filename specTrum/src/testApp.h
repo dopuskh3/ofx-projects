@@ -17,6 +17,7 @@ class testApp : public ofSimpleApp {
   
   public:
     float *fftList; 
+    float *fftSmoothed; 	
     int bands;
 
 

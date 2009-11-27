@@ -39,18 +39,29 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
 
 endif()
 
+
+# msaPhysics
+file ( GLOB_RECURSE ofxMSAPhysics ../addons/ofxMSAPhysics/src/* )
+include_directories ( ../addons/ofxMSAPhysics/src/Callbacks ../addons/ofxMSAPhysics/src/Constraints ../addons/ofxMSAPhysics/src/Core ../addons/ofxMSAPhysics/src/serialization/ ../addons/ofxMSAPhysics/src/ ) 
+
+# ofxObjCPointer
+file ( GLOB_RECURSE ofxObjCPointer ../addons/ofxObjCPointer/src/* ) 
+include_directories ( ../addons/ofxObjCPointer/src/ )
+
+
 #################################################
 # box2d
 #################################################
-file ( GLOB_RECURSE b2d_sources_files ../addons/ofxBox2d-vanderline/*)
-include_directories( ../addons/ofxBox2d-vanderline/lib/Box2D/Include ../addons/ofxBox2d-vanderline/ ) 
+# file ( GLOB_RECURSE b2d_sources_files ../addons/ofxBox2d-vanderline/*)
+#include_directories( ../addons/ofxBox2d-vanderline/lib/Box2D/Include ../addons/ofxBox2d-vanderline/ ) 
 
 
 add_executable( chips
     ${app_sources_files}
-    ${b2d_sources_files}
+    ${ofxMSAPhysics}
     ${ofxOpenCv}
     ${ofxVectorMath}
+    ${ofxObjCPointer}
     ${OFX_SOURCE_FILES} )
 
 set ( libs ${ofx_libs} ${cv_LIBRARIES}) 
