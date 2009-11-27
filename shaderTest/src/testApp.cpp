@@ -62,7 +62,7 @@ void testApp::update(){
       if(fftList[i]>1.0f) fftList[i] = 0.9f;
       fftList[i] = cbrtf(fftList[i]);
       //fftList[i] = (fftList[i-1] + fftList[i] +  fftList[i+1]) / 3.0f;
-      fftSmoothed[i] =0.2f; // 0.000010f; 
+      fftSmoothed[i] *= 0.002f; // 0.000010f; 
       if ( fftSmoothed[i] < fftList[i] ){
         fftSmoothed[i] = fftList[i]; 
         //if(fftSmoothed[i] > 1.0f){

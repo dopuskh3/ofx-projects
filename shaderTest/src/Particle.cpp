@@ -106,8 +106,8 @@ void Particle::draw(){
   for(int i=0 ; i < hPos.size(); i++){
     float l = hVel[i].length();
     float angle = atan2(hVel[i].y, hVel[i].x); 
-    float ofx = -sin(angle)*l*0.05;
-    float ofy = cos(angle)*l*0.05;
+    float ofx = -sin(angle)*l*0.1;
+    float ofy = cos(angle)*l*0.1;
     
     
     

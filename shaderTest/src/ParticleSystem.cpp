@@ -99,7 +99,7 @@ void ParticleSystem::update(){
         p.id = i; 
         p.angle = /*(ofGetFrameNum()%100/100.0f) * TWO_PI*/ + i/(fftSize-1)*TWO_PI;
         //p.angle = ofRandomf() * TWO_PI;
-        p.accel = 100*fft[i]*ofxVec3f(cos(p.angle), -sin(p.angle), 0.0f); 
+        p.accel = fft[i]*ofxVec3f(cos(p.angle), -sin(p.angle), 0.0f); 
         
         p.update();
         particles.push_back(p);
@@ -111,7 +111,7 @@ void ParticleSystem::update(){
          
   // for each particles 
   for(int j=0; j < particles.size(); j++){
-    particles[j].accel *=0.05; //.set(0,0,0);
+    particles[j].accel = 0;
     //particles[j].addDamping();
     
     if(! particleDeserveToLive(j)){
@@ -146,10 +146,10 @@ void ParticleSystem::update(){
       // get multiplicator from sign
       //float angleSign=(particles[j].id<0)?-1.0f:1.0f;
 
-      float fftAngle = (float )(ofRandom(0, 1)-1)*sqrtf(1-(fft[fftid]/fftMax))*TWO_PI + particles[j].angle; //+ (1.0f/fftSize)*PI; //4.0f*(PI/2.0f))
+      float fftAngle = (float )(fft[fftid]/fftMax)*TWO_PI + particles[j].angle; //+ (1.0f/fftSize)*PI; //4.0f*(PI/2.0f))
       // apply force 
-      ofxVec2f fftForce = (/*averfft +*/ sqrtf(fft[fftid])) * FFT_MULT * ofxVec3f(cos(fftAngle), -sin(fftAngle), 0); 
-      particles[j].accel += fftForce; // + ofRandom(-1, 1); 
+      ofxVec2f fftForce = /*averfft + sqrtf(fft[fftid]))*/ ofxVec3f(fft[fftid] * FFT_MULT * cos(fftAngle), fft[fftid] * FFT_MULT * -sin(fftAngle), 0); 
+      particles[j].accel += fftForce; // ofRandom(-1, 1); 
       //particles[j].velocity += averfft * 0.01; 
       
 
@@ -160,7 +160,7 @@ void ParticleSystem::update(){
       particles[j].r = color.r; 
       particles[j].g = color.g;
       particles[j].b = color.b;
-      particles[j].alpha = fft[fftid];
+      particles[j].alpha = 0.5 + 0.5 * fft[fftid];
       ///fftMax; 
       //cout<<particles[j].velocity.length()<<endl;
      // if (particles.size() < 500 && averfft>0.02){
