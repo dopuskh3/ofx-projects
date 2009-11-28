@@ -16,6 +16,9 @@
 #include "ofxVec2f.h"
 #include "ofxOpenCv.h"
 
+#define OPTFLOW_SMOOTH true
+#define OPTFLOW_THRESHOLD 3.0
+
 class optFlow {
 
   public:
@@ -42,6 +45,10 @@ class optFlow {
     IplImage *velY;
     IplImage *_tvx;
     IplImage *_tvy;
+    IplImage *_pvx;
+    IplImage *_pvy;
+
+    bool optFlowSmooth;
 };
 
 #endif

@@ -1,17 +1,19 @@
 #include "testApp.h"
 
+#define CAP_W 640
+#define CAP_H 480
 
 //--------------------------------------------------------------
 void testApp::setup(){	
 	ofBackground(20,20,20);
 	ofSetFrameRate(32);
 
-	vidGrabber.initGrabber(800, 600);
+	vidGrabber.initGrabber(CAP_W, CAP_H);
     cout<<vidGrabber.getWidth()<<endl;
     cout<<vidGrabber.getHeight()<<endl;
     vidGrabber.setVerbose(true);
 
-	oflow.init(800, 600,2);
+	oflow.init(CAP_W, CAP_H,20);
 }
 
 //--------------------------------------------------------------
