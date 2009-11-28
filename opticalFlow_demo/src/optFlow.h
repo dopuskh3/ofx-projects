@@ -21,23 +21,27 @@ class optFlow {
   public:
     optFlow();
   
-    void init(ofVideoGrabber *vidGrabber, float scale);   
-    void update();
+    void init(int w, int h, int scale);   
+    void update(unsigned char *pixels);
     void draw();
   
 
-    int getWidth(){ return this->vidGrab->getWidth(); }
-    int getHeight(){ return this->vidGrab->getHeight(); }
+	int getWidth(){ return width; }
+	int getHeight(){ return height; }
     void getFlowAt(int x, int y, ofxVec2f &flow);
 
-    float scale;
     ofVideoGrabber *vidGrab;
     ofxCvGrayscaleImage  previous_image;
     ofxCvGrayscaleImage  current_image; 
     ofxCvGrayscaleImage _temp;
-  
+		
+	int step;
+	int height; 
+	int width;
     IplImage *velX; 
     IplImage *velY;
+    IplImage *_tvx;
+    IplImage *_tvy;
 };
 
 #endif

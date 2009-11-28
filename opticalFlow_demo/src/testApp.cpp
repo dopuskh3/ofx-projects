@@ -5,15 +5,22 @@
 void testApp::setup(){	
 	ofBackground(20,20,20);
 	ofSetFrameRate(32);
-    
-    
-    vidGrabber.initGrabber(320, 240);
-    oflow.init(&vidGrabber, 0.05);
+
+	vidGrabber.initGrabber(800, 600);
+    cout<<vidGrabber.getWidth()<<endl;
+    cout<<vidGrabber.getHeight()<<endl;
+    vidGrabber.setVerbose(true);
+
+	oflow.init(800, 600,2);
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-  oflow.update();
+  vidGrabber.grabFrame();
+  if (vidGrabber.isFrameNew()){
+    oflow.update(vidGrabber.getPixels());
+  }
+
 
 }
 

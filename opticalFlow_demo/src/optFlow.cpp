@@ -16,61 +16,62 @@ optFlow::optFlow(){
 }
 
 
-void optFlow::init(ofVideoGrabber *vidGrab, float scale){
+void optFlow::init(int w, int h, int step){
   cout<<"Initializing video grabber"<<endl;
-  this->vidGrab = vidGrab; 
-  this->previous_image.allocate(this->getWidth()*scale, this->getHeight()*scale);
-  this->current_image.allocate(this->getWidth()*scale, this->getHeight()*scale);
+  vidGrab = vidGrab; 
+  width = w;
+  height = h;
+
+  previous_image.allocate(getWidth(), getHeight());
+  current_image.allocate(getWidth(), getHeight());
   
-  this->velX = cvCreateImage( cvSize(this->getWidth()*scale, this->getHeight()*scale), IPL_DEPTH_32F, 1);
-  this->velY = cvCreateImage( cvSize(this->getWidth()*scale, this->getHeight()*scale), IPL_DEPTH_32F, 1);
-  this->scale = scale;
+  velX = cvCreateImage( cvSize(getWidth()/step, getHeight()/step), IPL_DEPTH_32F, 1);
+  velY = cvCreateImage( cvSize(getWidth()/step, getHeight()/step), IPL_DEPTH_32F, 1);
+
+  _tvx = cvCreateImage(cvSize(w, h), IPL_DEPTH_32F, 1);
+  _tvy = cvCreateImage(cvSize(w, h), IPL_DEPTH_32F, 1); 
+  this->step = step;
+	
 }
 
 
-
-
-void optFlow::update(){
+void optFlow::update(unsigned char *pixels){
   // swap images 
   ofxCvColorImage _temp;
-  this->vidGrab->grabFrame();
 
-  if (this->vidGrab->isFrameNew()){
-    _temp.allocate(this->getWidth(), this->getHeight());
-    _temp.setFromPixels(this->vidGrab->getPixels(), this->getWidth(), this->getHeight());
-    _temp.resize(current_image.getWidth(), current_image.getHeight());
-    //_temp.erode();
-    //_temp.blur(3);
-    this->previous_image = this->current_image;
-    this->current_image = _temp;
-    
-     
-    cvCalcOpticalFlowLK(this->previous_image.getCvImage(), this->current_image.getCvImage(), cvSize(3,3),
-                        velX, velY);
-  }
+  _temp.allocate(getWidth(), getHeight());
+  _temp.setFromPixels(pixels, getWidth(), getHeight());
+  //_temp.resize(current_image.getWidth(), current_image.getHeight());
+
+  //_temp.erode();
+  _temp.blur();
+  previous_image = current_image;
+  current_image = _temp;
+
+  cvCalcOpticalFlowLK(previous_image.getCvImage(), current_image.getCvImage(), cvSize(3,3),
+      _tvx, _tvy);
+  
+  cvResize(_tvx, velX);
+  cvResize(_tvy, velY);
+
 }
 
+
 void optFlow::getFlowAt(int x, int y, ofxVec2f &flow){
-  int i = (float)x*this->scale;
-  int j = (float)x*this->scale;
-  //cout<<"Pixel at ("<<x<<", "<<y<<") -> ("<<i<<", "<<j<<")"<<endl;
-  
-  flow.x = (float )(this->velX->imageData + this->velX->widthStep*j)[i];
-  flow.y = (float )(this->velY->imageData + this->velY->widthStep*j)[i];
+  int dx = x/step;
+  int dy = y/step;
+  flow.x = cvGetReal2D(velX, dy, dx);
+  flow.y = cvGetReal2D(velY, dy, dx);
 }
 
 void optFlow::draw(){
-
- //this->velX.draw(0, 0);
- int xstep = floor(1.0/scale);
- int ystep = floor(1.0/scale); 
  
- current_image.draw(100, 400);
- for(int x=0; x < this->getWidth(); x+=xstep){
-   for(int y=0; y < this->getHeight(); y+=ystep){
+ current_image.draw(0, 0);
+ for(int x=0; x < getWidth()-step; x+=step){
+   for(int y=0; y < getHeight()-step; y+=step){
     ofxVec2f v; 
     getFlowAt(x, y, v);
-    ofLine(x, y, x+v.x*0.1, y+v.y*0.1);
+    ofLine(x, y, x+v.x, y+v.y);
    }
  }
 }
