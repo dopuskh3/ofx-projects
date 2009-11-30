@@ -14,6 +14,7 @@
 
 #include "ofMain.h"
 #include "ofxVec2f.h"
+#include "ofxVec4f.h"
 #include "ofxOpenCv.h"
 
 #define OPTFLOW_SMOOTH true
@@ -32,6 +33,7 @@ class optFlow {
 	int getWidth(){ return width; }
 	int getHeight(){ return height; }
     void getFlowAt(int x, int y, ofxVec2f &flow);
+    void getNMax(vector<ofxVec4f> &points);
 
     ofVideoGrabber *vidGrab;
     ofxCvGrayscaleImage  previous_image;

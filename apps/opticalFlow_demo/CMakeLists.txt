@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(opticalFlowDemo)
 
-include ( ../CMakeBase.txt ) 
+include ( ../../CMakeBase.txt ) 
 
 # add ofx includes directories for dependencies 
 include_directories ( ${ofx_includes} ) 
@@ -10,12 +10,12 @@ include_directories ( ${ofx_includes} )
 file ( GLOB_RECURSE app_sources_files src/*)
 
 # VectorMath addon ##############################
-file ( GLOB_RECURSE ofxVectorMath ../addons/ofxVectorMath/src/* )
-include_directories ( ../addons/ofxVectorMath/src/ ) 
+file ( GLOB_RECURSE ofxVectorMath ../../addons/ofxVectorMath/src/* )
+include_directories ( ../../addons/ofxVectorMath/src/ ) 
 
 # OpenCv addon ##################################
-file ( GLOB_RECURSE ofxOpenCv ../addons/ofxOpenCv/src/* )
-include_directories ( ../addons/ofxOpenCv/src/ ) 
+file ( GLOB_RECURSE ofxOpenCv ../../addons/ofxOpenCv/src/* )
+include_directories ( ../../addons/ofxOpenCv/src/ ) 
 
 if ( CMAKE_SYSTEM_NAME MATCHES "Linux" ) 
 include(FindPkgConfig)
@@ -36,11 +36,14 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
     message ("--- ${cv_LIBRARIES}")
 endif()
 
-
+# optFlow addon
+file ( GLOB_RECURSE optFlow ../../dopAddons/optFlow/src/*)
+include_directories ( ../../dopAddons/optFlow/src/ ) 
 
 add_executable( opticalFlowDemo
     ${app_sources_files}
     ${ofxVectorMath}
+    ${optFlow}
     ${ofxOpenCv}
     ${OFX_SOURCE_FILES} )
 

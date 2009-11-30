@@ -83,12 +83,31 @@ void optFlow::update(unsigned char *pixels){
 
 }
 
+bool sortFlow(const ofxVec4f &a,  const ofxVec4f &b){
+  return ( (a.z*a.z + a.w*a.w) > (b.z*b.z + b.w*b.w) );
+}
+
+void optFlow::getNMax(vector<ofxVec4f> &points){
+  for (int x=0; x < width/step; x++){
+    for (int y=0; y<  height/step; y++){
+      ofxVec4f point = ofxVec4f(x*step, y*step, cvGetReal2D(velX, y, x), cvGetReal2D(velY, y, x));
+      points.push_back(point);
+    }
+  }
+  
+  sort(points.begin(), points.end(), sortFlow);
+}
 
 void optFlow::getFlowAt(int x, int y, ofxVec2f &flow){
   int dx = x/step;
   int dy = y/step;
-  flow.x = cvGetReal2D(velX, dy, dx);
-  flow.y = cvGetReal2D(velY, dy, dx);
+  if (x >= width || y >= height || x < 0 || y < 0){
+    flow.x = 0; 
+    flow.y = 0;
+  } else {
+    flow.x = cvGetReal2D(velX, dy, dx);
+    flow.y = cvGetReal2D(velY, dy, dx);
+  }
 }
 
 void optFlow::draw(){

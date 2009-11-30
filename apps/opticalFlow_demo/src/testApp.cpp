@@ -13,7 +13,10 @@ void testApp::setup(){
     cout<<vidGrabber.getHeight()<<endl;
     vidGrabber.setVerbose(true);
 
-	oflow.init(CAP_W, CAP_H,20);
+	oflow.init(CAP_W, CAP_H,10);
+    
+    particles.setup(300, &oflow, CAP_W, CAP_H);
+
 }
 
 //--------------------------------------------------------------
@@ -22,6 +25,7 @@ void testApp::update(){
   if (vidGrabber.isFrameNew()){
     oflow.update(vidGrabber.getPixels());
   }
+  particles.update();
 
 
 }
@@ -31,7 +35,7 @@ void testApp::draw(){
   ofSetColor(255, 255, 255);
   
   oflow.draw();
-
+  particles.draw();
 
 }
 
