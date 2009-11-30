@@ -6,15 +6,17 @@
 //--------------------------------------------------------------
 void testApp::setup(){	
 	ofBackground(20,20,20);
-	ofSetFrameRate(32);
+	ofSetFrameRate(22);
 
 	vidGrabber.initGrabber(CAP_W, CAP_H);
     cout<<vidGrabber.getWidth()<<endl;
     cout<<vidGrabber.getHeight()<<endl;
     vidGrabber.setVerbose(true);
+  
 
 	oflow.init(CAP_W, CAP_H,10);
-    
+    grabber.init();
+
     particles.setup(300, &oflow, CAP_W, CAP_H);
 
 }
@@ -36,7 +38,7 @@ void testApp::draw(){
   
   oflow.draw();
   particles.draw();
-
+  grabber.grab();
 }
 
 //--------------------------------------------------------------

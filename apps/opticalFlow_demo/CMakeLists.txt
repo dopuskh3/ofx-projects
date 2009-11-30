@@ -40,10 +40,16 @@ endif()
 file ( GLOB_RECURSE optFlow ../../dopAddons/optFlow/src/*)
 include_directories ( ../../dopAddons/optFlow/src/ ) 
 
+# screenGrabber addon
+file ( GLOB_RECURSE screenGrabber ../../dopAddons/screenGrabber/src/*)
+include_directories ( ../../dopAddons/screenGrabber/src/ ) 
+
+
 add_executable( opticalFlowDemo
     ${app_sources_files}
     ${ofxVectorMath}
     ${optFlow}
+    ${screenGrabber}
     ${ofxOpenCv}
     ${OFX_SOURCE_FILES} )
 

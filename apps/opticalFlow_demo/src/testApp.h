@@ -14,6 +14,7 @@
 #include "ofMain.h"
 #include "optFlow.h"
 #include "ParticleSystem.h"
+#include "screenGrabber.h"
 
 class testApp : public ofSimpleApp{
 	
@@ -34,6 +35,7 @@ class testApp : public ofSimpleApp{
         ofVideoGrabber vidGrabber;        
         optFlow oflow;
         ParticleSystem particles;
+        screenGrabber grabber;
 		
 };
 
