@@ -42,11 +42,21 @@ void ParticleSystem::setup(int nParticles){
   fft=NULL;
   fftSize = 0;
   fftMult = FFT_MULT;
-  fftThresh = FFT_THRESH;
   enableNoise = ENABLE_NOISE;
   noiseMult = NOISE_MULT;
   averageTrigger = AVERAGE_TRIGGER;
   maxParticles = MAX_PARTICLES;
+  particleRandomPos = PARTICLE_RANDOM_POS;
+  rotatingAngle = ROTATING_ANGLE;
+  lowThresh = LOW_THRESH;
+  midThresh = MID_THRESH;
+  highThresh = HIGH_THRESH;
+
+  particleSizeMin = PARTICLE_SIZE_MIN;
+  particleSizeMax = PARTICLE_SIZE_MAX; 
+
+  velocityDamp = VELOCITY_DAMP;
+  accelDamp = ACCEL_DAMP;
 }
 
 void ParticleSystem::setFFT(float *fftVector, int size){
@@ -65,7 +75,7 @@ void ParticleSystem::addRepiel(ofxVec3f center, float fValue, float fRadius){
 }
 
 void ParticleSystem::addParticle(){
-      Particle p = Particle(width/2 + ofRandom(-20, 20), height/2 + ofRandom(-20.0, 20.0)); 
+      Particle p = Particle(width/2 + ofRandom(-20, 20), height/2 + ofRandom(-20.0, 20.0), particleSizeMin, particleSizeMax); 
       p.id = ofRandom(0, fftSize-1); 
       particles.push_back(p);
 }
@@ -83,6 +93,7 @@ void ParticleSystem::update(){
   int repielValue = 2; 
   float averfft=1.0f; 
   float fftMax = 0.0f;
+  float trigger; 
   
   
   if(fftSize && fft >0){
@@ -93,26 +104,40 @@ void ParticleSystem::update(){
     }
     averfft/=fftSize;
     int count = averfft * fftMax * 200;
-    if(averageTrigger)
-      trigger = averfft;
-    else
-      trigger = fftThresh;
 
     for (int j=count; j>=0; j--){
       int i = ofRandom(0, fftSize-1);
+      if ( i < fftSize/3 && ! averageTrigger ){
+        trigger = lowThresh;
+      } else if(i >= fftSize/3 && i < 2*(fftSize/3) && ! averageTrigger){
+        trigger = midThresh;
+      } else if( ! averageTrigger ){
+        trigger = highThresh;
+      } else { // then averfft trigger
+        trigger = averfft; 
+      } 
       if(fft[i] > trigger && particles.size() < maxParticles){
         // addParticle(); 
-        Particle p=Particle(width/2, height/2);///2 + ofRandom(-200, 200), height/2 + ofRandom(-200.0, 200.0));
+        int x = width/2;
+        int y = height/2;
+        if(particleRandomPos){
+          x = ofRandom(0, width);
+          y = ofRandom(0, height);
+        }
+        Particle p=Particle(x, y, particleSizeMin, particleSizeMax);
         
         p.alpha = 0.0f;
         p.id = i; 
-        p.angle = /*(ofGetFrameNum()%100/100.0f) * TWO_PI*/ + i/(fftSize-1)*TWO_PI;
-        //p.angle = ofRandomf() * TWO_PI;
-        p.accel = fft[i]*ofxVec3f(cos(p.angle), -sin(p.angle), 0.0f); 
+        if (rotatingAngle){
+          p.angle = (ofGetFrameNum()%100);
+        } else{
+          p.angle = 0;
+        }
+        p.angle += i/(fftSize-1)*TWO_PI;
+        //p.accel = fft[i]*ofxVec3f(cos(p.angle), -sin(p.angle), 0.0f); 
         
         p.update();
         particles.push_back(p);
-        //    particles.at(particles.size()-1).id = i; 
       }
     }
 
@@ -120,7 +145,8 @@ void ParticleSystem::update(){
          
   // for each particles 
   for(int j=0; j < particles.size(); j++){
-    particles[j].accel = 0;
+    particles[j].accel *= accelDamp;
+    particles[j].velocity *= velocityDamp;
     //particles[j].addDamping();
     
     if(! particleDeserveToLive(j)){
@@ -145,12 +171,11 @@ void ParticleSystem::update(){
     
     if (fftSize > 0){
       int fftid=particles[j].id;
-      float fftAngle = (float )(fft[fftid]/fftMax)*TWO_PI + particles[j].angle; //+ (1.0f/fftSize)*PI; //4.0f*(PI/2.0f))
+      float fftAngle = (float )(fft[fftid]/fftMax)*PI + particles[j].angle; //+ (1.0f/fftSize)*PI; //4.0f*(PI/2.0f))
       
       // apply force 
       ofxVec2f fftForce = /*averfft + sqrtf(fft[fftid]))*/ ofxVec3f(fft[fftid] * fftMult * cos(fftAngle), fft[fftid] * fftMult * -sin(fftAngle), 0); 
       particles[j].accel += fftForce; // ofRandom(-1, 1); 
-      //particles[j].velocity += averfft * 0.01; 
       
 
       msaColor color; 

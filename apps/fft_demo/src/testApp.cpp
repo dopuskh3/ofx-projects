@@ -22,12 +22,20 @@ void testApp::setup(){
       fftSmoothed[i] = 0.0; 
   
     gui.addTitle("Control");
-    gui.addSlider("fft mult", psys.fftMult , 0.0, 30.0);
+    gui.addSlider("fft mult", psys.fftMult , 0.0, 200.0);
     gui.addSlider("noise mul", psys.noiseMult, 0.0, 30.0);
     gui.addSlider("max particles", psys.maxParticles, 0, 800);
-    gui.addSlider("threshold", psys.fftThresh, 0.0, 1.0);
+    gui.addSlider("Low Thresh", psys.lowThresh, 0.0, 1.0);
+    gui.addSlider("Mid Thresh", psys.midThresh, 0.0, 1.0);
+    gui.addSlider("High Thresh", psys.highThresh, 0.0, 1.0);
+    gui.addSlider("Particle Size Min", psys.particleSizeMin, 0, 50);
+    gui.addSlider("Particle Size Max", psys.particleSizeMax, 0, 50);
+    gui.addSlider("Velocity Damp", psys.velocityDamp, 0.0, 1.0);
+    gui.addSlider("Accel Damp", psys.accelDamp, 0.0, 1.0);
     gui.addToggle("average toggle", psys.averageTrigger);
     gui.addToggle("enable noise", psys.enableNoise); 
+    gui.addToggle("rotating angle", psys.rotatingAngle);
+    gui.addToggle("random pos", psys.particleRandomPos);
 
 
     music.loadSound("test.mp3"); 

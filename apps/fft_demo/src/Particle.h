@@ -32,7 +32,7 @@ class Particle{
 
     int numH; 
 
-    Particle(float x, float y);
+    Particle(float x, float y, int sizeMin, int sizeMax);
     void addForce(ofxVec3f f); 
     void addDamping(); 
     void update();

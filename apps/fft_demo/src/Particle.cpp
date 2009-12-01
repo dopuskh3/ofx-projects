@@ -12,7 +12,7 @@
 
 #include "Particle.h"
 
-Particle::Particle(float x, float y){
+Particle::Particle(float x, float y, int nhmin, int nhmax){
 
   this->position = ofxVec3f(x,y); 
   this->velocity = ofxVec3f(0, 0);
@@ -20,7 +20,7 @@ Particle::Particle(float x, float y){
   ttl = PARTICLE_TTL; 
   damping = 0.01f;
   fuzz = 0.0;
-  numH = ofRandom(3,8); 
+  numH = ofRandom(nhmin,nhmax); 
 
   r = 0.0f; 
   g = 0.0f;
@@ -43,7 +43,7 @@ void Particle::update(){
     hAc.push_back(accel); 
     hColor.push_back(ofxVec4f(r, g, b, alpha)); 
 
-    if(hPos.size() >= numH){
+    while(hPos.size() >= numH){
       hPos.pop_front(); 
       hVel.pop_front();
       hAc.pop_front(); 

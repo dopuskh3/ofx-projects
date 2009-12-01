@@ -19,6 +19,15 @@
 #define DRAW_REPIELS 1
 #define AVERAGE_TRIGGER false
 #define MAX_PARTICLES 400
+#define PARTICLE_RANDOM_POS false
+#define ROTATING_ANGLE false
+#define LOW_THRESH 0.25f
+#define HIGH_THRESH 0.04f
+#define MID_THRESH 0.2f
+#define PARTICLE_SIZE_MIN 3
+#define PARTICLE_SIZE_MAX 8
+#define VELOCITY_DAMP 0.9f
+#define ACCEL_DAMP 0.0f
 
 class ParticleSystem{
 
@@ -53,5 +62,16 @@ class ParticleSystem{
     bool enableNoise;
     bool averageTrigger;
     int maxParticles;
+    bool particleRandomPos;
+    bool rotatingAngle; 
+    
+    float lowThresh;
+    float midThresh;
+    float highThresh;
 
+    int particleSizeMin;
+    int particleSizeMax;
+
+    float velocityDamp;
+    float accelDamp;
 };
