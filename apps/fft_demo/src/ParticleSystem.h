@@ -17,6 +17,8 @@
 #define ENABLE_NOISE false
 #define NOISE_MULT 2.0f
 #define DRAW_REPIELS 1
+#define AVERAGE_TRIGGER false
+#define MAX_PARTICLES 400
 
 class ParticleSystem{
 
@@ -49,5 +51,7 @@ class ParticleSystem{
     float noiseMult;
     float fftThresh;
     bool enableNoise;
+    bool averageTrigger;
+    int maxParticles;
 
 };

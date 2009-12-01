@@ -24,6 +24,9 @@ void testApp::setup(){
     gui.addTitle("Control");
     gui.addSlider("fft mult", psys.fftMult , 0.0, 30.0);
     gui.addSlider("noise mul", psys.noiseMult, 0.0, 30.0);
+    gui.addSlider("max particles", psys.maxParticles, 0, 800);
+    gui.addSlider("threshold", psys.fftThresh, 0.0, 1.0);
+    gui.addToggle("average toggle", psys.averageTrigger);
     gui.addToggle("enable noise", psys.enableNoise); 
 
 

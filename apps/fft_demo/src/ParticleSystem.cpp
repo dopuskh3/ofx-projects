@@ -45,6 +45,8 @@ void ParticleSystem::setup(int nParticles){
   fftThresh = FFT_THRESH;
   enableNoise = ENABLE_NOISE;
   noiseMult = NOISE_MULT;
+  averageTrigger = AVERAGE_TRIGGER;
+  maxParticles = MAX_PARTICLES;
 }
 
 void ParticleSystem::setFFT(float *fftVector, int size){
@@ -91,9 +93,14 @@ void ParticleSystem::update(){
     }
     averfft/=fftSize;
     int count = averfft * fftMax * 200;
+    if(averageTrigger)
+      trigger = averfft;
+    else
+      trigger = fftThresh;
+
     for (int j=count; j>=0; j--){
       int i = ofRandom(0, fftSize-1);
-      if(fft[i] > averfft && particles.size() < 3*fftSize){
+      if(fft[i] > trigger && particles.size() < maxParticles){
         // addParticle(); 
         Particle p=Particle(width/2, height/2);///2 + ofRandom(-200, 200), height/2 + ofRandom(-200.0, 200.0));
         
