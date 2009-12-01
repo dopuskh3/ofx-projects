@@ -28,15 +28,11 @@ ParticleSystem::ParticleSystem(){
 // - particles
 // - erase flag
 //
-void ParticleSystem::setup(int nParticles, optFlowHS *oflow, int w, int h){
-  
-  height = h;
-  width = w;
-  flow = oflow;
-
+void ParticleSystem::setup(int nParticles){
   for(int i=0; i < nParticles; i++){
-    addParticle();
+  //addParticle();
   }  
+
   mouseX = 0; 
   mouseY = 0;
   erase = 0;
@@ -45,6 +41,10 @@ void ParticleSystem::setup(int nParticles, optFlowHS *oflow, int w, int h){
 
   fft=NULL;
   fftSize = 0;
+  fftMult = FFT_MULT;
+  fftThresh = FFT_THRESH;
+  enableNoise = ENABLE_NOISE;
+  noiseMult = NOISE_MULT;
 }
 
 void ParticleSystem::setFFT(float *fftVector, int size){
@@ -74,47 +74,51 @@ bool ParticleSystem::particleDeserveToLive(int j){
         || particles[j].ttl < 0  ) {
       return false;
     }
-
   return true;
 }
 
-#define FFT_THRESH 0.05f
-#define FFT_MULT 5.4f
-#define FLOW_MULT 0.3f
-#define NOISE_MULT 0.06f
 void ParticleSystem::update(){
+  int repielValue = 2; 
+  float averfft=1.0f; 
+  float fftMax = 0.0f;
   
-        //Particle p=Particle(width/2, height/2);///2 + ofRandom(-200, 200), height/2 + ofRandom(-200.0, 200.0));
+  
+  if(fftSize && fft >0){
+    for(int i=0; i< fftSize; i++){
+      averfft+=fft[i];
+      if(fft[i]>fftMax)
+        fftMax = fft[i];
+    }
+    averfft/=fftSize;
+    int count = averfft * fftMax * 200;
+    for (int j=count; j>=0; j--){
+      int i = ofRandom(0, fftSize-1);
+      if(fft[i] > averfft && particles.size() < 3*fftSize){
+        // addParticle(); 
+        Particle p=Particle(width/2, height/2);///2 + ofRandom(-200, 200), height/2 + ofRandom(-200.0, 200.0));
         
-        //p.alpha = 0.0f;
-        //p.id = i; 
-        //p.angle = /*(ofGetFrameNum()%100/100.0f) * TWO_PI*/ + i/(fftSize-1)*TWO_PI;
+        p.alpha = 0.0f;
+        p.id = i; 
+        p.angle = /*(ofGetFrameNum()%100/100.0f) * TWO_PI*/ + i/(fftSize-1)*TWO_PI;
         //p.angle = ofRandomf() * TWO_PI;
-        //p.accel = fft[i]*ofxVec3f(cos(p.angle), -sin(p.angle), 0.0f); 
+        p.accel = fft[i]*ofxVec3f(cos(p.angle), -sin(p.angle), 0.0f); 
         
-        //p.update();
-        //particles.push_back(p);
+        p.update();
+        particles.push_back(p);
         //    particles.at(particles.size()-1).id = i; 
-      //}
-   // }
+      }
+    }
 
-  //}
-  //vector <ofxVec4f> sortedFlow;
-  //flow->getNMax(sortedFlow);  
+  }
+         
   // for each particles 
   for(int j=0; j < particles.size(); j++){
-    particles[j].accel = 0.0;
+    particles[j].accel = 0;
     //particles[j].addDamping();
-     
+    
     if(! particleDeserveToLive(j)){
       //cout<<"ERASING"<<endl;
       particles.erase(particles.begin()+j);
-      cout<<"Creating particle"<<endl;
-      Particle p=Particle(ofRandom(0, width), ofRandom(0, height));
-
-      //p.velocity.x = sortedFlow[0].z;
-      //p.velocity.y = sortedFlow[0].w;
-      particles.push_back(p);
       continue;
       //addParticle(); 
     }
@@ -125,24 +129,41 @@ void ParticleSystem::update(){
     }
     
     //---------------------------------------------------- Move Particles with a perlin noise
-    float noiseAngle = noise->Get(particles[j].position.x/width, particles[j].position.y/height) * TWO_PI; 
-    float noiseAngle2  = noise->Get(particles[j].position.x/width, particles[j].position.y/height) * TWO_PI; 
-    ofxVec3f noiseForce = ofxVec3f(cos(noiseAngle), -sin(noiseAngle2), 0);
-    particles[j].accel += noiseForce * NOISE_MULT; 
-    ofxVec2f f; 
+    if(enableNoise){
+      float noiseAngle = noise->Get(particles[j].position.x/width, particles[j].position.y/height) * TWO_PI; 
+      float noiseAngle2  = noise->Get(particles[j].position.x/width, particles[j].position.y/height) * TWO_PI; 
+      ofxVec3f noiseForce = ofxVec3f(cos(noiseAngle), -sin(noiseAngle2), 0); 
+      particles[j].accel += noiseMult * noiseForce;
+    }
+    
+    if (fftSize > 0){
+      int fftid=particles[j].id;
+      float fftAngle = (float )(fft[fftid]/fftMax)*TWO_PI + particles[j].angle; //+ (1.0f/fftSize)*PI; //4.0f*(PI/2.0f))
+      
+      // apply force 
+      ofxVec2f fftForce = /*averfft + sqrtf(fft[fftid]))*/ ofxVec3f(fft[fftid] * fftMult * cos(fftAngle), fft[fftid] * fftMult * -sin(fftAngle), 0); 
+      particles[j].accel += fftForce; // ofRandom(-1, 1); 
+      //particles[j].velocity += averfft * 0.01; 
+      
 
-    flow->getFlowAt(particles[j].position.x, particles[j].position.y, f);
-    particles[j].accel += ofxVec3f(FLOW_MULT * f.x, FLOW_MULT* f.y, 0); //flow.getFlowAt(particles[j].position.x, flow.getFlowAt(particles[j].position.y, particles[j].accel)
+      msaColor color; 
+      int h = (lroundf(particles[j].id * 360.0f / (float)fftSize)); //+ ofGetFrameNum() )%360; 
+      //color.setHSV(h,  MIN(sqrtf(fft[fftid]), 1.0), MIN(sqrtf(averfft), 1.0) ); 
+      color.setHSV(h,  MIN(2.0f*fft[fftid], 1.0), MIN(2.0f* averfft, 1.0) ); 
+      particles[j].r = color.r; 
+      particles[j].g = color.g;
+      particles[j].b = color.b;
+      particles[j].alpha = 0.5 + 0.5 * fft[fftid];
+    }
 
     particles[j].update();
-      particles[j].r = ofRandomf();
-      particles[j].g = ofRandomf();
-      particles[j].b = ofRandomf();
-      particles[j].alpha = 0.5;
-
 
   }
 
+ // fft
+  if(fft && fftSize > 0){
+    //
+  }
 }
 
 void ParticleSystem::toggleErase(){

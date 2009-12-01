@@ -9,8 +9,8 @@
 //------------------------------------------------------------------------------------ 
 
 
-#ifndef _OPTFLOW_H_
-#define _OPTFLOW_H_
+#ifndef _OPTFLOWLK_H_
+#define _OPTFLOWLK_H_
 
 #include "ofMain.h"
 #include "ofxVec2f.h"
@@ -20,10 +20,10 @@
 #define OPTFLOW_SMOOTH true
 #define OPTFLOW_THRESHOLD 3.0
 
-class optFlow {
+class optFlowLK {
 
   public:
-    optFlow();
+    optFlowLK();
   
     void init(int w, int h, int scale);   
     void update(unsigned char *pixels);

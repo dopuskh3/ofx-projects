@@ -36,9 +36,10 @@ void testApp::update(){
 void testApp::draw(){
   ofSetColor(255, 255, 255);
   
-  oflow.draw();
+  oflow.drawImage();
+  oflow.drawFlow();
   particles.draw();
-  grabber.grab();
+  //grabber.grab();
 }
 
 //--------------------------------------------------------------

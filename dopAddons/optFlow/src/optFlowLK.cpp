@@ -9,15 +9,14 @@
 //
 //------------------------------------------------------------------------------------ 
 
-#include "optFlow.h"
+#include "optFlowLK.h"
 
-optFlow::optFlow(){
+optFlowLK::optFlowLK(){
    
 }
 
 
-void optFlow::init(int w, int h, int step){
-  cout<<"Initializing video grabber"<<endl;
+void optFlowLK::init(int w, int h, int step){
   
   optFlowSmooth = OPTFLOW_SMOOTH;
 
@@ -30,7 +29,10 @@ void optFlow::init(int w, int h, int step){
   
   velX = cvCreateImage( cvSize(getWidth()/step, getHeight()/step), IPL_DEPTH_32F, 1);
   velY = cvCreateImage( cvSize(getWidth()/step, getHeight()/step), IPL_DEPTH_32F, 1);
-  
+ 
+  cvSetZero(velY);
+  cvSetZero(velX);
+
   _pvx = cvCreateImage( cvSize(getWidth()/step, getHeight()/step), IPL_DEPTH_32F, 1);
   _pvy = cvCreateImage( cvSize(getWidth()/step, getHeight()/step), IPL_DEPTH_32F, 1);
 
@@ -42,7 +44,7 @@ void optFlow::init(int w, int h, int step){
 }
 
 
-void optFlow::update(unsigned char *pixels){
+void optFlowLK::update(unsigned char *pixels){
   // swap images 
   ofxCvColorImage _temp;
 
@@ -87,7 +89,7 @@ bool sortFlow(const ofxVec4f &a,  const ofxVec4f &b){
   return ( (a.z*a.z + a.w*a.w) > (b.z*b.z + b.w*b.w) );
 }
 
-void optFlow::getNMax(vector<ofxVec4f> &points){
+void optFlowLK::getNMax(vector<ofxVec4f> &points){
   for (int x=0; x < width/step; x++){
     for (int y=0; y<  height/step; y++){
       ofxVec4f point = ofxVec4f(x*step, y*step, cvGetReal2D(velX, y, x), cvGetReal2D(velY, y, x));
@@ -98,7 +100,7 @@ void optFlow::getNMax(vector<ofxVec4f> &points){
   sort(points.begin(), points.end(), sortFlow);
 }
 
-void optFlow::getFlowAt(int x, int y, ofxVec2f &flow){
+void optFlowLK::getFlowAt(int x, int y, ofxVec2f &flow){
   int dx = x/step;
   int dy = y/step;
   if (x >= width || y >= height || x < 0 || y < 0){
@@ -110,7 +112,7 @@ void optFlow::getFlowAt(int x, int y, ofxVec2f &flow){
   }
 }
 
-void optFlow::draw(){
+void optFlowLK::draw(){
  
  current_image.draw(0, 0);
  ofSetColor(255, 0, 0);

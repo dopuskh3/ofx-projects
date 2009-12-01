@@ -11,23 +11,25 @@
 #include "Particle.h"
 #include "ofxVectorMath.h"
 #include "perlin.h"
-#include "optFlowHS.h"
 
+#define FFT_THRESH 0.05f
+#define FFT_MULT 5.4f
+#define ENABLE_NOISE false
+#define NOISE_MULT 2.0f
 #define DRAW_REPIELS 1
+
 class ParticleSystem{
 
   
   public:
     vector<Particle> particles; 
-  
-
     float *fft; 
     float fftSize;
     vector <int>particleToFFT; 
     Perlin *noise;
 
     ParticleSystem();
-    void setup(int nParticles, optFlowHS *oflow, int w, int h); 
+    void setup(int nParticles); 
     void update();
     void draw();
     void addRepiel(ofxVec3f r, float value, float radius);
@@ -42,6 +44,10 @@ class ParticleSystem{
     float mouseX, mouseY; 
     bool erase;
     int width, height; 
+    
+    float fftMult; 
+    float noiseMult;
+    float fftThresh;
+    bool enableNoise;
 
-    optFlowHS *flow;
 };

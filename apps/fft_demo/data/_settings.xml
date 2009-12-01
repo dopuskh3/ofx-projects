@@ -1,0 +1,14 @@
+<controls>
+    <SliderFloat_fft_mult>
+        <name>fft mult</name>
+        <value>20.390625</value>
+    </SliderFloat_fft_mult>
+    <SliderFloat_noise_mul>
+        <name>noise mul</name>
+        <value>22.617188</value>
+    </SliderFloat_noise_mul>
+    <Toggle_enable_noise>
+        <name>enable noise</name>
+        <value>0</value>
+    </Toggle_enable_noise>
+</controls>

@@ -12,9 +12,7 @@
 #define _TEST_APP
 
 #include "ofMain.h"
-#include "optFlowHS.h"
 #include "ParticleSystem.h"
-#include "screenGrabber.h"
 
 class testApp : public ofSimpleApp{
 	
@@ -31,12 +29,17 @@ class testApp : public ofSimpleApp{
 		void mouseDragged(int x, int y, int button);
 		void mousePressed(int x, int y, int button);
 		void mouseReleased();
-      
-        ofVideoGrabber vidGrabber;        
-        optFlowHS oflow;
-        ParticleSystem particles;
-        screenGrabber grabber;
 		
+        ParticleSystem psys; 		
+
+        ofSoundPlayer music;
+
+        float *fftList;  
+        float *fftSmoothed;     
+        int bands;
+        
+
+//        ofxGui *gui;
 };
 
 #endif
