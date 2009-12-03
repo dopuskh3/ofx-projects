@@ -15,3 +15,77 @@ your configuration and library path.
 
 
 
+OpenFrameworks dependencies
+===========================
+
+Openframeworks depends on;
+              |Linux|MaxOsX|Windows|
+- RtAudio     |  X  |  X   |   ?   |   http://www.music.mcgill.ca/~gary/rtaudio/
+- Unicap      |  X  |  ?   |   ?   |   http://unicap-imaging.org/download.htm
+- videoInput  |     |      |   ?   |   http://muonics.net/school/spring05/videoInput/
+- poco        |  X  |  X   |   X   |   http://pocoproject.org/
+- glfw        |  X  |  X   |   X   |   http://glfw.sourceforge.net/
+- glut        |  X  |  X   |   X   |   http://www.opengl.org/resources/libraries/glut/
+- freetype    |  X  |  X   |   X   |   http://www.freetype.org/index2.html
+- freeimage   |  X  |  X   |   X   |   http://freeimage.sourceforge.net/download.html
+- fmodex      |  X  |  X   |   X   |   http://www.fmod.org/
+- GLee        |  X  |  X   |   X   |   http://www.opengl.org/sdk/libs/GLee/
+
+On Linux 
+++++++++
+
+RtAudio
+-------
+
+tar zxvf rtaudio-<version>.tar.gz
+cd rtaudio-<version>
+./configure
+make 
+cp RtAudio.h RtError.h ./../libsLinux/include
+cp librtaudio.a ./../libsLinux/lib
+
+Unicap
+------
+
+./configure --enable-static --disable-shared --prefix=/tmp/unicap --disable-unicapgtk ; make ; make install
+cp -R /tmp/unicap/lib/ ./../libsLinux/lib
+cp -R /tmp/unicap/include ./../libsLinux/include
+
+
+glfw
+----
+
+apt-get install libglfw-dev libglfw2
+
+glut
+----
+
+apt-get install libglut3 libglut3-dev
+
+freetype
+--------
+
+apt-get install libfreetype6 libfreetype6-dev
+
+freeimage
+---------
+
+cd FreeImage
+make
+cp Dist/FreeImage.h ./../libsLinux/include
+cp Dist/libfreeimage.a ./../libsLinux/lib
+
+glee
+----
+
+mkdir GLee
+cd GLee
+tar zxvf GLee-5.4.0-src.tar.gz
+make
+cp libGLee.so ./../libsLinux/lib
+cp GLee.h ./../libsLinux/include
+
+
+
+fmodex
+------
