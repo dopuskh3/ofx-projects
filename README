@@ -1,0 +1,17 @@
+
+
+
+This repository contains import of various openFrameworks addons I use in my projects.
+
+
+ - addonExamples/    : imported addons examples
+ - addons/           : imported addons
+ - apps/             : my projects
+ - dopAddons         : my addons 
+
+
+All project can be built using CMake. CMakeBase.txt should be edited in order to reflect 
+your configuration and library path.
+
+
+
