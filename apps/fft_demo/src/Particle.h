@@ -17,6 +17,7 @@
 #include <deque>
 
 #define PARTICLE_TTL 1000
+#define VELOCITY_MULTIPLIER 0.1 
 
 class Particle{
   
@@ -50,6 +51,7 @@ class Particle{
     int id;
     float r, g, b, alpha;
     float angle;
+    float velocityMultiplier;
      
 };
 

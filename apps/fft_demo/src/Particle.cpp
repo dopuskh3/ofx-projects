@@ -20,8 +20,10 @@ Particle::Particle(float x, float y, int nhmin, int nhmax){
   ttl = PARTICLE_TTL; 
   damping = 0.01f;
   fuzz = 0.0;
+
   numH = ofRandom(nhmin,nhmax); 
 
+  velocityMultiplier = VELOCITY_MULTIPLIER;
   r = 0.0f; 
   g = 0.0f;
   b = 0.0f; 
@@ -106,10 +108,8 @@ void Particle::draw(){
   for(int i=0 ; i < hPos.size(); i++){
     float l = hVel[i].length();
     float angle = atan2(hVel[i].y, hVel[i].x); 
-    float ofx = -sin(angle)*l*0.1;
-    float ofy = cos(angle)*l*0.1;
-    
-    
+    float ofx = MAX(1.0, -sin(angle)*l*velocityMultiplier);
+    float ofy = MAX(1.0, cos(angle)*l*velocityMultiplier);
     
     glColor4f(hColor[i].x, hColor[i].y, hColor[i].z, hColor[i].w);
     glVertex3f(hPos[i].x+ofx, hPos[i].y+ofy , 0.0f); 

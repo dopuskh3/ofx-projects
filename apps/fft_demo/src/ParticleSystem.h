@@ -12,6 +12,8 @@
 #include "ofxVectorMath.h"
 #include "perlin.h"
 
+
+// Default parameters values 
 #define FFT_THRESH 0.05f
 #define FFT_MULT 5.4f
 #define ENABLE_NOISE false
@@ -26,8 +28,11 @@
 #define MID_THRESH 0.2f
 #define PARTICLE_SIZE_MIN 3
 #define PARTICLE_SIZE_MAX 8
+#define PARTICLE_VELOCITY_MULT 0.1
 #define VELOCITY_DAMP 0.9f
 #define ACCEL_DAMP 0.0f
+#define DRAW_FFT false
+#define AVER_FFT_SPEED false
 
 class ParticleSystem{
 
@@ -55,23 +60,46 @@ class ParticleSystem{
     float mouseX, mouseY; 
     bool erase;
     int width, height; 
-    
+   
+    // average fft speed 
+    bool averFFTSpeed;
+    // fft multiplier  
     float fftMult; 
+    // noise multiplier
     float noiseMult;
-    float fftThresh;
-    bool enableNoise;
-    bool averageTrigger;
-    int maxParticles;
-    bool particleRandomPos;
-    bool rotatingAngle; 
     
+    // noise enabled 
+    bool enableNoise;
+
+    // trigger fft on average value
+    bool averageTrigger;
+
+    // max number of particles
+    int maxParticles;
+
+    // start particles at random position
+    bool particleRandomPos;
+
+    // particles rotating direction
+    bool rotatingAngle; 
+
+    // low/mid/high freq threshold
     float lowThresh;
     float midThresh;
     float highThresh;
 
+    // minimum particle size
     int particleSizeMin;
+    // maximumm particle size
     int particleSizeMax;
-
+    // particle velocity multiplier 
+    float particleVelocityMult;
+  
+    // velocity damping
     float velocityDamp;
+    // accell damping
     float accelDamp;
+
+    // draw fft
+    bool drawFFT;
 };

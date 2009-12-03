@@ -37,6 +37,8 @@ class testApp : public ofSimpleApp{
         float *fftList;  
         float *fftSmoothed;     
         int bands;
+        float amort;
+        int tbands;
         
 
 //        ofxGui *gui;

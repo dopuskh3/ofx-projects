@@ -15,7 +15,10 @@ void testApp::setup(){
     psys.setup(56); 
 
     fftList=NULL;                                                                                                   
-    bands = 127;
+    bands = 256;
+    amort = 0;
+    tbands = bands;
+
     fftSmoothed = (float *)malloc(bands* sizeof(float));
 
     for (int i =0 ; i < bands; i++)
@@ -30,12 +33,17 @@ void testApp::setup(){
     gui.addSlider("High Thresh", psys.highThresh, 0.0, 1.0);
     gui.addSlider("Particle Size Min", psys.particleSizeMin, 0, 50);
     gui.addSlider("Particle Size Max", psys.particleSizeMax, 0, 50);
+    gui.addSlider("Particle Velocity Mult", psys.particleVelocityMult, 0.0, 1.0);
     gui.addSlider("Velocity Damp", psys.velocityDamp, 0.0, 1.0);
     gui.addSlider("Accel Damp", psys.accelDamp, 0.0, 1.0);
     gui.addToggle("average toggle", psys.averageTrigger);
     gui.addToggle("enable noise", psys.enableNoise); 
     gui.addToggle("rotating angle", psys.rotatingAngle);
     gui.addToggle("random pos", psys.particleRandomPos);
+    gui.addToggle("Draw FFT", psys.drawFFT);
+    gui.addToggle("Average FFT Speed", psys.averFFTSpeed);
+    gui.addSlider("Takke bands", tbands, 0, bands);
+    gui.addSlider("Amort", amort, 0, 1);
 
 
     music.loadSound("test.mp3"); 
@@ -57,7 +65,7 @@ void testApp::update(){
       if(fftList[i]>1.0f) fftList[i] = 0.9f;
       fftList[i] = cbrtf(fftList[i]);
       //fftList[i] = (fftList[i-1] + fftList[i] +  fftList[i+1]) / 3.0f;
-      fftSmoothed[i] *= 0.002f; // 0.000010f; 
+      fftSmoothed[i] *= amort;
       if ( fftSmoothed[i] < fftList[i] ){
         fftSmoothed[i] = fftList[i]; 
         //if(fftSmoothed[i] > 1.0f){
@@ -66,7 +74,9 @@ void testApp::update(){
       }
   }
 
-  psys.setFFT(fftSmoothed, bands); 
+  psys.setFFT(fftSmoothed, tbands);
+  //ands);
+  //160);
   psys.update(); 
 
 }
