@@ -89,3 +89,81 @@ cp GLee.h ./../libsLinux/include
 
 fmodex
 ------
+
+
+
+
+Installing on MAC OS X
+----------------------
+
+export OFX_LIBS=/opt/openFrameworks/
+sudo mkdir $OFX_LIBS
+sudo mkdir $OFX_LIBS/include
+sudo mkdir $OFX_LIBS/lib
+
+GLee
+----
+
+mkdir GLee
+cd GLee
+tar zxvf ../dist/GLee-5.4.0-src.tar.gz
+./configure CXXFLAGS="-m32 -framework CoreFoundation -framework OpenGL" ; make
+make 
+sudo cp libGLee.so $OFX_LIBS/lib
+sudo cp GLee.h $OFX_LIBS/include
+cd ..
+
+
+RtAudio
+-------
+
+tar zxvf ./dist/rtaudio-4.0.6.tar.gz
+cd rtaudio-4.0.6
+./configure --enable-static CXXFLAGS=-m32
+make
+sudo cp librtaudio.a $OFX_LIBS/lib/libRtAudio.a
+sudo cp RtAudio.h RtError.h $OFX_LIBS/include/
+cd ..
+
+FreeImage
+---------
+
+unzip ./dist/FreeImage3130.zip
+cd FreeImage
+
+# edit Makefile.osx to change paths to SDK. For example on my 10.6 (snow leopard):
+-------------------------------------
+INCLUDE_PPC = -isysroot /Developer/SDKs/MacOSX10.6.sdk
+INCLUDE_I386 = -isysroot /Developer/SDKs/MacOSX10.6.sdk 
+--------------------------------------
+make 
+
+sudo cp Source/FreeImage.h $OFX_LIBS/include/
+sudo cp libfreeimage.a $OFX_LIBS/lib/libFreeImage.a
+
+
+Poco
+-----
+
+
+tar zxvf ./dist/poco-<versio>
+./configure --prefix=$OFX_LIBS
+make
+
+glfw
+----
+
+unzip dist/glfw-2.6.zip
+cd glfw
+cd lib/macosx
+# edit Makefile.macosx.gcc.universal and adjust your SDK path:
+FATFLAGS     = -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch ppc -arch i386
+make -f Makefile.macosx.gcc.universal
+sudo cp libglfw.a $OFX_LIBS/lib
+sudo cp ../../include/GL/glfw.h $OFX_LIB/include
+
+
+
+
+
+

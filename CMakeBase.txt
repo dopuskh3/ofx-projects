@@ -47,6 +47,7 @@ endif ()
 
 if ( CMAKE_SYSTEM_NAME MATCHES "Linux" )
 set ( addons_path "/home/fv/Dev/openFrameworks/ofx-projects/addons" ) 
+set ( libdir "/home/fv/Dev/openFrameworks/ofx-projects/" )
 # The path where stants openFrameworks's sources
 set ( ofx_sources_directory "/home/fv/Dev/openFrameworks/ofx-dev/libs/openFrameworks" )
 
@@ -58,24 +59,24 @@ set (poco_includes "/usr/include" )
 set (poco_libdir " ")
 
 # GLee include path 
-set (glee_includes "/home/fv/Dev/openFrameworks/ofx-dev/libs/GLee/include" )
-set (glee_libdir   "/home/fv/Dev/openFrameworks/ofx-dev/libs/GLee/lib" ) 
+set (glee_includes "${libdir}/libs/Linux/include")
+set (glee_libdir   "${libdir}/libs/Linux/lib")
 
 # FModex 
-set (fmodex_includes "/home/fv/Dev/openFrameworks/ofx-dev/libs/fmodex/inc" ) 
-set (fmodex_libdir   "/home/fv/Dev/openFrameworks/ofx-dev/libs/fmodex/lib/linux/" )
+set (fmodex_includes "${libdir}/libs/Linux/include")
+set (fmodex_libdir   "${libdir}/libs/Linux/lib")
 
 # RtAudio
-set (rtaudio_includes "/home/fv/Dev/openFrameworks/ofx-dev/libs/rtAudio/include")
-set (rtaudio_libdir   "/home/fv/Dev/openFrameworks/ofx-dev/libs/rtAudio/lib")
+set (rtaudio_includes "${libdir}/libs/Linux/include")
+set (rtaudio_libdir   "${libdir}/libs/Linux/lib")
 
 # FreeImage 
-set ( freeimage_includes "/home/fv/Dev/openFrameworks/ofx-dev/libs/freeimage/include" )
-set ( freeimage_libdir   "/home/fv/Dev/openFrameworks/ofx-dev/libs/freeimage/lib" ) 
+set ( freeimage_includes "${libdir}/libs/Linux/include")
+set ( freeimage_libdir   "${libdir}/libs/Linux/lib")
 
 # For linux only 
-set (unicap_includes "/home/fv/Dev/openFrameworks/ofx-dev/libs/unicap/include")
-set (unicap_libdir   "/home/fv/Dev/openFrameworks/ofx-dev/libs/unicap/lib")
+set (unicap_includes "${libdir}/libs/Linux/include/unicap")
+set (unicap_libdir   "${libdir}/libs/Linux/lib")
 
 set (asound_includes "")
 set (asound_libdir "")
