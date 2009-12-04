@@ -24,24 +24,39 @@ message("${CMAKE_SYSTEM_NAME}")
 #endif ()
 
 MACRO (find_lib_inc varname libname incfile)
+    string(TOLOWER libname libnamelow)
     find_library(${varname}_LIBRARIES ${libname} PATHS ${OPENFRAMEWORKS_LIBRARY_PREFIX})
-    find_path(${varname}_INCLUDES NAMES ${incfile} PATHS ${OPENFRAMEWORKS_INCLUDE_PREFIX}
+
+    if (NOT ${varname}_LIBRARIES})
+        find_library(${varname}_LIBRARIES ${libnamelow} PATHS ${OPENFRAMEWORKS_LIBRARY_PREFIX})
+    endif()
+
+    find_path(${varname}_INCLUDES NAMES ${incfile} 
+        PATHS ${OPENFRAMEWORKS_INCLUDE_PREFIX}
             /usr/local/X11R6/include
             /usr/local/X11/include
             /usr/X11/include
             /sw/include
             /opt/local/include
             /usr/freeware/include   
+            /usr/include/${libnamelow}
+            /usr/local/include/${libnamelow}
+            /opt/local/include/${libnamelow}
+            /usr/include/${libname}
+            /usr/local/include/${libname}
+            /opt/local/include/${libname}
     )
     if ( NOT ${varname}_LIBRARIES ) 
         message ( FATAL_ERROR "Cannot find ${libname} library")
     else()
         message ( STATUS "Found ${libname} library")
+        set ( OPENFRAMEWORKS_LIBRARIES ${OPENFRAMEWORKS_LIBRARIES} ${varname}_LIBRARIES )
     endif()
     if ( NOT ${varname}_INCLUDES ) 
         message ( FATAL_ERROR "Cannot find ${incfile}" )
     else ()
-        message ( STATUS "Found ${incfile}")
+        set ( OPENFRAMEWORKS_INCLUDES ${OPENFRAMEWORKS_INCLUDES} ${${varname}_INCLUDES} )
+        message ( STATUS "Found ${incfile} (${${varname}_INCLUDES})")
     endif()
 ENDMACRO(find_lib_inc)
     
@@ -54,7 +69,7 @@ find_lib_inc(FREEIMAGE FreeImage FreeImage.h)
 
 
 # freetype 
-include (FindFreeType)
+include (FindFreetype)
 if (NOT FREETYPE_FOUND)
     message( FATAL_ERROR "Cannot find freetype 2 library")
 else()
@@ -136,6 +151,47 @@ if ( APPLE )
 
 endif()
 
+if ( UNIX ) 
+    include(FindPkgConfig)
+    pkg_check_modules(UNICAP libunicap)
+    if ( UNICAP_LIBRARIES )
+        message ( STATUS "Found unicap")
+        set ( OPENFRAMEWORKS_LIBRARIES ${OPENFRAMEWORKS_LIBRARIES} ${UNICAP_LIBRARIES} )
+        set ( OPENFRAMEWORKS_INCLUDES ${OPENFRAMEWORKS_INCLUDES} ${UNICAP_INCLUDE_DIRS} ) 
+    else()
+        message ( FATAL_ERROR "Cannot find unicap")
+    endif()
+
+    pkg_check_modules(GST gstreamer-app-0.10)
+    if ( GST_LIBRARIES ) 
+        message ( STATUS "Found Gstreamer")
+        set (  OPENFRAMEWORKS_LIBRARIES ${OPENFRAMEWORKS_LIBRARIES}  ${GST_LIBRARIES} )
+        set ( OPENFRAMEWORKS_INCLUDES ${OPENFRAMEWORKS_INCLUDES} ${GST_INCLUDE_DIRS} ) 
+    else()
+        message( FATAL_ERROR "Cannot find Gstreamer-app")
+    endif()
+
+    pkg_check_modules(AVFORMAT libavformat)
+    if ( AVFORMAT_LIBRARIES)
+        message ( STATUS "Found libavformat")
+        set ( OPENFRAMEWORKS_LIBRARIES ${OPENFRAMEWORKS_LIBRARIES} ${AVFORMAT_LIBRARIES})
+        set ( OPENFRAMEWORKS_INCLUDES ${OPENFRAMEWORKS_INCLUDES} ${AVFORMAT_INCLUDE_DIRS})
+    else()
+        message ( FATAL_ERROR "Cannot find libavformat" ) 
+    endif()
+
+    pkg_check_modules(SWSCALE libswscale)
+    if ( SWSCALE_LIBRARIES)
+        message ( STATUS "Found libswscale")
+        set ( OPENFRAMEWORKS_LIBRARIES ${OPENFRAMEWORKS_LIBRARIES} ${SWSCALE_LIBRARIES})
+        set ( OPENFRAMEWORKS_INCLUDES ${OPENFRAMEWORKS_INCLUDES} ${SWSCALE_INCLUDE_DIRS})
+    else()
+        message ( FATAL_ERROR "Cannot find libswscale")
+    endif()
+
+
+    #find_lib_inc(UNICAP unicap unicap.h)
+endif()
 
 
 SET(OPENFRAMEWORKS_LIBRARIES
@@ -149,7 +205,7 @@ SET(OPENFRAMEWORKS_LIBRARIES
     ${GLU_LIBRARY}
     )
 
-set(OPENFRAMEWORKS_INCLUDES
+set(OPENFRAMEWORKS_INCLUDES ${OPENFRAMEWORKS_INCLUDES}
     ${FREETYPE_INCLUDE_DIRS}
     ${FREETYPE_INCLUDE_DIRS}/freetype
     ${OPENFRAMEWORKS_INCLUDE_PREFIX})
@@ -160,6 +216,12 @@ if ( APPLE )
     ${COREFOUNDATION_LIBRARY}
     ${CARBON_LIBRARY}
     ${QUICKTIME_LIBRARIES})
+endif()
+
+if ( UNIX )
+    set ( OPENFRAMEWORKS_LIBRARIES ${OPENFRAMEWORKS_LIBRARIES}
+    ${UNICAP_LIBRARIES})
+
 endif()
     
 

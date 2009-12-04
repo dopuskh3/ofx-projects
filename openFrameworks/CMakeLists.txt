@@ -61,6 +61,7 @@ include_directories( .
                      sound
                      utils
                      video)
+
 include_directories(${OPENFRAMEWORKS_INCLUDES})
 
 add_library( openFrameworks ${OFX_SOURCE_FILES})
