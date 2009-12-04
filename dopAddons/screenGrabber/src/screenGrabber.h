@@ -26,6 +26,5 @@ class screenGrabber {
     void init();
 
     void grab();
-    ofxThreadedImageSaver img;
 };
 

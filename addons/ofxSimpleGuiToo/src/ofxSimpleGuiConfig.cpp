@@ -42,7 +42,7 @@ ofxSimpleGuiConfig defaultSimpleGuiConfig;
 ofxSimpleGuiConfig::ofxSimpleGuiConfig() {
 	
 	sliderHeight		= 5;
-	sliderTextHeight	= 25;
+	sliderTextHeight	= 15;
 	titleHeight			= sliderHeight + sliderTextHeight;
 	toggleHeight		= titleHeight;
 	buttonHeight		= titleHeight;

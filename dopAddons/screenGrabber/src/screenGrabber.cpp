@@ -25,19 +25,18 @@ void screenGrabber::init(){
 
   width = ofGetWidth();
   height = ofGetHeight();
+  count = 0;
 }
 
 
 void screenGrabber::grab(){
-  
+    
+  ofImage img;
   char filename[255];
 
-  img.grabScreen(0, 0, height, width);  
-  //img.resize(height/2, width/2); 
+  img.grabScreen(0, 0, width, height);
   sprintf(filename, "screen_%08i.png", count);
   img.saveImage(filename);
-  //img.saveThreaded(filename);
-  //Threaded(filename);
   count++;
 
 }

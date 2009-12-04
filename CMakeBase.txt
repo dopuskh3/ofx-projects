@@ -7,41 +7,42 @@ cmake_minimum_required(VERSION 2.6)
 
 if ( CMAKE_SYSTEM_NAME MATCHES "Darwin" )
 
+set (libdir "/opt/openFrameworks")
 # The path where stants openFrameworks's sources
-set ( ofx_sources_directory "/Users/fv/Dev/openframeworks/ofx-dev/libs/openFrameworks")
+set ( ofx_sources_directory "/Users/fv/Dev/openframeworks/ofx-projects/openFrameworks")
 
 # Additional include directories 
 set ( custom_include_dirs "/usr/include/libavformat;/usr/include/libavcodec;/usr/include/libswscale")
 
 # Poco include path where to find Poco/Poco.h and libPocoFoundation
-set (poco_includes "/Users/fv/Dev/openframeworks/ofx-dev/libs/poco/include" )
-set (poco_libdir "/Users/fv/Dev/openframeworks/ofx-dev/libs/poco/lib")
+set (poco_includes "${libdir}/include" )
+set (poco_libdir "${libdir}/lib" )
 
 # GLee include path 
-set (glee_includes "/Users/fv/Dev/openframeworks/ofx-dev/libs/GLee/include" )
-set (glee_libdir   "/Users/fv/Dev/openframeworks/ofx-dev/libs/GLee/lib" ) 
+set (glee_includes "${libdir}/include")
+set (glee_libdir   "${libdir}/lib")
 
 # FModex 
 set (fmodex_includes "/Users/fv/Dev/openframeworks/ofx-dev/libs/fmodex/inc" ) 
 set (fmodex_libdir   "/Users/fv/Dev/openframeworks/ofx-dev/libs/fmodex/lib/" )
 
 # RtAudio
-set (rtaudio_includes "/Users/fv/Dev/openframeworks/ofx-dev/libs/rtAudio/include")
-set (rtaudio_libdir   "/Users/fv/Dev/openframeworks/ofx-dev/libs/rtAudio/lib")
+set (rtaudio_includes "${libdir}/include")
+set (rtaudio_libdir   "${libdir}/lib")
 
 # FreeImage 
-set ( freeimage_includes "/Users/fv/Dev/openframeworks/ofx-dev/libs/freeimage/include" )
-set ( freeimage_libdir   "/Users/fv/Dev/openframeworks/ofx-dev/libs/freeimage/lib" ) 
+set ( freeimage_includes "${libdir}/include")
+set ( freeimage_libdir   "${libdir}/lib")
 
 # For linux only 
-set (unicap_includes "/Users/fv/Dev/openframeworks/ofx-dev/libs/unicap/include")
-set (unicap_libdir   "/Users/fv/Dev/openframeworks/ofx-dev/libs/unicap/lib")
+#set (unicap_includes "/Users/fv/Dev/openframeworks/ofx-dev/libs/unicap/include")
+#set (unicap_libdir   "/Users/fv/Dev/openframeworks/ofx-dev/libs/unicap/lib")
 
-set (asound_includes "")
-set (asound_libdir "")
+#set (asound_includes "")
+#set (asound_libdir "")
 
-set (raw1394_includes "")
-set (raw1394_libdir "")
+#set (raw1394_includes "")
+#set (raw1394_libdir "")
 
 endif ()
 
@@ -93,7 +94,7 @@ endif()
 
 if ( CMAKE_SYSTEM_NAME MATCHES "Darwin" )
 	set (CMAKE_FIND_LIBRARY_PREFIXES "" "lib")
-	set (CMAKE_FIND_LIBRARY_SUFFIXES ".dylib" ".a" ".lib")
+	set (CMAKE_FIND_LIBRARY_SUFFIXES ".dylib" ".a" ".lib", ".so")
 endif ()
 
 

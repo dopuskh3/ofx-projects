@@ -36,8 +36,11 @@ add_executable( fft_demo
     ${ofxVectorMath}
     ${ofxMSAInteractiveObject}
     ${ofxXmlSettings}
-    ${ofxSimpleGuiToo}
-    ${OFX_SOURCE_FILES} )
+    ${ofxSimpleGuiToo})
 
-set ( libs ${ofx_libs} ${cv_LIBRARIES}) 
+    # ${OFX_SOURCE_FILES} )
+find_library(oflib openFrameworks ./../../openFrameworks)
+message ("${oflib}")
+include (../../openFrameworks.cmake)
+set ( libs ${oflib} ${OPENFRAMEWORKS_LIBRARIES} ${cv_LIBRARIES}) # ${ofx_libs} ${cv_LIBRARIES}) 
 target_link_libraries(fft_demo ${libs} )

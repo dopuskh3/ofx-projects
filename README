@@ -119,7 +119,7 @@ RtAudio
 
 tar zxvf ./dist/rtaudio-4.0.6.tar.gz
 cd rtaudio-4.0.6
-./configure --enable-static CXXFLAGS=-m32
+./configure --enable-static CXXFLAGS=-m32  # check in the makefile that -m32 was take
 make
 sudo cp librtaudio.a $OFX_LIBS/lib/libRtAudio.a
 sudo cp RtAudio.h RtError.h $OFX_LIBS/include/
@@ -145,10 +145,25 @@ sudo cp libfreeimage.a $OFX_LIBS/lib/libFreeImage.a
 Poco
 -----
 
+-------------------------------------
+...
+LINKMODE = STATIC
+...
+CXXFLAGS        = -Wall -Wno-sign-compare -m32 -arch i386
+...
+-------------------------------------
+for i in CppUnit Foundation XML Net Util; do
+    (cd $i ; make static_release)
+done
+# install
+mkdir -p $OFX_LIBS/include/Poco/
 
-tar zxvf ./dist/poco-<versio>
-./configure --prefix=$OFX_LIBS
-make
+
+for i in Foundation XML Net Util; do
+    sudo cp -rf $i/include/* $OFX_LIBS/include/
+done
+sudo cp lib/Darwin/i386/lib*.a /opt/openFrameworks/lib
+
 
 glfw
 ----
@@ -160,10 +175,22 @@ cd lib/macosx
 FATFLAGS     = -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch ppc -arch i386
 make -f Makefile.macosx.gcc.universal
 sudo cp libglfw.a $OFX_LIBS/lib
-sudo cp ../../include/GL/glfw.h $OFX_LIB/include
+sudo cp ../../include/GL/glfw.h $OFX_LIBS/include
 
 
+Freetype2
+---------
+
+Freetype is already included in mac os x with X11 package
 
 
+FMODEX
+------
 
+
+Install the distributed package. The installer install files in /Developer/FMOD Programmers API Mac/.
+Copy the libraries and includes in $OFX_LIB prefix:
+
+sudo cp /Developer/FMOD\ Programmers\ API\ Mac/api/inc/* $OFX_LIB/include
+!sudo cp /Developer/FMOD\ Programmers\ API\ Mac/api/lib/* $OFX_LIB/lib       
 
