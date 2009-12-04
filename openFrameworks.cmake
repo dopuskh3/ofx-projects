@@ -53,7 +53,7 @@ MACRO (find_lib_inc varname libname incfile)
         message ( FATAL_ERROR "Cannot find ${libname} library")
     else()
         message ( STATUS "Found ${libname} library")
-        set ( OPENFRAMEWORKS_LIBRARIES ${OPENFRAMEWORKS_LIBRARIES} ${varname}_LIBRARIES )
+        set ( OPENFRAMEWORKS_LIBRARIES ${OPENFRAMEWORKS_LIBRARIES} ${${varname}_LIBRARIES} )
     endif()
     if ( NOT ${varname}_INCLUDES ) 
         message ( FATAL_ERROR "Cannot find ${incfile}" )
@@ -164,6 +164,7 @@ if ( UNIX )
     else()
         message ( FATAL_ERROR "Cannot find unicap")
     endif()
+    
 
     pkg_check_modules(GST gstreamer-app-0.10)
     if ( GST_LIBRARIES ) 
@@ -173,10 +174,20 @@ if ( UNIX )
     else()
         message( FATAL_ERROR "Cannot find Gstreamer-app")
     endif()
+    
+    pkg_check_modules(GSTVIDEO gstreamer-video-0.10)
+    if ( GSTVIDEO_LIBRARIES ) 
+        message ( STATUS "Found Gstreamer-video")
+        set (  OPENFRAMEWORKS_LIBRARIES ${OPENFRAMEWORKS_LIBRARIES}  ${GSTVIDEO_LIBRARIES} )
+        set ( OPENFRAMEWORKS_INCLUDES ${OPENFRAMEWORKS_INCLUDES} ${GSTVIDEO_INCLUDE_DIRS} ) 
+    else()
+        message( FATAL_ERROR "Cannot find Gstreamer-video")
+    endif()
+
 
     pkg_check_modules(AVFORMAT libavformat)
     if ( AVFORMAT_LIBRARIES)
-        message ( STATUS "Found libavformat")
+        message ( STATUS "Found libavformat  ${AVFORMAT_LIBRARIES} ${AVFORMAT_LDFLAGS} ${AVFORMAT_LDFLAGS_OTHER}")
         set ( OPENFRAMEWORKS_LIBRARIES ${OPENFRAMEWORKS_LIBRARIES} ${AVFORMAT_LIBRARIES})
         set ( OPENFRAMEWORKS_INCLUDES ${OPENFRAMEWORKS_INCLUDES} ${AVFORMAT_INCLUDE_DIRS})
     else()
@@ -191,22 +202,35 @@ if ( UNIX )
     else()
         message ( FATAL_ERROR "Cannot find libswscale")
     endif()
+    
+    ### LIBASOUND 
+    find_library(ASOUND asound)
+    if (ASOUND)
+        set ( OPENFRAMEWORKS_LIBRARIES ${OPENFRAMEWORKS_LIBRARIES} ${ASOUND})
+        message ( STATUS "Found asound ${ASOUND}")
+    else()
+        message (FATAL_ERROR "Cannot find asound library")
+    endif()
+
+### LIBRAW1394
+    find_library(RAW1394 raw1394)
+    if (RAW1394)
+        set ( OPENFRAMEWORKS_LIBRARIES ${OPENFRAMEWORKS_LIBRARIES} ${RAW1394})
+        message ( STATUS "Found raw1394")
+    else()
+        message (FATAL_ERROR "Cannot find raw1394 library")
+    endif()
 
 
     #find_lib_inc(UNICAP unicap unicap.h)
 endif()
-
-
 SET(OPENFRAMEWORKS_LIBRARIES
-    ${POCO_LIBRARIES}
-    ${RTAUDIO_LIBRARIES}
-    ${FMODEX_LIBRARIES}
-    ${GLEE_LIBRARIES}
-    ${FREEIMAGE_LIBRARIES}
-    ${FREETYPE_LIBRARIES}
-    ${GLUT_LIBRARIES}
-    ${GLU_LIBRARY}
-    )
+    ${OPENFRAMEWORKS_LIBRARIES}
+            ${FREETYPE_LIBRARIES}
+            ${GLUT_LIBRARIES}
+            ${GLU_LIBRARY}
+      )
+
 
 set(OPENFRAMEWORKS_INCLUDES ${OPENFRAMEWORKS_INCLUDES}
     ${FREETYPE_INCLUDE_DIRS}
@@ -228,5 +252,5 @@ if ( UNIX )
 endif()
     
 
-#message("${OPENFRAMEWORKS_LIBRARIES}")
-#message("${OPENFRAMEWORKS_INCLUDES}")
+message("${OPENFRAMEWORKS_LIBRARIES}")
+message("${OPENFRAMEWORKS_INCLUDES}")

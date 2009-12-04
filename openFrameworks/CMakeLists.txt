@@ -73,6 +73,7 @@ set_target_properties (openFrameworksShared
                         PROPERTIES OUTPUT_NAME openFrameworks )
 
 
-
 target_link_libraries(openFrameworksShared ${OPENFRAMEWORKS_LIBRARIES})
 target_link_libraries(openFrameworksStatic ${OPENFRAMEWORKS_LIBRARIES})
+
+

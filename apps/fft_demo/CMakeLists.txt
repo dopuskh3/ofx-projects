@@ -2,7 +2,18 @@ cmake_minimum_required(VERSION 2.6)
 
 project(fft_demo)
 
-include ( ../../CMakeBase.txt ) 
+# include ( ../../CMakeBase.txt ) 
+
+set ( ofx_base /home/fv/Dev/openFrameworks/ofx-projects/openFrameworks ) 
+set ( ofx_includes  ${ofx_base}
+            ${ofx_base}/app
+            ${ofx_base}/communication
+            ${ofx_base}/events
+            ${ofx_base}/graphics
+            ${ofx_base}/sound
+            ${ofx_base}/utils
+            ${ofx_base}/video)
+
 
 # add ofx includes directories for dependencies 
 include_directories ( ${ofx_includes} ) 
@@ -42,5 +53,6 @@ add_executable( fft_demo
 find_library(oflib openFrameworks ./../../openFrameworks)
 message ("${oflib}")
 include (../../openFrameworks.cmake)
-set ( libs ${oflib} ${OPENFRAMEWORKS_LIBRARIES} ${cv_LIBRARIES}) # ${ofx_libs} ${cv_LIBRARIES}) 
+include_directories ( ${OPENFRAMEWORKS_INCLUDES} )
+set ( libs ${oflib} ${cv_LIBRARIES}) # ${ofx_libs} ${cv_LIBRARIES}) 
 target_link_libraries(fft_demo ${libs} )
