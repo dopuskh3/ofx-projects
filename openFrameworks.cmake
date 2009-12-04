@@ -8,7 +8,9 @@
 # Check the following dependencies 
 cmake_minimum_required(VERSION 2.6)
 
-set (OPENFRAMEWORKS_PREFIX "/opt/openFrameworks")
+cmake_policy(SET CMP0011 NEW)
+
+# set (OPENFRAMEWORKS_PREFIX "/opt/openFrameworks")
 
 if ( DEFINED OPENFRAMEWORKS_PREFIX ) 
     MESSAGE ( "Searching libraries in ${OPENFRAMEWORKS_PREFIX}" )
@@ -18,10 +20,11 @@ endif( DEFINED OPENFRAMEWORKS_PREFIX )
 
 message ( "${OPENFRAMEWORKS_INCLUDE_PREFIX}")
 message("${CMAKE_SYSTEM_NAME}")
-#if ( CMAKE_SYSTEM_NAME MATCHES "Darwin" )
+
+if ( APPLE )
     set (CMAKE_FIND_LIBRARY_PREFIXES "" "lib")
     set (CMAKE_FIND_LIBRARY_SUFFIXES ".dylib" ".a" ".lib", ".so")
-#endif ()
+endif ()
 
 MACRO (find_lib_inc varname libname incfile)
     string(TOLOWER libname libnamelow)
@@ -225,5 +228,5 @@ if ( UNIX )
 endif()
     
 
-message("${OPENFRAMEWORKS_LIBRARIES}")
-message("${OPENFRAMEWORKS_INCLUDES}")
+#message("${OPENFRAMEWORKS_LIBRARIES}")
+#message("${OPENFRAMEWORKS_INCLUDES}")

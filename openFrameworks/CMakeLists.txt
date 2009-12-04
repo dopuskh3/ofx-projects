@@ -64,7 +64,15 @@ include_directories( .
 
 include_directories(${OPENFRAMEWORKS_INCLUDES})
 
-add_library( openFrameworks ${OFX_SOURCE_FILES})
+add_library( openFrameworksShared SHARED ${OFX_SOURCE_FILES})
+add_library( openFrameworksStatic ${OFX_SOURCE_FILES})
+set_target_properties (openFrameworksStatic 
+                        PROPERTIES OUTPUT_NAME openFrameworks )
 
-target_link_libraries(openFrameworks ${OPENFRAMEWORKS_LIBRARIES})
+set_target_properties (openFrameworksShared 
+                        PROPERTIES OUTPUT_NAME openFrameworks )
 
+
+
+target_link_libraries(openFrameworksShared ${OPENFRAMEWORKS_LIBRARIES})
+target_link_libraries(openFrameworksStatic ${OPENFRAMEWORKS_LIBRARIES})
