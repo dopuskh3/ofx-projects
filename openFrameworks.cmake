@@ -154,7 +154,7 @@ if ( APPLE )
 
 endif()
 
-if ( UNIX ) 
+if ( CMAKE_SYSTEM_NAME MATCHES "Linux" ) 
     include(FindPkgConfig)
     pkg_check_modules(UNICAP libunicap)
     if ( UNICAP_LIBRARIES )
@@ -245,7 +245,7 @@ if ( APPLE )
     ${QUICKTIME_LIBRARIES})
 endif()
 
-if ( UNIX )
+if ( CMAKE_SYSTEM_NAME MATCHES "Linux" )
     set ( OPENFRAMEWORKS_LIBRARIES ${OPENFRAMEWORKS_LIBRARIES}
     ${UNICAP_LIBRARIES})
 

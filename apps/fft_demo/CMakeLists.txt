@@ -4,7 +4,7 @@ project(fft_demo)
 
 # include ( ../../CMakeBase.txt ) 
 
-set ( ofx_base /home/fv/Dev/openFrameworks/ofx-projects/openFrameworks ) 
+set ( ofx_base ../../openFrameworks ) 
 set ( ofx_includes  ${ofx_base}
             ${ofx_base}/app
             ${ofx_base}/communication
@@ -50,9 +50,11 @@ add_executable( fft_demo
     ${ofxSimpleGuiToo})
 
     # ${OFX_SOURCE_FILES} )
+#find_library(gl OpenGL)
 find_library(oflib openFrameworks ./../../openFrameworks)
 message ("${oflib}")
+set (OPENFRAMEWORKS_PREFIX "/opt/openFrameworks")
 include (../../openFrameworks.cmake)
 include_directories ( ${OPENFRAMEWORKS_INCLUDES} )
-set ( libs ${oflib} ${cv_LIBRARIES}) # ${ofx_libs} ${cv_LIBRARIES}) 
+set ( libs ${oflib} ${gl} ${cv_LIBRARIES}) # ${ofx_libs} ${cv_LIBRARIES}) 
 target_link_libraries(fft_demo ${libs} )
