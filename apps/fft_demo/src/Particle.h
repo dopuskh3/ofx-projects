@@ -47,7 +47,8 @@ class Particle{
     int ttl; 
     float fuzz; 
     float fuzzDec; 
-    float damping; 
+    float vDamping; 
+    float aDamping;
     int id;
     float r, g, b, alpha;
     float angle;

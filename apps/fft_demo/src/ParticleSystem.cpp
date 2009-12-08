@@ -114,8 +114,9 @@ void ParticleSystem::update(){
   averfft/=fftSize;
   
   // number of particles to add
-  int count = averfft * fftMax * 200;
-  for (int j=count; j>=0; j--){
+  int count = fftSize; // averfft * fftMax * 2000;
+  cout<<count<<endl;
+  while ( count >= 0){
     int i = ofRandom(0, fftSize-1);
 
     // apply correct threshold depending on frequency 
@@ -128,29 +129,36 @@ void ParticleSystem::update(){
     } else { // then averfft trigger enabled 
       trigger = averfft; 
     } 
-
+    count--;
     // if fft value and not reaching max paticles number 
     if(fft[i] > trigger && particles.size() < maxParticles){
+      //cout<<fft[i]*10<<endl;
+      for(float cnt = 0.0f; cnt < fft[i] * 10.0f ; cnt+=0.1f){
+      //cout<<count<<endl;
+      //count--;
       // add new particle 
       int x = width/2;
       int y = height/2;
+      float angle;
+      if (rotatingAngle){
+        angle = ofGetFrameNum()%100;
+      } else{
+        angle = 0;
+      }
       if(particleRandomPos){
         x = ofRandom(0, width);
         y = ofRandom(0, height);
+      } else {
+
       }
       Particle p=Particle(x, y, particleSizeMin, particleSizeMax);
       p.alpha = 0.0f;
       p.id = i; 
       p.velocityMultiplier = particleVelocityMult;
-
-      if (rotatingAngle){
-        p.angle = (ofGetFrameNum()%100);
-      } else{
-        p.angle = 0;
-      }
-      p.angle += i/(fftSize-1)*TWO_PI;
+      p.angle = angle  +  i/(fftSize-1)*TWO_PI;
       p.update();
       particles.push_back(p);
+      }
     }
   }
 
@@ -169,14 +177,15 @@ void ParticleSystem::update(){
 
     //---------------------------------------------------- Move Particles with a perlin noise
     if(enableNoise){
-      float noiseAngle = noise->Get(particles[j].position.x/width, particles[j].position.y/height) * TWO_PI; 
-      float noiseAngle2  = noise->Get(particles[j].position.x/width, particles[j].position.y/height) * TWO_PI; 
+      float noiseAngle = noise->Get(particles[j].position.x, particles[j].position.y) * TWO_PI; 
+      float noiseAngle2  = noise->Get(particles[j].position.x, particles[j].position.y) * TWO_PI; 
       ofxVec3f noiseForce = ofxVec3f(cos(noiseAngle), -sin(noiseAngle2), 0); 
       particles[j].accel += noiseMult * noiseForce;
     }
 
     int fftid=particles[j].id;
-    float fftAngle = (float )(fft[fftid]/fftMax)*PI + particles[j].angle;
+    float sign=(ofRandom(0,1))?-1.0f:1.0f;
+    float fftAngle = sign * ((float )(fft[fftid]/fftMax)*PI + particles[j].angle);
 
     // apply force 
     ofxVec2f fftForce;

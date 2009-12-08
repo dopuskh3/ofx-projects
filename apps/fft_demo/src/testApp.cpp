@@ -13,17 +13,40 @@ void testApp::setup(){
    
        
     psys.setup(56); 
-
-    fftList=NULL;                                                                                                   
-    bands = 256;
+ #ifndef LIVE_MUSIC
+  	bands = 128;
     amort = 0;
     tbands = bands;
 
-    fftSmoothed = (float *)malloc(bands* sizeof(float));
+    fftSmoothed = new float[bands];
 
+    music.loadSound("test.mp3"); 
+    music.play(); 
+    music.setVolume(1); 
+#else
+  	bands = 128;
+    amort = 0;
+    tbands = bands;
+
+	fft = ofxFft::create(bands*2, OF_FFT_HAMMING, OF_FFT_FFTW);
+
+	// 0 output channels,
+	// 1 input channel
+	// 44100 samples per second
+	// [bins] samples per buffer
+	// 4 num buffers (latency)
+
+	ofSoundStreamSetup(0, 1, this, 44100, bands*2, 4);
+
+	audioInput = new float[bands*2];
+    
+    fftList = NULL; 
+    fftSmoothed = new float[bands];
     for (int i =0 ; i < bands; i++)
       fftSmoothed[i] = 0.0; 
   
+
+#endif
     gui.addTitle("Control");
     gui.addSlider("fft mult", psys.fftMult , 0.0, 200.0);
     gui.addSlider("noise mul", psys.noiseMult, 0.0, 30.0);
@@ -43,27 +66,25 @@ void testApp::setup(){
     gui.addToggle("Draw FFT", psys.drawFFT);
     gui.addToggle("Average FFT Speed", psys.averFFTSpeed);
     gui.addSlider("Takke bands", tbands, 0, bands);
-    gui.addSlider("Amort", amort, 0, 1);
+    gui.addSlider("Amort", amort, 0.0, 2.0f);
 
 
-    music.loadSound("test.mp3"); 
-    music.play(); 
-    music.setVolume(1); 
-  
     gui.loadFromXML();
     gui.show();
+
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 
+#ifndef LIVE_MUSIC
   fftList = ofSoundGetSpectrum(bands); 
 
   for (int i = 0; i < bands; i++){
       //fftList[0] = 0.0f;
       //fftList[bands-1] = 0.0f;
-      if(fftList[i]>1.0f) fftList[i] = 0.9f;
-      fftList[i] = cbrtf(fftList[i]);
+      if(fftList[i]>1.0f) fftList[i] = 1.0f;
+      fftList[i] = sqrtf(sqrtf(sqrtf(fftList[i])));
       //fftList[i] = (fftList[i-1] + fftList[i] +  fftList[i+1]) / 3.0f;
       fftSmoothed[i] *= amort;
       if ( fftSmoothed[i] < fftList[i] ){
@@ -73,13 +94,49 @@ void testApp::update(){
         //}
       }
   }
-
-  psys.setFFT(fftSmoothed, tbands);
+#else
+  if (fftList){ 
+    //cout<<fft->getBinSize()<<endl;
+    psys.setFFT(fftSmoothed, fft->getBinSize());
   //ands);
   //160);
-  psys.update(); 
+    psys.update(); 
+  }
+#endif
+}
+
+#ifdef LIVE_MUSIC
+void testApp::audioReceived(float* input, int bufferSize, int nChannels) {
+	
+    memcpy(audioInput, input, sizeof(float) * bufferSize);
+	// compute fft given audioInput
+    //
+    //
+    //
+
+  fftList = fft->fft(audioInput);
+  for (int i = 0; i < bands; i++){
+      //fftList[0] = 0.0f;
+      //fftList[bands-1] = 0.0f;
+      if(i<1){ fftList[i] /= 2.0f;}
+      //if(fftList[i]>0.7f){ cout<<"LSKD"<<endl; fftList[i] /= 2.0f;}
+      fftList[i] = cbrtf(fftList[i]);
+      //fftList[i] = (fftList[i-1] + fftList[i] +  fftList[i+1]) / 3.0f;
+      fftSmoothed[i];
+      fftSmoothed[i] *= amort;
+      if ( fftList[i] > fftSmoothed[i]){ //fftSmoothed[i] < fftList[i] ){
+        fftSmoothed[i] = fftList[i]; 
+        //if(fftSmoothed[i] > 1.0f){
+        //  fftSmoothed[i]=1.0f;
+        //}
+      } else{
+        fftSmoothed[i] *= 0.8f;}
+  }
+
+  psys.setFFT(fftSmoothed, tbands);
 
 }
+#endif
 
 //--------------------------------------------------------------
 void testApp::draw(){
