@@ -3,30 +3,14 @@ cmake_minimum_required(VERSION 2.6)
 project(fft_demo)
 
 # include ( ../../CMakeBase.txt ) 
-
-set ( ofx_base ../../openFrameworks ) 
-set ( ofx_includes  ${ofx_base}
-            ${ofx_base}/app
-            ${ofx_base}/communication
-            ${ofx_base}/events
-            ${ofx_base}/graphics
-            ${ofx_base}/sound
-            ${ofx_base}/utils
-            ${ofx_base}/video)
-
-
 # add ofx includes directories for dependencies 
-include_directories ( ${ofx_includes} ) 
-
 file ( GLOB_RECURSE app_sources_files src/*)
-
 # VectorMath addon ##############################
 file ( GLOB_RECURSE ofxVectorMath ../../addons/ofxVectorMath/src/* )
 include_directories ( ../../addons/ofxVectorMath/src/ ) 
 
 
 # ofxGui
-
 file ( GLOB_RECURSE ofxMSAInteractiveObject ../../addons/ofxMSAInteractiveObject/src/* ) 
 include_directories ( ../../addons/ofxMSAInteractiveObject/src/ )
 
@@ -49,12 +33,11 @@ add_executable( fft_demo
     ${ofxXmlSettings}
     ${ofxSimpleGuiToo})
 
-    # ${OFX_SOURCE_FILES} )
-#find_library(gl OpenGL)
-find_library(oflib openFrameworks ./../../openFrameworks)
-message ("${oflib}")
-set (OPENFRAMEWORKS_PREFIX "/opt/openFrameworks")
-include (../../openFrameworks.cmake)
-include_directories ( ${OPENFRAMEWORKS_INCLUDES} )
-set ( libs ${oflib} ${gl} ${cv_LIBRARIES}) # ${ofx_libs} ${cv_LIBRARIES}) 
+#include(FindPkgConfig)
+#pkg_search_module(OF openFrameworks)
+find_library(OF openFrameworks PATHS /usr/local/Frameworks)
+message("${OF}")
+
+include_directories ( ${OF_INCLUDE_DIRS} "${OF}/Headers")
+set ( libs ${OF} ${cv_LIBRARIES} "-framework OpenGL") # ${ofx_libs} ${cv_LIBRARIES}) 
 target_link_libraries(fft_demo ${libs} )
