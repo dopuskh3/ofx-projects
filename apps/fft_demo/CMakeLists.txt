@@ -4,17 +4,6 @@ project(fft_demo)
 
 # include ( ../../CMakeBase.txt ) 
 
-set ( ofx_base ../../openFrameworks ) 
-set ( ofx_includes  ${ofx_base}
-            ${ofx_base}/app
-            ${ofx_base}/communication
-            ${ofx_base}/events
-            ${ofx_base}/graphics
-            ${ofx_base}/sound
-            ${ofx_base}/utils
-            ${ofx_base}/video)
-
-
 # add ofx includes directories for dependencies 
 include_directories ( ${ofx_includes} ) 
 
@@ -36,6 +25,13 @@ include_directories ( ../../addons/ofxSimpleGuiToo/src/ ../../addons/ofxSimpleGu
 file ( GLOB_RECURSE ofxXmlSettings ../../addons/ofxXmlSettings/libs/* ../../addons/ofxXmlSettings/src/* ) 
 include_directories ( ../../addons/ofxXmlSettings/libs/ ../../addons/ofxXmlSettings/src/ )
 
+# ofxFft
+file ( GLOB_RECURSE ofxFft ./../../addons/ofxFft/src/* )
+include_directories ( ./../../addons/ofxFft/src )
+find_library(fftw_libs fftw3)
+find_library(fftwf_libs fftw3f)
+
+
 
 
 # ofxShader addons ##############################
@@ -47,14 +43,18 @@ add_executable( fft_demo
     ${ofxVectorMath}
     ${ofxMSAInteractiveObject}
     ${ofxXmlSettings}
+    ${ofxFft}
     ${ofxSimpleGuiToo})
 
     # ${OFX_SOURCE_FILES} )
+
+include(FindPkgConfig)
+pkg_check_modules(OF openFrameworks)
+# message("${OF_INCLUDES} ${OF_CFLAGS} asdas")
 #find_library(gl OpenGL)
-find_library(oflib openFrameworks ./../../openFrameworks)
-message ("${oflib}")
-set (OPENFRAMEWORKS_PREFIX "/opt/openFrameworks")
-include (../../openFrameworks.cmake)
-include_directories ( ${OPENFRAMEWORKS_INCLUDES} )
-set ( libs ${oflib} ${gl} ${cv_LIBRARIES}) # ${ofx_libs} ${cv_LIBRARIES}) 
+#find_library(oflib openFrameworks ./../../openFrameworks)
+#message ("${oflib}")
+#include (../../openFrameworks.cmake)
+include_directories (${OF_INCLUDE_DIRS}) # ${OF_CFLAGS})
+set ( libs ${OF_LIBRARIES} ${fftwf_libs} ${fftwf_libs} )#oflib} ${gl} ${cv_LIBRARIES}) # ${ofx_libs} ${cv_LIBRARIES}) 
 target_link_libraries(fft_demo ${libs} )

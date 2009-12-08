@@ -18,9 +18,10 @@ Particle::Particle(float x, float y, int nhmin, int nhmax){
   this->velocity = ofxVec3f(0, 0);
   this->accel   = ofxVec3f(0, 0); 
   ttl = PARTICLE_TTL; 
-  damping = 0.01f;
+  vDamping = 0.01f;
+  aDamping = 0.0f;
   fuzz = 0.0;
-
+  
   numH = ofRandom(nhmin,nhmax); 
 
   velocityMultiplier = VELOCITY_MULTIPLIER;
@@ -39,6 +40,8 @@ void Particle::update(){
 
   //ttl--; 
 
+  velocity += accel; 
+  position += velocity;
   if(numH > 0){
     hPos.push_back(position); 
     hVel.push_back(velocity); 
@@ -52,8 +55,6 @@ void Particle::update(){
       hColor.pop_front();
     }
   }
-  velocity += accel; 
-  position += velocity;
 
 
   //if(fuzz != 0){
@@ -66,7 +67,7 @@ void Particle::update(){
 
 //---------------------------------------------------- 
 void Particle::addDamping(){
- accel = accel - velocity * damping; 
+ accel = accel - velocity * vDamping; 
 }
 
 //----------------------------------------------------
@@ -107,10 +108,9 @@ void Particle::draw(){
 
   for(int i=0 ; i < hPos.size(); i++){
     float l = hVel[i].length();
-    float angle = atan2(hVel[i].y, hVel[i].x); 
-    float ofx = MAX(1.0, -sin(angle)*l*velocityMultiplier);
-    float ofy = MAX(1.0, cos(angle)*l*velocityMultiplier);
-    
+    float angle = atan2(hVel[i].x, hVel[i].y); 
+    float ofx =  cos(angle)*l*velocityMultiplier;
+    float ofy =  -sin(angle)*l*velocityMultiplier;
     glColor4f(hColor[i].x, hColor[i].y, hColor[i].z, hColor[i].w);
     glVertex3f(hPos[i].x+ofx, hPos[i].y+ofy , 0.0f); 
     glVertex3f(hPos[i].x-ofx, hPos[i].y-ofy , 0.0f); 

@@ -1,47 +1,47 @@
 <controls>
     <SliderFloat_fft_mult>
         <name>fft mult</name>
-        <value>70.312500</value>
+        <value>32.031250</value>
     </SliderFloat_fft_mult>
     <SliderFloat_noise_mul>
         <name>noise mul</name>
-        <value>6.914062</value>
+        <value>2.109375</value>
     </SliderFloat_noise_mul>
     <SliderInt_max_particles>
         <name>max particles</name>
-        <value>165</value>
+        <value>753</value>
     </SliderInt_max_particles>
     <SliderFloat_Low_Thresh>
         <name>Low Thresh</name>
-        <value>0.218750</value>
+        <value>0.000000</value>
     </SliderFloat_Low_Thresh>
     <SliderFloat_Mid_Thresh>
         <name>Mid Thresh</name>
-        <value>0.058594</value>
+        <value>0.000000</value>
     </SliderFloat_Mid_Thresh>
     <SliderFloat_High_Thresh>
         <name>High Thresh</name>
-        <value>0.042969</value>
+        <value>0.000000</value>
     </SliderFloat_High_Thresh>
     <SliderInt_Particle_Size_Min>
         <name>Particle Size Min</name>
-        <value>3</value>
+        <value>1</value>
     </SliderInt_Particle_Size_Min>
     <SliderInt_Particle_Size_Max>
         <name>Particle Size Max</name>
-        <value>11</value>
+        <value>5</value>
     </SliderInt_Particle_Size_Max>
     <SliderFloat_Particle_Velocity_Mult>
         <name>Particle Velocity Mult</name>
-        <value>0.136719</value>
+        <value>0.250000</value>
     </SliderFloat_Particle_Velocity_Mult>
     <SliderFloat_Velocity_Damp>
         <name>Velocity Damp</name>
-        <value>0.472656</value>
+        <value>0.714844</value>
     </SliderFloat_Velocity_Damp>
     <SliderFloat_Accel_Damp>
         <name>Accel Damp</name>
-        <value>0.015625</value>
+        <value>0.003906</value>
     </SliderFloat_Accel_Damp>
     <Toggle_average_toggle>
         <name>average toggle</name>
@@ -49,15 +49,15 @@
     </Toggle_average_toggle>
     <Toggle_enable_noise>
         <name>enable noise</name>
-        <value>1</value>
+        <value>0</value>
     </Toggle_enable_noise>
     <Toggle_rotating_angle>
         <name>rotating angle</name>
-        <value>0</value>
+        <value>1</value>
     </Toggle_rotating_angle>
     <Toggle_random_pos>
         <name>random pos</name>
-        <value>1</value>
+        <value>0</value>
     </Toggle_random_pos>
     <Toggle_Draw_FFT>
         <name>Draw FFT</name>
@@ -65,14 +65,14 @@
     </Toggle_Draw_FFT>
     <Toggle_Average_FFT_Speed>
         <name>Average FFT Speed</name>
-        <value>1</value>
+        <value>0</value>
     </Toggle_Average_FFT_Speed>
     <SliderInt_Takke_bands>
         <name>Takke bands</name>
-        <value>234</value>
+        <value>128</value>
     </SliderInt_Takke_bands>
     <SliderFloat_Amort>
         <name>Amort</name>
-        <value>0.148438</value>
+        <value>1.242188</value>
     </SliderFloat_Amort>
 </controls>
