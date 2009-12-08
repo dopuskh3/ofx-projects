@@ -53,5 +53,4 @@ else ( APPLE )
     include_directories (${OF_INCLUDE_DIRS}) # ${OF_CFLAGS})
 endif ( APPLE )
 
-set ( libs ${OF} ${fftwf_libs} ${fftw_libs} ) 
-target_link_libraries(fft_demo ${libs} )
+set ( libs ${OF_LIBRARIES} ${fftwf_libs} ${fftwf_libs} )#oflib} ${gl} ${cv_LIBRARIES}) # ${ofx_libs} ${cv_LIBRARIES}) 
