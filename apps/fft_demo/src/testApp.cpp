@@ -2,29 +2,29 @@
 #include "ofxSimpleGuiToo.h"
 
 //--------------------------------------------------------------
-void testApp::setup(){	
+void testApp::setup(){
 	ofBackground(0,0,0);
 	ofSetFrameRate(32);
-    
+
     glDepthMask(false);
     glDisable(GL_DEPTH_TEST);
     glEnable( GL_BLEND );
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-   
-       
-    psys.setup(56); 
+
+
+    psys.setup(56);
  #ifndef LIVE_MUSIC
-  	bands = 128;
+  	bands = 256;
     amort = 0;
     tbands = bands;
 
     fftSmoothed = new float[bands];
 
-    music.loadSound("test.mp3"); 
-    music.play(); 
-    music.setVolume(1); 
+    music.loadSound("test.mp3");
+    music.play();
+    music.setVolume(1);
 #else
-  	bands = 128;
+  	bands = 256;
     amort = 0;
     tbands = bands;
 
@@ -39,12 +39,12 @@ void testApp::setup(){
 	ofSoundStreamSetup(0, 1, this, 44100, bands*2, 4);
 
 	audioInput = new float[bands*2];
-    
-    fftList = NULL; 
+
+    fftList = NULL;
     fftSmoothed = new float[bands];
     for (int i =0 ; i < bands; i++)
-      fftSmoothed[i] = 0.0; 
-  
+      fftSmoothed[i] = 0.0;
+
 
 #endif
     gui.addTitle("Control");
@@ -60,13 +60,14 @@ void testApp::setup(){
     gui.addSlider("Velocity Damp", psys.velocityDamp, 0.0, 1.0);
     gui.addSlider("Accel Damp", psys.accelDamp, 0.0, 1.0);
     gui.addToggle("average toggle", psys.averageTrigger);
-    gui.addToggle("enable noise", psys.enableNoise); 
+    gui.addToggle("enable noise", psys.enableNoise);
     gui.addToggle("rotating angle", psys.rotatingAngle);
     gui.addToggle("random pos", psys.particleRandomPos);
     gui.addToggle("Draw FFT", psys.drawFFT);
     gui.addToggle("Average FFT Speed", psys.averFFTSpeed);
     gui.addSlider("Takke bands", tbands, 0, bands);
-    gui.addSlider("Amort", amort, 0.0, 2.0f);
+    gui.addSlider("Amort", amort, 0.0, 1.0f);
+    gui.addSlider("Flow Factor", psys.fftFlowFactor, 0.0, 500.0);
 
 
     gui.loadFromXML();
@@ -78,36 +79,34 @@ void testApp::setup(){
 void testApp::update(){
 
 #ifndef LIVE_MUSIC
-  fftList = ofSoundGetSpectrum(bands); 
+  fftList = ofSoundGetSpectrum(bands);
 
   for (int i = 0; i < bands; i++){
       //fftList[0] = 0.0f;
       //fftList[bands-1] = 0.0f;
       if(fftList[i]>1.0f) fftList[i] = 1.0f;
-      fftList[i] = sqrtf(sqrtf(sqrtf(fftList[i])));
+      //fftList[i] = sqrtf(sqrtf(sqrtf(fftList[i])));
       //fftList[i] = (fftList[i-1] + fftList[i] +  fftList[i+1]) / 3.0f;
       fftSmoothed[i] *= amort;
       if ( fftSmoothed[i] < fftList[i] ){
-        fftSmoothed[i] = fftList[i]; 
-        //if(fftSmoothed[i] > 1.0f){
-        //  fftSmoothed[i]=1.0f;
-        //}
+        fftSmoothed[i] = fftList[i];
+      }
       }
   }
 #else
-  if (fftList){ 
+  if (fftList){
     //cout<<fft->getBinSize()<<endl;
     psys.setFFT(fftSmoothed, fft->getBinSize());
   //ands);
   //160);
-    psys.update(); 
+    psys.update();
   }
 #endif
 }
 
 #ifdef LIVE_MUSIC
 void testApp::audioReceived(float* input, int bufferSize, int nChannels) {
-	
+
     memcpy(audioInput, input, sizeof(float) * bufferSize);
 	// compute fft given audioInput
     //
@@ -125,7 +124,7 @@ void testApp::audioReceived(float* input, int bufferSize, int nChannels) {
       fftSmoothed[i];
       fftSmoothed[i] *= amort;
       if ( fftList[i] > fftSmoothed[i]){ //fftSmoothed[i] < fftList[i] ){
-        fftSmoothed[i] = fftList[i]; 
+        fftSmoothed[i] = fftList[i];
         //if(fftSmoothed[i] > 1.0f){
         //  fftSmoothed[i]=1.0f;
         //}
@@ -140,22 +139,22 @@ void testApp::audioReceived(float* input, int bufferSize, int nChannels) {
 
 //--------------------------------------------------------------
 void testApp::draw(){
-  
+
 
   //ofEnableAlphaBlending();
- 
+
   ofEnableAlphaBlending();
   glEnable(GL_BLEND);
-  glEnable(GL_LINE_SMOOTH); 
+  glEnable(GL_LINE_SMOOTH);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
- 
-  psys.draw(); 
+
+  psys.draw();
   gui.draw();
 
 }
 
 //--------------------------------------------------------------
-void testApp::keyPressed  (int key){ 
+void testApp::keyPressed  (int key){
 
   switch(key){
     case 'g':
@@ -179,13 +178,13 @@ void testApp::keyPressed  (int key){
 }
 
 //--------------------------------------------------------------
-void testApp::keyReleased  (int key){ 
+void testApp::keyReleased  (int key){
 }
 
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ){
   psys.mouseX = x;
-  psys.mouseY = y; 
+  psys.mouseY = y;
 }
 
 //--------------------------------------------------------------

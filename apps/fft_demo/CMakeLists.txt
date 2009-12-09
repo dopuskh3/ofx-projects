@@ -43,11 +43,13 @@ if ( APPLE )
     set ( libs ${OF} ${cv_LIBRARIES} "-framework OpenGL") # ${ofx_libs} ${cv_LIBRARIES}) 
 
 else ( APPLE ) 
-
+    message( "Building for linux")
+    message( " LIBS : ${OF_LIBRARIES} INCLUDES ${OF_INCLUDE_DIRS}" )
     include(FindPkgConfig)
     pkg_check_modules(OF openFrameworks)
     include_directories (${OF_INCLUDE_DIRS}) # ${OF_CFLAGS})
-
 endif ( APPLE )
 
 set ( libs ${OF_LIBRARIES} ${fftwf_libs} ${fftwf_libs} )#oflib} ${gl} ${cv_LIBRARIES}) # ${ofx_libs} ${cv_LIBRARIES}) 
+
+target_link_libraries(fft_demo ${libs})
