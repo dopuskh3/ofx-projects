@@ -35,22 +35,19 @@ add_executable( fft_demo
     ${ofxSimpleGuiToo})
 
 if ( APPLE ) 
+
     find_library(OF openFrameworks PATHS /usr/local/Frameworks)
     message("${OF}")
-
     include_directories ( "${OF}/Headers")
     set ( OF_LIBRARIES ${OF} )  
     set ( libs ${OF} ${cv_LIBRARIES} "-framework OpenGL") # ${ofx_libs} ${cv_LIBRARIES}) 
+
 else ( APPLE ) 
 
     include(FindPkgConfig)
     pkg_check_modules(OF openFrameworks)
-    # message("${OF_INCLUDES} ${OF_CFLAGS} asdas")
-    #find_library(gl OpenGL)
-    #find_library(oflib openFrameworks ./../../openFrameworks)
-    #message ("${oflib}")
-    #include (../../openFrameworks.cmake)
     include_directories (${OF_INCLUDE_DIRS}) # ${OF_CFLAGS})
+
 endif ( APPLE )
 
 set ( libs ${OF_LIBRARIES} ${fftwf_libs} ${fftwf_libs} )#oflib} ${gl} ${cv_LIBRARIES}) # ${ofx_libs} ${cv_LIBRARIES}) 
