@@ -19,21 +19,23 @@ include_directories ( ../../addons/ofxSimpleGuiToo/src/ ../../addons/ofxSimpleGu
 file ( GLOB_RECURSE ofxXmlSettings ../../addons/ofxXmlSettings/libs/* ../../addons/ofxXmlSettings/src/* ) 
 include_directories ( ../../addons/ofxXmlSettings/libs/ ../../addons/ofxXmlSettings/src/ )
 
-# opencv 
+file ( GLOB_RECURSE ofxOpenCv ../../addons/ofxOpenCv/src/* )
+include_directories ( ../../addons/ofxOpenCv/src/ ) 
+
 # OpenCv addon ##################################
-if ( APPLE )
-
-else ( APPLE )
-    file ( GLOB_RECURSE ofxOpenCv ../../addons/ofxOpenCv/src/* )
-    include_directories ( ../../addons/ofxOpenCv/src/ ) 
-endif ( APPLE )
-
 if ( CMAKE_SYSTEM_NAME MATCHES "Linux" ) 
     include(FindPkgConfig)
     pkg_search_module(CV opencv)
     include_directories ( ${CV_INCLUDE_DIRS} )
 endif()
-
+if ( APPLE )
+   include_directories(../../../opencv/OpenCV-2.0.0/include/opencv)
+   find_library(cv cv PATHS ../../../opencv/OpenCV-2.0.0/lib)
+   find_library(cvaux cvaux PATHS ../../../opencv/OpenCV-2.0.0/lib)
+   find_library(cvcore cxcore PATHS ../../../opencv/OpenCV-2.0.0/lib)
+   message("${cv} ${cvaux}")
+   set (CV_LIBRARIES ${cv} ${cvaux} ${cvcore})
+endif( APPLE )
 
 add_executable( skin
     ${app_sources_files}
@@ -47,8 +49,7 @@ if ( APPLE )
     find_library(OF openFrameworks PATHS /usr/local/Frameworks)
     message("${OF}")
     include_directories ( "${OF}/Headers")
-    set ( OF_LIBRARIES ${OF} )  
-    set ( libs ${OF} "-framework OpenGL") # ${ofx_libs} ${cv_LIBRARIES}) 
+    set ( OF_LIBRARIES ${OF} "-framework OpenGL") # ${ofx_libs} ${cv_LIBRARIES}) 
 else ( APPLE ) 
     message( "Building for linux")
     message( " LIBS : ${OF_LIBRARIES} INCLUDES ${OF_INCLUDE_DIRS}" )
