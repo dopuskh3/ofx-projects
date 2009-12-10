@@ -4,7 +4,8 @@
 
 //========================================================================
 int main( ){
-
+  
+    ofSetLogLevel(OF_LOG_VERBOSE);
     ofEnableArbTex();
 	ofSetupOpenGL(1280, 1024, OF_WINDOW);			// <-------- setup the GL context
 

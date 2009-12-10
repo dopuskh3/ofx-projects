@@ -8,9 +8,9 @@ void testApp::setup(){
 
   vidGrabber.setVerbose(true);
 	//vidGrabber.setUseTexture(false);
-	vidGrabber.initGrabber(320, 240);
+  vidGrabber.initGrabber(640, 480);
 
-  skin_classifier.init(320, 240);
+  skin_classifier.init(640, 480);
 
 }
 
