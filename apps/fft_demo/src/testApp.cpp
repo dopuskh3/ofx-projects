@@ -67,7 +67,7 @@ void testApp::setup(){
     gui.addToggle("Average FFT Speed", psys.averFFTSpeed);
     gui.addSlider("Takke bands", tbands, 0, bands);
     gui.addSlider("Amort", amort, 0.0, 1.0f);
-    gui.addSlider("Flow Factor", psys.fftFlowFactor, 0.0, 500.0);
+    //gui.addSlider("Flow Factor", psys.fftFlowFactor, 0.0, 40.0);
 
 
     gui.loadFromXML();

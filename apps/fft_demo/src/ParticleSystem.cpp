@@ -104,6 +104,7 @@ void ParticleSystem::update(){
   float fftMax = 0.0f;
   float trigger;
 
+
   // fft is uninitialized
   if(!fftSize || !fft)
    return ;
@@ -116,14 +117,18 @@ void ParticleSystem::update(){
   averfft/=fftSize;
 
   int x, y;// -----
-
-  for(int i = fftSize; i >0 ; --i){
-      float factor = fftFlowFactor * averfft * fft[i];
-      factor = sqrt(factor);
-
+  if (particles.size() > maxParticles & fftFlowFactor > 0){
+    fftFlowFactor-=0.1;
+  }
+  if (particles.size() < maxParticles ) {
+    fftFlowFactor+=0.1; 
+  } 
+  for(int k = fftSize; k >0 ; --k){
+      int i = ofRandom(0, fftSize);
+      float factor = fftFlowFactor * cbrtf(fft[i]*(float)(i+1)/20.0); 
+      //factor = sqrtf(factor);
       int numPart = factor * fft[i];
-      if (particles.size() > maxParticles)
-        break;
+
       for(int j=0; j< numPart; j++){
         float angle;
         if (rotatingAngle){
@@ -227,7 +232,7 @@ void ParticleSystem::update(){
     if( averFFTSpeed)
       fftForce = ofxVec3f(averfft * fftMult * cos(fftAngle), averfft * fftMult * sin(fftAngle), 0);
     else
-      fftForce = ofxVec3f(fft[fftid] * averfft * fftMult * cos(fftAngle), averfft * fft[fftid] * fftMult * sin(fftAngle), 0);
+      fftForce = ofxVec3f(sqrt(fft[fftid]) * averfft * fftMult * cos(fftAngle), averfft * sqrt(fft[fftid]) * fftMult * sin(fftAngle), 0);
 
     particles[j].accel += fftForce;
 

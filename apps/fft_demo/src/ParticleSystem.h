@@ -33,7 +33,7 @@
 #define ACCEL_DAMP 0.0f
 #define DRAW_FFT false
 #define AVER_FFT_SPEED false
-#define FFT_FLOW_FACTOR 10.0f
+#define FFT_FLOW_FACTOR 5.5
 
 class ParticleSystem{
 

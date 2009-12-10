@@ -1,15 +1,15 @@
 <controls>
     <SliderFloat_fft_mult>
         <name>fft mult</name>
-        <value>185.937500</value>
+        <value>91.406250</value>
     </SliderFloat_fft_mult>
     <SliderFloat_noise_mul>
         <name>noise mul</name>
-        <value>2.109375</value>
+        <value>1.289062</value>
     </SliderFloat_noise_mul>
     <SliderInt_max_particles>
         <name>max particles</name>
-        <value>415</value>
+        <value>187</value>
     </SliderInt_max_particles>
     <SliderFloat_Low_Thresh>
         <name>Low Thresh</name>
@@ -33,11 +33,11 @@
     </SliderInt_Particle_Size_Max>
     <SliderFloat_Particle_Velocity_Mult>
         <name>Particle Velocity Mult</name>
-        <value>0.066406</value>
+        <value>0.074219</value>
     </SliderFloat_Particle_Velocity_Mult>
     <SliderFloat_Velocity_Damp>
         <name>Velocity Damp</name>
-        <value>0.843750</value>
+        <value>0.933594</value>
     </SliderFloat_Velocity_Damp>
     <SliderFloat_Accel_Damp>
         <name>Accel Damp</name>
@@ -69,14 +69,10 @@
     </Toggle_Average_FFT_Speed>
     <SliderInt_Takke_bands>
         <name>Takke bands</name>
-        <value>256</value>
+        <value>252</value>
     </SliderInt_Takke_bands>
     <SliderFloat_Amort>
         <name>Amort</name>
         <value>0.000000</value>
     </SliderFloat_Amort>
-    <SliderFloat_Flow_Factor>
-        <name>Flow Factor</name>
-        <value>359.375000</value>
-    </SliderFloat_Flow_Factor>
 </controls>
