@@ -6,7 +6,8 @@ void testApp::setup(){
 	ofBackground(20,20,20);
 	ofSetFrameRate(32);
 
-	vidGrabber.setUseTexture(false);
+  vidGrabber.setVerbose(true);
+	//vidGrabber.setUseTexture(false);
 	vidGrabber.initGrabber(320, 240);
 
   skin_classifier.init(320, 240);

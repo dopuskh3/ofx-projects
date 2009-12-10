@@ -33,20 +33,22 @@ void skinClassifier::setImage(unsigned char *image){
 
   currentImage.setFromPixels(image, width, height);
   currentImage.convertRgbToHsv();
-  pixels = currentImage.getPixels();
+  IplImage *inImage = currentImage.getCvImage();
+  IplImage *outImage = skinImage.getCvImage();
 
-  outPixels = skinImage.getPixels();
 
-  for(int i = 0; i < width*height; i++){
-    char h = pixels[i*3];
-    char s = pixels[i*3+1];
-    char v = pixels[i*3+2];
-    if ( h >= HMIN/2 && h <HMAX/2 && s > SMIN * 255 && s < SMAX * 255){
-      outPixels[i] = 1;
-    } else {
-      outPixels[i] = 0;
+  for(int x = 0; x < width; x++){
+    for(int y = 0; y < height; y++){
+      char h = CV_IMAGE_ELEM(inImage, uchar, y, pixels[x*3]);
+      char s = CV_IMAGE_ELEM(inImage, uchar, y, pixels[x*3+1]);
+      char v = CV_IMAGE_ELEM(inImage, uchar, y, pixels[x*3+2]);
+      if ( h >= HMIN/2 && h <HMAX/2 && s > SMIN * 255 && s < SMAX * 255){
+       ((uchar *)(outImage->imageData + (outImage->widthStep * y)))[x] = 1;
+       } else {
+       ((uchar *)(outImage->imageData + (outImage->widthStep * y)))[x] = 0;
+      }
     }
-    skinImage.setFromPixels(outPixels, width, height);
+    //skinImage.setFromPixels(outPixels, width, height);
   }
 
 }
