@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(fft_demo)
+project(skin)
 
 # add ofx includes directories for dependencies 
 file ( GLOB_RECURSE app_sources_files src/*)
@@ -19,30 +19,36 @@ include_directories ( ../../addons/ofxSimpleGuiToo/src/ ../../addons/ofxSimpleGu
 file ( GLOB_RECURSE ofxXmlSettings ../../addons/ofxXmlSettings/libs/* ../../addons/ofxXmlSettings/src/* ) 
 include_directories ( ../../addons/ofxXmlSettings/libs/ ../../addons/ofxXmlSettings/src/ )
 
-# ofxFft
-file ( GLOB_RECURSE ofxFft ./../../addons/ofxFft/src/* )
-include_directories ( ./../../addons/ofxFft/src )
-find_library(fftw_libs fftw3)
-find_library(fftwf_libs fftw3f)
-include ( ../../addons/ofxFft/ofxFft.cmake ) 
-message ( "${ofxFft_SOURCES} ${ofxFft_INCLUDES} - ${ofxFft_LIBRARIES}" )
+# opencv 
+# OpenCv addon ##################################
+if ( APPLE )
 
-add_executable( fft_demo
+else ( APPLE )
+    file ( GLOB_RECURSE ofxOpenCv ../../addons/ofxOpenCv/src/* )
+    include_directories ( ../../addons/ofxOpenCv/src/ ) 
+endif ( APPLE )
+
+if ( CMAKE_SYSTEM_NAME MATCHES "Linux" ) 
+    include(FindPkgConfig)
+    pkg_search_module(CV opencv)
+    include_directories ( ${CV_INCLUDE_DIRS} )
+endif()
+
+
+add_executable( skin
     ${app_sources_files}
     ${ofxVectorMath}
+    ${ofxOpenCv}
     ${ofxMSAInteractiveObject}
     ${ofxXmlSettings}
-    ${ofxFft}
     ${ofxSimpleGuiToo})
 
 if ( APPLE ) 
-
     find_library(OF openFrameworks PATHS /usr/local/Frameworks)
     message("${OF}")
     include_directories ( "${OF}/Headers")
     set ( OF_LIBRARIES ${OF} )  
-    set ( libs ${OF} ${cv_LIBRARIES} "-framework OpenGL") # ${ofx_libs} ${cv_LIBRARIES}) 
-
+    set ( libs ${OF} "-framework OpenGL") # ${ofx_libs} ${cv_LIBRARIES}) 
 else ( APPLE ) 
     message( "Building for linux")
     message( " LIBS : ${OF_LIBRARIES} INCLUDES ${OF_INCLUDE_DIRS}" )
@@ -51,6 +57,5 @@ else ( APPLE )
     include_directories (${OF_INCLUDE_DIRS}) # ${OF_CFLAGS})
 endif ( APPLE )
 
-set ( libs ${OF_LIBRARIES} ${fftwf_libs} ${fftwf_libs} )#oflib} ${gl} ${cv_LIBRARIES}) # ${ofx_libs} ${cv_LIBRARIES}) 
-
-target_link_libraries(fft_demo ${libs})
+set ( libs ${OF_LIBRARIES} ${CV_LIBRARIES} )
+target_link_libraries(skin ${libs})
