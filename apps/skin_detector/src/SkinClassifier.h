@@ -8,9 +8,9 @@
 //
 //------------------------------------------------------------------------------------
 
-#include "ofMain.h"
 #include "ofxOpenCv.h"
-
+#include "ofMain.h"
+#include "cvaux.h"/
 
 class skinClassifier {
 
@@ -28,5 +28,6 @@ class skinClassifier {
   private:
     ofxCvColorImage currentImage;
     ofxCvGrayscaleImage skinImage;
+    CvAdaptiveSkinDetector *cvSkinDetector;
 
 };

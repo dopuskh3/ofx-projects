@@ -11,7 +11,7 @@
 
 
 #include "SkinClassifier.h"
-
+#include "cvaux.hpp"
 #define HMIN 0
 #define HMAX 50
 #define SMIN 0.23
@@ -23,11 +23,21 @@ void skinClassifier::init(int w, int h){
  height = h;
  currentImage.allocate(w, h);
  skinImage.allocate(w, h);
+ cvSkinDetector = new CvAdaptiveSkinDetector(1, CvAdaptiveSkinDetector::MORPHING_METHOD_ERODE_DILATE);
+
 }
 
 
 void skinClassifier::setImage(unsigned char *image){
   // filter image
+
+  currentImage.setFromPixels(image, width, height);
+
+  cvSkinDetector->process(currentImage.getCvImage(), skinImage.getCvImage());
+
+  skinImage.flagImageChanged();
+
+  /*
   unsigned char *pixels;
   unsigned char *outPixels;
 
@@ -50,6 +60,8 @@ void skinClassifier::setImage(unsigned char *image){
     }
     //skinImage.setFromPixels(outPixels, width, height);
   }
+  */
+
 
 }
 

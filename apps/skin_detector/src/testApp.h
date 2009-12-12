@@ -11,8 +11,8 @@
 #ifndef _TEST_APP
 #define _TEST_APP
 
-#include "ofMain.h"
 #include "SkinClassifier.h"
+#include "ofMain.h"
 
 
 class testApp : public ofSimpleApp{
