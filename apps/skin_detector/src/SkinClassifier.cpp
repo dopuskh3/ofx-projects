@@ -21,8 +21,11 @@ void skinClassifier::init(int w, int h){
  //image =  cvCreateImage(cvSize(w, h), IPL_DEPTH_8U, 3);
  width = w;
  height = h;
- currentImage.allocate(w, h);
  skinImage.allocate(w, h);
+ cimage.allocate(w, h);
+
+ currentImage = cvCreateImage(cvSize(w, h), IPL_DEPTH_8U, 3);
+
  cvSkinDetector = new CvAdaptiveSkinDetector(1, CvAdaptiveSkinDetector::MORPHING_METHOD_ERODE_DILATE);
 
 }
@@ -31,11 +34,24 @@ void skinClassifier::init(int w, int h){
 void skinClassifier::setImage(unsigned char *image){
   // filter image
   uchar value;
-  
-  currentImage.setFromPixels(image, width, height);
+  uchar *ptr;
+  uchar *sptr;
+
+  for ( int x = 0; x < width; x++){
+    for ( int y = 0; y < height; y++){
+      ptr = (uchar *)(currentImage->imageData + currentImage->widthStep * y + x*currentImage->nChannels );
+      sptr = (uchar *)(image + width * 3 * y + 3*x);
+      ptr[0] = sptr[2];
+      ptr[1] = sptr[1];
+      ptr[2] = sptr[0];
+    }
+  }
+
+  cimage = currentImage;
+
   IplImage *mask = skinImage.getCvImage();
 
-  cvSkinDetector->process(currentImage.getCvImage(), mask);
+  cvSkinDetector->process(currentImage, mask);
   for ( int x = 0; x < width; x++){
     for ( int y = 0 ; y < height; y++){
       value = ((uchar *)(mask->imageData + y*mask->widthStep))[x];
@@ -77,7 +93,7 @@ void skinClassifier::setImage(unsigned char *image){
 void skinClassifier::draw(int x, int y){
  // convert image to of cv image
  // draw image
- currentImage.draw(0, 0);
+ cimage.draw(0, 0);
  skinImage.draw(x, y);
 
 }

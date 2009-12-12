@@ -26,7 +26,8 @@ class skinClassifier {
     int height;
 
   private:
-    ofxCvColorImage currentImage;
+    IplImage *currentImage;
+    ofxCvColorImage cimage;
     ofxCvGrayscaleImage skinImage;
     CvAdaptiveSkinDetector *cvSkinDetector;
 
