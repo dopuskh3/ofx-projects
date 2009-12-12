@@ -30,11 +30,20 @@ void skinClassifier::init(int w, int h){
 
 void skinClassifier::setImage(unsigned char *image){
   // filter image
-
+  uchar value;
+  
   currentImage.setFromPixels(image, width, height);
+  IplImage *mask = skinImage.getCvImage();
 
-  cvSkinDetector->process(currentImage.getCvImage(), skinImage.getCvImage());
-
+  cvSkinDetector->process(currentImage.getCvImage(), mask);
+  for ( int x = 0; x < width; x++){
+    for ( int y = 0 ; y < height; y++){
+      value = ((uchar *)(mask->imageData + y*mask->widthStep))[x];
+      if (value){
+        ((uchar *) (mask->imageData + mask->widthStep*y))[x] = 255;
+      }
+    }
+  }
   skinImage.flagImageChanged();
 
   /*
@@ -68,7 +77,7 @@ void skinClassifier::setImage(unsigned char *image){
 void skinClassifier::draw(int x, int y){
  // convert image to of cv image
  // draw image
-
+ currentImage.draw(0, 0);
  skinImage.draw(x, y);
 
 }

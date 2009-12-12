@@ -4,12 +4,11 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	ofBackground(20,20,20);
-	ofSetFrameRate(32);
+	//ofSetFrameRate(32);
 
   vidGrabber.setVerbose(true);
 	//vidGrabber.setUseTexture(false);
   vidGrabber.initGrabber(640, 480);
-
   skin_classifier.init(640, 480);
 
 }
@@ -26,7 +25,7 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
   ofSetColor(255, 255, 255);
-  vidGrabber.draw(0, 0);
+  //vidGrabber.draw(0, 0);
   skin_classifier.draw(640, 0);
   //skin_classifier.draw(700, 700);
   //skin_classifier.draw(700, 700);
