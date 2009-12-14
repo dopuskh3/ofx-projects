@@ -26,7 +26,7 @@ void skinClassifier::init(int w, int h){
 
  currentImage = cvCreateImage(cvSize(w, h), IPL_DEPTH_8U, 3);
 
- cvSkinDetector = new CvAdaptiveSkinDetector(1, CvAdaptiveSkinDetector::MORPHING_METHOD_ERODE_DILATE);
+ cvSkinDetector = new CvAdaptiveSkinDetector(1, CvAdaptiveSkinDetector::MORPHING_METHOD_ERODE_ERODE);
 
 }
 
