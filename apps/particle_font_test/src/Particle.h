@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------
 //
 // \file Particle.h
-// \brief 
+// \brief
 //
-// \author Francois Visconte <f.visconte@gmail.com> 
+// \author Francois Visconte <f.visconte@gmail.com>
 // http://digitalork.blogspot.com, http://github.com/dopuskh3
 //
-//------------------------------------------------------------------------------------ 
+//------------------------------------------------------------------------------------
 
 
 
@@ -17,30 +17,28 @@
 #include <deque>
 
 #define PARTICLE_TTL 1000
-#define VELOCITY_MULTIPLIER 0.1 
+#define VELOCITY_MULTIPLIER 0.1
 
 class Particle{
-  
-  public:
-    ofxVec3f position; 
-    ofxVec3f velocity;
-    ofxVec3f accel; 
-	  ofxVec3f destination;
-	ofxVec3f noise;
 
-    Particle(ofxVec3f initial_position, ofxVec3f final_destination);
+  public:
+    ofxVec3f position;
+    ofxVec3f velocity;
+    ofxVec3f accel;
+
+
+    Particle(ofxVec3f initial_position, float timeStep);
     void update();
     void draw();
     bool raise;
-    
+    void addDamping(float damping = 0.01f);
+    void resetForce();
+    void addForce(ofxVec3f force, float radius, float scale);
+
 
     //---------------------------------------------------- Vars
-    int ttl; 
-    float vDamping; 
-    float aDamping;
+    int ttl;
     int id;
-    float r, g, b, alpha;
-    float velocityMultiplier;
-     
+    float timeStep;
 };
 

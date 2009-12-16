@@ -26,7 +26,7 @@ void skinClassifier::init(int w, int h){
 
  currentImage = cvCreateImage(cvSize(w, h), IPL_DEPTH_8U, 3);
 
- cvSkinDetector = new CvAdaptiveSkinDetector(1, CvAdaptiveSkinDetector::MORPHING_METHOD_ERODE_ERODE);
+ cvSkinDetector = new CvAdaptiveSkinDetector(1, CvAdaptiveSkinDetector::MORPHING_METHOD_NONE);
 
 }
 
@@ -40,7 +40,7 @@ void skinClassifier::setImage(unsigned char *image){
   for ( int x = 0; x < width; x++){
     for ( int y = 0; y < height; y++){
       ptr = (uchar *)(currentImage->imageData + currentImage->widthStep * y + x*currentImage->nChannels );
-      sptr = (uchar *)(image + width * 3 * y + 3*x);
+      sptr = (uchar *)(image + 3*(width * y + x) );
       ptr[0] = sptr[2];
       ptr[1] = sptr[1];
       ptr[2] = sptr[0];

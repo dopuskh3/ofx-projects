@@ -18,9 +18,11 @@ class ParticleSystem{
 
   public:
     vector<Particle> particles;
-	vector<ofxVec3f> destination;
+  	vector<ofxVec3f> destination;
     vector<ofxVec3f> sourcePoints;
     Perlin *noise;
+    float timeStep;
+    float steps;
 
     ParticleSystem();
     void setup(int nParticles, int width, int height);
