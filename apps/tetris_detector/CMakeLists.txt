@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(pdestest)
+project(tetris)
 
 # add ofx includes directories for dependencies 
 file ( GLOB_RECURSE app_sources_files src/*)
@@ -23,45 +23,46 @@ file ( GLOB_RECURSE ofxOpenCv ../../addons/ofxOpenCv/src/* )
 include_directories ( ../../addons/ofxOpenCv/src/ ) 
 
 # OpenCv addon ##################################
-#if ( CMAKE_SYSTEM_NAME MATCHES "Linux" ) 
-#    #include(FindPkgConfig)
-#    #pkg_search_module(CV opencv)
-#    #include_directories ( ${CV_INCLUDE_DIRS} )
-#    set ( CV_LIBRARIES "-L/usr/local/lib -lcxcore -lcv -lcvaux -lml")
-#    include_directories (/usr/local/include/opencv)
-#    # message ( " ${CV_LIBRARIES} - ${CV_INCLUDE_DIRS} ") 
-#endif()
-#if ( APPLE )
-#   include_directories(../../../opencv/OpenCV-2.0.0/include/opencv)
-#   find_library(cv cv PATHS ../../../opencv/OpenCV-2.0.0/lib)
-#   find_library(cvaux cvaux PATHS ../../../opencv/OpenCV-2.0.0/lib)
-#   find_library(cvcore cxcore PATHS ../../../opencv/OpenCV-2.0.0/lib)
-#   message("${cv} ${cvaux}")
-#   set (CV_LIBRARIES ${cv} ${cvaux} ${cvcore})
-#endif( APPLE )
+if ( CMAKE_SYSTEM_NAME MATCHES "Linux" ) 
+    #include(FindPkgConfig)
+    #pkg_search_module(CV opencv)
+    #include_directories ( ${CV_INCLUDE_DIRS} )
+    set ( CV_LIBRARIES "-L/usr/local/lib -lcxcore -lcv -lcvaux -lml")
+    include_directories (/usr/local/include/opencv)
+    # message ( " ${CV_LIBRARIES} - ${CV_INCLUDE_DIRS} ") 
+endif()
+if ( APPLE )
+   include_directories(../../../opencv/OpenCV-2.0.0/include/opencv)
+   find_library(cv cv PATHS ../../../opencv/OpenCV-2.0.0/lib)
+   find_library(highgui highgui PATHS ../../../opencv/OpenCV-2.0.0/lib)
+   find_library(cvaux cvaux PATHS ../../../opencv/OpenCV-2.0.0/lib)
+   find_library(cvcore cxcore PATHS ../../../opencv/OpenCV-2.0.0/lib)
+   message("${cv} ${cvaux}")
+   set (CV_LIBRARIES ${cv} ${cvaux} ${cvcore} ${highgui})
+endif( APPLE )
 
-add_executable( pdestest
+add_executable( tetris
     ${app_sources_files}
     ${ofxVectorMath}
-#    ${ofxOpenCv}
+    ${ofxOpenCv}
     ${ofxMSAInteractiveObject}
     ${ofxXmlSettings}
     ${ofxSimpleGuiToo})
 
-#if ( APPLE ) 
-#    find_library(OF openFrameworks PATHS /usr/local/Frameworks)
-#    message("${OF}")
-#    include_directories ( "${OF}/Headers")
-#    include_directories ( "/usr/local/include" )
-#else ( APPLE ) 
-    message( "Building for linux")
+if ( APPLE ) 
     include(FindPkgConfig)
     pkg_check_modules(OF openFrameworks)
     message( " LIBS : ${OF_LIBRARIES} INCLUDES ${OF_INCLUDE_DIRS}" )
     set (CMAKE_CXX_FLAGS ${OF_CFLAGS_OTHER} )
     set ( OF_LIBRARIES ${OF_LIBRARIES} "-framework OpenGL") # ${ofx_libs} ${cv_LIBRARIES}) 
     include_directories (${OF_INCLUDE_DIRS}) # ${OF_CFLAGS})
-#endif ( APPLE )
+
+else ( APPLE ) 
+    include(FindPkgConfig)
+    pkg_check_modules(OF openFrameworks)
+    set (CMAKE_CXX_FLAGS ${OF_CFLAGS_OTHER} )
+    include_directories (${OF_INCLUDE_DIRS}) # ${OF_CFLAGS})
+endif ( APPLE )
 
 set ( libs ${OF_LIBRARIES} ${CV_LIBRARIES}) # ${CV_LIBRARIES} )
-target_link_libraries(pdestest ${libs})
+target_link_libraries(tetris ${libs})
