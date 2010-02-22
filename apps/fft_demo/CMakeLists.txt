@@ -24,7 +24,7 @@ file ( GLOB_RECURSE ofxFft ./../../addons/ofxFft/src/* )
 include_directories ( ./../../addons/ofxFft/src )
 find_library(fftw_libs fftw3)
 find_library(fftwf_libs fftw3f)
-include ( ../../addons/ofxFft/ofxFft.cmake ) 
+#include ( ../../addons/ofxFft/ofxFft.cmake ) 
 message ( "${ofxFft_SOURCES} ${ofxFft_INCLUDES} - ${ofxFft_LIBRARIES}" )
 
 add_executable( fft_demo

@@ -58,6 +58,10 @@ void testApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
+
+  cout<<"Mouse pressed "<<endl;
+  tclass.setColor(x, y);
+
 }
 
 //--------------------------------------------------------------

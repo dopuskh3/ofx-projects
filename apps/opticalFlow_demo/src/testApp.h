@@ -11,10 +11,10 @@
 #ifndef _TEST_APP
 #define _TEST_APP
 
-#include "ofMain.h"
 #include "optFlowHS.h"
+
+#include "ofMain.h"
 #include "ParticleSystem.h"
-#include "screenGrabber.h"
 
 class testApp : public ofSimpleApp{
 	
@@ -35,7 +35,6 @@ class testApp : public ofSimpleApp{
         ofVideoGrabber vidGrabber;        
         optFlowHS oflow;
         ParticleSystem particles;
-        screenGrabber grabber;
 		
 };
 

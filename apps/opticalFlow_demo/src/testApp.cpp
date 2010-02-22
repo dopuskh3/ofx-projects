@@ -15,7 +15,7 @@ void testApp::setup(){
   
 
 	oflow.init(CAP_W, CAP_H,10);
-    grabber.init();
+    //grabber.init();
 
     particles.setup(300, &oflow, CAP_W, CAP_H);
 

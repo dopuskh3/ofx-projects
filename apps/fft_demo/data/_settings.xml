@@ -1,23 +1,23 @@
 <controls>
     <SliderFloat_fft_mult>
         <name>fft mult</name>
-        <value>91.406250</value>
+        <value>200.000000</value>
     </SliderFloat_fft_mult>
     <SliderFloat_noise_mul>
         <name>noise mul</name>
-        <value>1.289062</value>
+        <value>0.585938</value>
     </SliderFloat_noise_mul>
     <SliderInt_max_particles>
         <name>max particles</name>
-        <value>187</value>
+        <value>421</value>
     </SliderInt_max_particles>
     <SliderFloat_Low_Thresh>
         <name>Low Thresh</name>
-        <value>0.000000</value>
+        <value>0.117188</value>
     </SliderFloat_Low_Thresh>
     <SliderFloat_Mid_Thresh>
         <name>Mid Thresh</name>
-        <value>0.000000</value>
+        <value>0.042969</value>
     </SliderFloat_Mid_Thresh>
     <SliderFloat_High_Thresh>
         <name>High Thresh</name>
@@ -25,23 +25,23 @@
     </SliderFloat_High_Thresh>
     <SliderInt_Particle_Size_Min>
         <name>Particle Size Min</name>
-        <value>2</value>
+        <value>3</value>
     </SliderInt_Particle_Size_Min>
     <SliderInt_Particle_Size_Max>
         <name>Particle Size Max</name>
-        <value>11</value>
+        <value>14</value>
     </SliderInt_Particle_Size_Max>
     <SliderFloat_Particle_Velocity_Mult>
         <name>Particle Velocity Mult</name>
-        <value>0.074219</value>
+        <value>0.164062</value>
     </SliderFloat_Particle_Velocity_Mult>
     <SliderFloat_Velocity_Damp>
         <name>Velocity Damp</name>
-        <value>0.933594</value>
+        <value>0.570312</value>
     </SliderFloat_Velocity_Damp>
     <SliderFloat_Accel_Damp>
         <name>Accel Damp</name>
-        <value>0.003906</value>
+        <value>0.054688</value>
     </SliderFloat_Accel_Damp>
     <Toggle_average_toggle>
         <name>average toggle</name>
@@ -69,7 +69,7 @@
     </Toggle_Average_FFT_Speed>
     <SliderInt_Takke_bands>
         <name>Takke bands</name>
-        <value>252</value>
+        <value>256</value>
     </SliderInt_Takke_bands>
     <SliderFloat_Amort>
         <name>Amort</name>

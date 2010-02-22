@@ -12,12 +12,13 @@
 #ifndef _OPTFLOWHS_H_
 #define _OPTFLOWHS_H_
 
+#include "ofxOpenCv.h"
+
 #include "ofMain.h"
 #include "ofxVec2f.h"
 #include "ofxVec4f.h"
-#include "ofxOpenCv.h"
 
-#define OPTFLOW_SMOOTH false
+#define OPTFLOW_SMOOTH true
 
 // optical flow BM parameters 
 // see: 
