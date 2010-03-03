@@ -22,6 +22,7 @@ include_directories ( ../../addons/ofxXmlSettings/libs/ ../../addons/ofxXmlSetti
 # ofxFft
 file ( GLOB_RECURSE ofxFft ./../../addons/ofxFft/src/* )
 include_directories ( ./../../addons/ofxFft/src )
+include_directories ( /opt/local/include )
 find_library(fftw_libs fftw3)
 find_library(fftwf_libs fftw3f)
 #include ( ../../addons/ofxFft/ofxFft.cmake ) 
@@ -37,11 +38,12 @@ add_executable( fft_demo
 
 if ( APPLE ) 
 
-    find_library(OF openFrameworks PATHS /usr/local/Frameworks)
-    message("${OF}")
-    include_directories ( "${OF}/Headers")
-    set ( OF_LIBRARIES ${OF} )  
-    set ( libs ${OF} ${cv_LIBRARIES} "-framework OpenGL") # ${ofx_libs} ${cv_LIBRARIES}) 
+    include(FindPkgConfig)
+    pkg_check_modules(OF openFrameworks)
+    message( " LIBS : ${OF_LIBRARIES} INCLUDES ${OF_INCLUDE_DIRS}" )
+    set (CMAKE_CXX_FLAGS ${OF_CFLAGS_OTHER} )
+    set ( OF_LIBRARIES ${OF_LIBRARIES} "-framework OpenGL") # ${ofx_libs} ${cv_LIBRARIES}) 
+    include_directories (${OF_INCLUDE_DIRS}) # ${OF_CFLAGS})
 
 else ( APPLE ) 
     message( "Building for linux")

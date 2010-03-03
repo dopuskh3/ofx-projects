@@ -8,37 +8,24 @@ void testApp::setup(){
 	ofSetFrameRate(30);
 
 	font.loadFont("Batang.ttf", 130, true, false, true);
-	font.drawStringAsShapes("Foobar", 100, 100); //true, false, true);
+	//font.drawStringAsShapes("Foobar", 100, 100); //true, false, true);
+	cs = new charShape(&font);
 
-    ofTTFCharacter charB = font.getCharacterAsPoints('F');
-    for(int ci=0; ci<charB.contours.size(); ci++) { // loop all contours
-         ofTTFContour contour = charB.contours[ci];
-         for(int pi=0; pi<contour.pts.size()-1; pi++) { // loop all points of that contour
-           ofxVec2f p1 = ofxVec2f(contour.pts[pi].x, contour.pts[pi].y);
-           ofxVec2f p2 = ofxVec2f(contour.pts[pi+1].x, contour.pts[pi+1].y);
-           while((p1-p2).length()>1){
-            cout<<p1.x<<" - "<<p1.y<<endl;
-            psys.addSourcePoint(p1.x+400, p1.y+400);
-            cout<<p1.x+200<<" - "<<p1.y+200<<endl;
-            p1 += (p2-p1).normalize();
-           }
-         }
-    }
-
-	psys.setup(1000, ofGetWidth(), ofGetHeight());
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-	psys.update();
-	psys.addParticle();
+
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    ofSetColor(255, 255, 255);
-
-	psys.draw();
+	ofSetColor(255, 255, 255);
+	//ofSetColor(0, 0, 0);
+	
+//	psys.draw();
+	cs->draw(100, 100);
+	
 }
 
 //--------------------------------------------------------------

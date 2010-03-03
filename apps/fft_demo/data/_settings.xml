@@ -5,19 +5,19 @@
     </SliderFloat_fft_mult>
     <SliderFloat_noise_mul>
         <name>noise mul</name>
-        <value>0.585938</value>
+        <value>4.218750</value>
     </SliderFloat_noise_mul>
     <SliderInt_max_particles>
         <name>max particles</name>
-        <value>421</value>
+        <value>390</value>
     </SliderInt_max_particles>
     <SliderFloat_Low_Thresh>
         <name>Low Thresh</name>
-        <value>0.117188</value>
+        <value>0.000000</value>
     </SliderFloat_Low_Thresh>
     <SliderFloat_Mid_Thresh>
         <name>Mid Thresh</name>
-        <value>0.042969</value>
+        <value>0.000000</value>
     </SliderFloat_Mid_Thresh>
     <SliderFloat_High_Thresh>
         <name>High Thresh</name>
@@ -25,23 +25,23 @@
     </SliderFloat_High_Thresh>
     <SliderInt_Particle_Size_Min>
         <name>Particle Size Min</name>
-        <value>3</value>
+        <value>1</value>
     </SliderInt_Particle_Size_Min>
     <SliderInt_Particle_Size_Max>
         <name>Particle Size Max</name>
-        <value>14</value>
+        <value>5</value>
     </SliderInt_Particle_Size_Max>
     <SliderFloat_Particle_Velocity_Mult>
         <name>Particle Velocity Mult</name>
-        <value>0.164062</value>
+        <value>0.750000</value>
     </SliderFloat_Particle_Velocity_Mult>
     <SliderFloat_Velocity_Damp>
         <name>Velocity Damp</name>
-        <value>0.570312</value>
+        <value>0.984375</value>
     </SliderFloat_Velocity_Damp>
     <SliderFloat_Accel_Damp>
         <name>Accel Damp</name>
-        <value>0.054688</value>
+        <value>0.000000</value>
     </SliderFloat_Accel_Damp>
     <Toggle_average_toggle>
         <name>average toggle</name>
@@ -61,7 +61,7 @@
     </Toggle_random_pos>
     <Toggle_Draw_FFT>
         <name>Draw FFT</name>
-        <value>0</value>
+        <value>1</value>
     </Toggle_Draw_FFT>
     <Toggle_Average_FFT_Speed>
         <name>Average FFT Speed</name>

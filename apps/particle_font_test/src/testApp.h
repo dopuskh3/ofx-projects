@@ -13,6 +13,7 @@
 
 #include "ofMain.h"
 #include "ParticleSystem.h"
+#include "char_shape.h"
 
 class testApp : public ofSimpleApp{
 
@@ -32,7 +33,7 @@ class testApp : public ofSimpleApp{
 		
 	ParticleSystem psys; 
 	ofTrueTypeFont font;
-
+	charShape *cs; 
 };
 
 #endif
