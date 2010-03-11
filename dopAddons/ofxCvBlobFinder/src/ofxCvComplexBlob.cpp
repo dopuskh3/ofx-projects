@@ -23,6 +23,16 @@ ofxCvComplexBlob::ofxCvComplexBlob(CvSeq *point_list) {
 
 }
 
+
+//----------------------------------------------------------------------------------
+ofRectangle ofxCvComplexBlob::getBoundingBox(){
+  CvRect bb; 
+  
+  bb = cvBoundingRect(points);
+  return ofRectangle(bb.x, bb.y, bb.width, bb.height);
+  
+}
+  
 //----------------------------------------------------------------------------------
 ofxCvComplexBlob::ofxCvComplexBlob(vector<ofPoint> of_points) {
     // FIXME Generate CvSeq from points list

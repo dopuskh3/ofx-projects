@@ -4,21 +4,31 @@
 
 #include "ofxCvBlobFinder.h"
 
+
+
+//--------------------------------------------------------------------------------
+bool sort_blob_func( ofxCvComplexBlob a, ofxCvComplexBlob b){ 
+  return a.getArea() > b.getArea();  
+}
+
+
 //----------------------------------------------------------------------------------
 ofxCvBlobFinder::ofxCvBlobFinder()
 {
     approxFactor = 0.005;
 }
+
 //----------------------------------------------------------------------------------
-void ofxCvBlobFinder::findBlobs(ofxCvGrayscaleImage image) {
+void ofxCvBlobFinder::findBlobs(ofxCvGrayscaleImage image, bool find_holes) {
 
     CvMemStorage *stor = cvCreateMemStorage();
     IplImage *img = image.getCvImage();
     CvSeq *contours;
 
     // CV_RETR_EXTERNAL to not find holes
-    cvFindContours(img, stor, &contours, sizeof(CvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
-
+    int mode = (find_holes)?CV_RETR_LIST:CV_RETR_EXTERNAL;
+    
+    cvFindContours(img, stor, &contours, sizeof(CvContour), mode, CV_CHAIN_APPROX_SIMPLE);
 
     blobz.clear();
     while (contours) {
@@ -26,12 +36,15 @@ void ofxCvBlobFinder::findBlobs(ofxCvGrayscaleImage image) {
         b.setApproxFactor(approxFactor);
         b.getApproxPoints();
         b.getHullPoints();
-
         blobz.push_back( b );
-
         contours = contours->h_next;
     }
+    
+    // sort blobs 
+    sort(blobz.begin(),  blobz.end(), sort_blob_func); 
 }
+
+
 //----------------------------------------------------------------------------------
 void ofxCvBlobFinder::draw(float x, float y, float w, float h) {
 
@@ -83,6 +96,14 @@ void ofxCvBlobFinder::draw(float x, float y, float w, float h) {
         ofSetColor(0x0000FF);
         DRAW_BLOB_VECTOR( blobz[j].getApproxPoints());
 
+        ofSetColor(0x00ffae);
+        ofRectangle c = blobz[j].getBoundingBox();
+        
+        ostringstream s; 
+        s << j << "Area = " << blobz[j].getArea();
+        
+        ofDrawBitmapString(s.str(), c.x, c.y);
+        ofRect(c.x, c.y, c.width, c.height);
     }
 
     glPopMatrix();

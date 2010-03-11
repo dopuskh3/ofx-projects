@@ -15,7 +15,7 @@
 class ofxCvComplexBlob
 {
   
-    private:
+  private:
     
     bool bApproxModified;
     bool bHullModified; 
@@ -46,7 +46,11 @@ class ofxCvComplexBlob
     vector<ofPoint> getApproxPoints();
     float getArea();
     float getPerimeter();
+    ofRectangle getBoundingBox();
     void clear();
+    
+    int operator -(ofxCvComplexBlob b){
+      return getArea() - b.getArea(); }
   
 };
 

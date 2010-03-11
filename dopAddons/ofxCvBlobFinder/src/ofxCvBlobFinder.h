@@ -18,7 +18,7 @@ class ofxCvBlobFinder : private ofBaseDraws {
   
     virtual float getWidth(){ return _width; };
     virtual float getHeight(){ return _height; };
-    void findBlobs(ofxCvGrayscaleImage img);
+    void findBlobs(ofxCvGrayscaleImage img, bool find_hole);
     
     void setApproxFactor(float factor){ approxFactor = factor; }; 
     float getApproxFactor(){ return approxFactor; }; 
